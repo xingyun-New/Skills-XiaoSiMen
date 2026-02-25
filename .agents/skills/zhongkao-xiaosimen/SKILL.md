@@ -138,6 +138,17 @@ quiz-output/{subject}-{grade}-{topic}-{timestamp}.html
 
 示例：`quiz-output/geography-8-中国自然环境-20260225.html`
 
+### Step 5: 发布到 GitHub Pages
+
+HTML 文件生成后，**必须自动执行发布流程**（详见 [publish-quiz.md](scripts/publish-quiz.md)）：
+
+1. 构造 GitHub Pages 在线链接：`https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/{filename}`
+2. 在项目根目录 `README.md` 的「在线练习」表格末尾追加新条目
+3. 执行 `git add` → `git commit` → `git push origin main`
+4. 向用户展示可直接访问的在线链接
+
+**此步骤为默认行为**，每次生成 HTML 后自动执行，无需用户额外指示。如果 git 操作失败，向用户说明原因并提供手动操作指引。
+
 ## Markdown 输出格式（仅当用户指定 Markdown 时使用）
 
 ### 单题格式模板
@@ -245,6 +256,7 @@ D. XXX
 
 | 文件 | 内容 |
 |------|------|
+| [publish-quiz.md](scripts/publish-quiz.md) | **GitHub Pages 自动发布流程** |
 | [html-template.md](references/html-template.md) | HTML 交互页面完整模板 |
 | [gamification.md](references/gamification.md) | 游戏化积分与成就系统 |
 | [teaching-methods.md](references/teaching-methods.md) | 完整教学方法论 |

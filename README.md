@@ -53,11 +53,22 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 quiz-output/                          # 示例输出
 ```
 
+## 在线练习
+
+通过 GitHub Pages 直接在浏览器中打开练习题，无需下载：
+
+| 科目 | 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|------|---------|
+| 🌍 地理 | 八年级 | 综合练习 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习-20260225.html) |
+| 🌍 地理 | 八年级 | 综合练习v2 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习-v2.html) |
+| 📜 历史 | 八年级 | 下册综合 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-下册综合-20260225.html) |
+
 ## 技术架构
 
 - 题目数据以 JSON 格式嵌入 `<script type="application/json">` 标签，避免字符串转义问题
 - 单文件 HTML，内嵌 CSS + JavaScript，无需外部依赖
 - 自适应布局，支持桌面和移动端
+- 生成 HTML 后自动推送至 GitHub，通过 GitHub Pages 提供在线访问
 
 ## 许可证
 
