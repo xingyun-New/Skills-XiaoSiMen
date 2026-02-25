@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>八年级地理 · 综合选择题练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh; padding: 20px; color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 { font-size: 1.8em; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white; }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap { background: rgba(255,255,255,0.2); border-radius: 12px; height: 12px; margin: 16px 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); border-radius: 12px; transition: width 0.4s ease; }
+    .card { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); margin-bottom: 20px; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text { font-size: 1.15em; line-height: 1.8; margin-bottom: 20px; font-weight: 500; }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn { display: flex; align-items: center; padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 14px; background: #fafafa; cursor: pointer; transition: all 0.2s; font-size: 1.05em; line-height: 1.6; text-align: left; }
+    .option-btn:hover:not(.disabled) { border-color: #667eea; background: #f0f4ff; transform: translateX(4px); }
+    .option-btn .letter { width: 32px; height: 32px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 14px; flex-shrink: 0; }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+    .knowledge-card { margin-top: 20px; padding: 20px; border-radius: 14px; line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease; }
+    .knowledge-card.correct-card { background: linear-gradient(135deg, #E8F5E9, #f1f8e9); border-left: 5px solid #4CAF50; }
+    .knowledge-card.wrong-card { background: linear-gradient(135deg, #FFF3E0, #FFF8E1); border-left: 5px solid #FF9800; }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+    .next-btn, .restart-btn { width: 100%; padding: 14px; margin-top: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 14px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn { width: 100%; padding: 14px; margin-top: 8px; background: linear-gradient(135deg, #FF9800, #F57C00); color: white; border: none; border-radius: 14px; font-size: 1.1em; font-weight: bold; cursor: pointer; }
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score { font-size: 4em; font-weight: bold; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics { text-align: left; background: #FFF3E0; padding: 16px 20px; border-radius: 12px; margin: 16px 0; }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+    .achievement-popup { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #FFD700, #FFA000); color: #333; padding: 16px 24px; border-radius: 16px; font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 1000; animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards; }
+    @keyframes slideIn { from { transform: translateX(300px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+    @media (max-width: 600px) { body { padding: 12px; } .card { padding: 20px; border-radius: 16px; } .header h1 { font-size: 1.4em; } .question-text { font-size: 1.05em; } .option-btn { padding: 12px 14px; font-size: 0.95em; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/10</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<script type="application/json" id="quiz-json">
+{
+  "title": "八年级地理 · 综合选择题练习",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国陆地领土面积约为多少平方千米？",
+      "options": ["860万", "960万", "1060万", "760万"],
+      "answer": 1,
+      "knowledgeCard": {
+        "topic": "中国的疆域",
+        "source": "人教版八年级上册 第一章 从世界看中国",
+        "keyMemory": "我国陆地面积约960万平方千米，居世界第三位（仅次于俄罗斯和加拿大）。",
+        "commonMistake": "容易与俄罗斯（1710万）或美国（937万）的面积混淆。记住「960」这个数字即可。",
+        "relatedTopics": "中国的四至点、领海面积、邻国数量（14个陆上邻国、6个隔海相望国家）"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国地势的总体特征是：",
+      "options": ["东高西低，呈阶梯状分布", "西高东低，呈阶梯状分布", "中间高，四周低", "北高南低，逐渐倾斜"],
+      "answer": 1,
+      "knowledgeCard": {
+        "topic": "中国地势特征",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "西高东低，大致呈三级阶梯状分布。第一阶梯（青藏高原，4000m+）→ 第二阶梯（高原盆地，1000-2000m）→ 第三阶梯（平原丘陵，500m以下）。",
+        "commonMistake": "「东高西低」是最常见的干扰项，与正确答案刚好相反。联想：太阳从东边升起，地势从西边高起。",
+        "relatedTopics": "三级阶梯分界线、地势对气候和河流流向的影响"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列山脉中，属于我国地势第二、三级阶梯分界线的是：",
+      "options": ["昆仑山脉", "喜马拉雅山脉", "太行山脉", "天山山脉"],
+      "answer": 2,
+      "knowledgeCard": {
+        "topic": "三级阶梯分界线",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "一二阶梯分界线：昆仑山—祁连山—横断山脉；二三阶梯分界线：大兴安岭—太行山—巫山—雪峰山。",
+        "commonMistake": "昆仑山是一二阶梯分界线，不是二三阶梯的。口诀记忆：「大太巫雪二三界」（大兴安岭、太行山、巫山、雪峰山）。",
+        "relatedTopics": "阶梯内部的主要地形区（如青藏高原、四川盆地、东北平原等）"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "秦岭—淮河一线是我国重要的地理分界线，下列说法正确的是：",
+      "options": ["该线以北为亚热带，以南为暖温带", "该线大致与800毫米等降水量线重合", "该线大致与400毫米等降水量线重合", "该线以南以旱地农业为主"],
+      "answer": 1,
+      "knowledgeCard": {
+        "topic": "秦岭—淮河地理分界线",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "秦岭—淮河线 ≈ 1月0℃等温线 ≈ 800mm等降水量线 ≈ 亚热带与暖温带分界 ≈ 湿润区与半湿润区分界 ≈ 水田与旱地分界。",
+        "commonMistake": "400mm等降水量线是半湿润区与半干旱区的分界线（大致沿大兴安岭—张家口—兰州—拉萨），不要与800mm线混淆。",
+        "relatedTopics": "南北方地区差异（饮食、建筑、农业、植被）"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "黄河最终注入的海洋是：",
+      "options": ["东海", "黄海", "渤海", "南海"],
+      "answer": 2,
+      "knowledgeCard": {
+        "topic": "黄河概况",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "黄河发源于青藏高原巴颜喀拉山北麓，流经9个省级行政区，在山东省东营市注入渤海。",
+        "commonMistake": "容易和「黄海」混淆（因为名字里都有「黄」字）。记住：黄河入渤海，长江入东海。",
+        "relatedTopics": "黄河的「地上河」、凌汛、水土流失治理"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "被称为「聚宝盆」的盆地是：",
+      "options": ["塔里木盆地", "准噶尔盆地", "柴达木盆地", "四川盆地"],
+      "answer": 2,
+      "knowledgeCard": {
+        "topic": "中国主要地形区",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "柴达木盆地位于青海省，矿产资源极为丰富（盐类、石油、天然气、有色金属），被誉为「聚宝盆」。",
+        "commonMistake": "塔里木盆地是我国最大的内陆盆地，以油气资源著称，但「聚宝盆」专指柴达木盆地。四川盆地又称「紫色盆地」。",
+        "relatedTopics": "四大盆地对比（塔里木、准噶尔、柴达木、四川）"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "我国人口分布的地理界线大致是黑河—腾冲一线（胡焕庸线），该线反映的人口分布特点是：",
+      "options": ["南多北少", "东多西少", "沿海多内陆少", "平原多山地少"],
+      "answer": 1,
+      "knowledgeCard": {
+        "topic": "中国人口分布特征",
+        "source": "人教版八年级上册 第一章 从世界看中国",
+        "keyMemory": "胡焕庸线（黑河—腾冲线）：东南部占国土面积43%，集中了约94%的人口；西北部占57%面积，仅6%人口。核心特征：东多西少。",
+        "commonMistake": "「南多北少」是干扰项，虽然南方人口也较多，但胡焕庸线反映的主要是东西方向的差异，不是南北方向。",
+        "relatedTopics": "人口密度、人口增长政策、城镇化"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列四大高原中，地面崎岖、石灰岩广布、多溶洞的是：",
+      "options": ["青藏高原", "内蒙古高原", "黄土高原", "云贵高原"],
+      "answer": 3,
+      "knowledgeCard": {
+        "topic": "四大高原特征",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "四大高原各有特点——青藏：高寒，雪山连绵；内蒙古：平坦开阔，一望无际；黄土：沟壑纵横，水土流失严重；云贵：崎岖不平，喀斯特地貌广布。",
+        "commonMistake": "「石灰岩广布、多溶洞」是喀斯特地貌的标志，专属于云贵高原。黄土高原的特点是黄土覆盖、沟壑纵横，不要混淆。",
+        "relatedTopics": "喀斯特地貌的成因（流水溶蚀）、桂林山水"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "治理黄河的关键在于治沙，其根本措施是：",
+      "options": ["在下游加固大堤", "在上游修建水库", "在中游黄土高原开展水土保持", "在入海口疏浚河道"],
+      "answer": 2,
+      "knowledgeCard": {
+        "topic": "黄河的治理",
+        "source": "人教版八年级上册 第二章 中国的自然环境",
+        "keyMemory": "黄河泥沙主要来源于中游黄土高原。治黄根本措施：在中游开展水土保持综合治理（植树种草、修建梯田、打坝淤地）。",
+        "commonMistake": "「加固大堤」和「修建水库」都是治理措施，但不是根本措施。根本措施是从源头（中游水土流失）解决问题。注意「根本」这个关键词。",
+        "relatedTopics": "黄土高原水土流失的原因（自然+人为）、「地上河」的形成"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于我国四大地理区域的说法，错误的是：",
+      "options": [
+        "北方地区以温带季风气候为主，农作物以小麦为主",
+        "南方地区降水丰沛，河流流量大，水运便利",
+        "西北地区降水丰富，植被以森林为主",
+        "青藏地区海拔高、气温低，太阳能资源丰富"
+      ],
+      "answer": 2,
+      "knowledgeCard": {
+        "topic": "四大地理区域特征",
+        "source": "人教版八年级下册 第五章 中国的地理差异",
+        "keyMemory": "西北地区深居内陆、远离海洋，降水稀少（大部分不足400mm），植被以荒漠和草原为主，绝非「降水丰富、森林为主」。",
+        "commonMistake": "注意审题，本题问的是「错误的」选项。遇到否定式设问一定要圈出「错误」二字，逐项判断对错。",
+        "relatedTopics": "四大区域的划分依据（气温、降水、地形）、各区域自然环境与人类活动的关系"
+      }
+    }
+  ]
+}
+</script>
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+
+  var optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+    return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+      '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+  }).join("") + "</div>";
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var isCorrect = idx === q.answer;
+
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    score += (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    correctTotal++;
+    if (streak === 3) showAchievement("🔥 三连击！");
+    if (streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (streak === 10) showAchievement("🏆 十连击！学霸！");
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && !isCorrect) btn.classList.add("wrong");
+  });
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>

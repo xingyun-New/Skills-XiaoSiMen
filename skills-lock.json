@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "computedHash": "25872a21881a950edc3db1f3329664d60405d539660ce05b3265db2de06a7dfd"
+    },
+    "math-teacher": {
+      "source": "jamesrochabrun/skills",
+      "sourceType": "github",
+      "computedHash": "b7f1c5c99abbbdd4468f0ce048e296fb19c97160501ff514d7a8fc89a1491891"
+    }
+  }
+}

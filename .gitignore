@@ -1,0 +1,21 @@
+# IDE/Editor symlink directories (created by skills installer)
+.cline/
+.kiro/
+.qoder/
+.trae/
+
+# Third-party installed skills (not part of this project)
+.agents/skills/find-skills/
+.agents/skills/math-teacher/
+
+# Math-teacher generated output
+math-games/
+math-playgrounds/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Node
+node_modules/
+
