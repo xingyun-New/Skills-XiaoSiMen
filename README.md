@@ -45,6 +45,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 🔢 数学 | 一次函数练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-quiz.html) |
 | 🔢 数学 | 二次根式练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/quadratic-radical-quiz.html) |
 | 🔢 数学 | 数学综合游戏 | Game | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-games/math_game.html) |
+| 🔢 数学 | 一次函数中等难度挑战 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-medium-quiz.html) |
 
 ### 初中小四门 (zhongkao-xiaosimen)
 
