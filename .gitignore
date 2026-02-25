@@ -6,11 +6,6 @@
 
 # Third-party installed skills (not part of this project)
 .agents/skills/find-skills/
-.agents/skills/math-teacher/
-
-# Math-teacher generated output
-math-games/
-math-playgrounds/
 
 # OS files
 Thumbs.db
