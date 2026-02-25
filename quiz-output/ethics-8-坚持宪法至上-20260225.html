@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>道德与法治 八年级下册 · 坚持宪法至上 练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #667eea; transform: scale(1.02); }
+
+    .fill-input {
+      width: 100%; padding: 14px 18px; font-size: 1.1em;
+      border: 2px solid #e0e0e0; border-radius: 14px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .fill-input:focus { border-color: #667eea; }
+    .submit-btn {
+      width: 100%; padding: 14px; margin-top: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "道德与法治 八年级下册 · 坚持宪法至上",
+  "subject": "道法",
+  "grade": "八年级",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法是国家的根本法，其根本原因在于：",
+      "options": [
+        "宪法的制定和修改程序比普通法律更为严格",
+        "宪法规定了国家生活中最根本、最重要的问题",
+        "宪法是由全国人民代表大会制定的",
+        "宪法是所有法律中篇幅最长的"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查宪法作为根本法的原因，想想宪法「根本」在哪里",
+        "📖 关键知识：宪法之所以是根本法，主要从三个方面理解——规定内容、法律效力、制定修改程序",
+        "🎯 解题思路：「根本原因」指向宪法规定的内容层面，而非程序或效力层面"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法是国家的根本法",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法是根本法的三个理由：①规定根本问题 ②具有最高法律效力 ③制定修改程序最严格。其中①是根本原因",
+        "commonMistake": "容易把「程序最严格」或「效力最高」当作根本原因，这两者是宪法根本法地位的体现，不是原因",
+        "relatedTopics": "宪法的最高法律效力、宪法与普通法律的关系"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于宪法与普通法律关系的说法，正确的是：",
+      "options": [
+        "宪法与普通法律具有同等的法律效力",
+        "普通法律是宪法的立法基础和立法依据",
+        "普通法律是依据宪法制定的，不得与宪法相抵触",
+        "普通法律的修改程序比宪法更为严格"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查宪法与普通法律的关系，注意「母法」与「子法」的关系",
+        "📖 关键知识：宪法是普通法律的立法基础和立法依据，普通法律不得与宪法相抵触",
+        "🎯 解题思路：把选项中的主语和谓语对换一下检查，B选项把宪法和普通法律的关系弄反了"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法与普通法律的关系",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法是「母法」，普通法律是「子法」。宪法是立法基础和依据，普通法律不得与宪法相抵触",
+        "commonMistake": "B选项把「立法基础和立法依据」的方向搞反了——应是宪法为普通法律提供依据，而非反过来",
+        "relatedTopics": "宪法的最高法律效力、违宪审查"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国宪法的修改，由全国人民代表大会以全体代表的多少以上的多数通过？",
+      "options": [
+        "二分之一",
+        "五分之三",
+        "四分之三",
+        "三分之二"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查宪法修改的特殊程序，比普通法律要求更高",
+        "📖 关键知识：普通法律的通过只需全体代表的过半数，而宪法修改的表决门槛更高",
+        "🎯 解题思路：宪法修改需要全体代表的三分之二以上多数通过，比普通法律的二分之一门槛高"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的修改程序",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法修改：①提议——全国人大常委会或1/5以上全国人大代表提议 ②通过——全体代表2/3以上多数通过",
+        "commonMistake": "容易和普通法律的通过条件（全体代表过半数即1/2）混淆，记住宪法修改门槛更高是2/3",
+        "relatedTopics": "宪法制定程序的严格性体现了宪法的根本法地位"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "宪法被称为「公民权利的保障书」，主要是因为宪法：",
+      "options": [
+        "规定了公民的基本权利和义务",
+        "规定了国家的根本制度",
+        "具有最高的法律效力",
+        "具有最严格的制定和修改程序"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：关键词是「公民权利的保障书」，想想宪法保障公民权利是通过什么方式",
+        "📖 关键知识：宪法通过明确规定公民的基本权利和义务来保障公民权利",
+        "🎯 解题思路：「保障书」直接对应的是宪法中关于公民权利义务的规定，其他选项虽正确但不是被称为「保障书」的原因"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法是公民权利的保障书",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法之所以是公民权利的保障书：①宪法规定公民基本权利和义务 ②国家权力是公民赋予的 ③国家权力的行使以保障公民权利为目的",
+        "commonMistake": "BCD选项都是宪法的特征，但题目问的是「保障书」这一称谓的原因，只有A直接对应",
+        "relatedTopics": "公民基本权利的具体内容（第二单元）、国家尊重和保障人权"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "在我国，有权监督宪法实施的国家机关是：",
+      "options": [
+        "国务院",
+        "全国人民代表大会及其常务委员会",
+        "最高人民法院",
+        "最高人民检察院"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查宪法监督的主体，想想我国最高国家权力机关是什么",
+        "📖 关键知识：我国宪法明确规定，监督宪法实施的职责属于最高国家权力机关",
+        "🎯 解题思路：全国人大是最高国家权力机关，全国人大及其常委会行使监督宪法实施的职权"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法监督的主体",
+        "source": "人教版八年级下册 第一单元 第二课「保障宪法实施」",
+        "keyMemory": "全国人大及其常委会行使监督宪法实施的职权，全国人大常委会有权解释宪法",
+        "commonMistake": "国务院是最高行政机关，最高法和最高检是司法机关，它们都不具有宪法监督权",
+        "relatedTopics": "全国人大的职权、人民代表大会制度"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列属于宪法规定的内容有：<br>①国家性质 ②根本制度 ③公民的基本权利和义务 ④刑罚的具体种类",
+      "options": [
+        "①②",
+        "③④",
+        "①②④",
+        "①②③"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查宪法规定的内容范围，宪法规定的是「根本性」问题",
+        "📖 关键知识：宪法规定国家性质、根本制度、根本任务、公民基本权利义务等最根本的问题",
+        "🎯 解题思路：④「刑罚的具体种类」属于刑法规定的内容，不属于宪法，排除含④的选项"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法规定的内容",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法规定国家生活中最根本的问题：国家性质、根本制度、根本任务、公民基本权利和义务、国家机构组织及职权等",
+        "commonMistake": "「刑罚的具体种类」属于刑法内容，「具体的税率」属于税法内容，这些具体细节不由宪法规定",
+        "relatedTopics": "宪法与普通法律的区别、宪法的法律效力"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "国家工作人员就职时应当依照法律规定公开进行宪法宣誓，这一制度有利于：",
+      "options": [
+        "增强国家工作人员的宪法意识，维护宪法权威",
+        "取消国家工作人员的所有权力",
+        "保证每个公民都能背诵宪法全文",
+        "代替其他法律对国家工作人员的约束"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查宪法宣誓制度的意义，从「仪式感」和「法治意识」角度思考",
+        "📖 关键知识：宪法宣誓制度的目的是彰显宪法权威，增强工作人员的宪法意识和责任感",
+        "🎯 解题思路：BCD明显过于绝对或荒谬——不可能取消权力、不可能要求全民背诵、也不可能代替其他法律"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法宣誓制度",
+        "source": "人教版八年级下册 第一单元 第二课「保障宪法实施」",
+        "keyMemory": "宪法宣誓制度的意义：①彰显宪法权威 ②增强国家工作人员的宪法意识 ③激励和教育工作人员忠于宪法、遵守宪法、维护宪法",
+        "commonMistake": "宣誓制度是增强意识和权威的方式，不能代替法律监督，也不等于取消权力",
+        "relatedTopics": "保障宪法实施的措施、依宪治国"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "「一切法律、行政法规和地方性法规都不得同宪法相抵触。」这说明宪法具有：",
+      "options": [
+        "最严格的制定程序",
+        "最广泛的群众基础",
+        "最高的法律效力",
+        "最多的法律条文"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：注意题目材料中的关键词「不得同宪法相抵触」，想想这体现了什么",
+        "📖 关键知识：宪法具有最高法律效力，一切法律法规都不得与宪法相抵触，否则无效",
+        "🎯 解题思路：其他法律「不得抵触」宪法，说明宪法的效力高于其他法律，即最高法律效力"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的最高法律效力",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法最高法律效力的表现：①宪法是其他法律的立法基础和依据 ②其他法律不得与宪法相抵触 ③与宪法抵触的法律无效",
+        "commonMistake": "「不得抵触」体现的是效力的高低关系，不是制定程序的严格性",
+        "relatedTopics": "宪法与普通法律的关系、违宪审查"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "依法治国的核心是：",
+      "options": [
+        "有法可依",
+        "依宪治国",
+        "执法必严",
+        "违法必究"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查依法治国与依宪治国的关系，想想宪法在法律体系中的地位",
+        "📖 关键知识：宪法是国家根本法，具有最高法律效力，因此依法治国首先要依宪治国",
+        "🎯 解题思路：宪法是一切法律之「母」，依法治国最核心的要求就是依照宪法治理国家"
+      ],
+      "knowledgeCard": {
+        "topic": "依宪治国",
+        "source": "人教版八年级下册 第一单元 第二课「保障宪法实施」",
+        "keyMemory": "宪法是治国安邦的总章程 → 依法治国首先要坚持依宪治国 → 依宪治国是依法治国的核心",
+        "commonMistake": "「有法可依、执法必严、违法必究」都是依法治国的要求，但不是「核心」，核心特指依宪治国",
+        "relatedTopics": "全面依法治国、宪法是治国安邦的总章程"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "小华在学习宪法时做了以下笔记，其中表述<b>有误</b>的是：",
+      "options": [
+        "宪法是国家的根本法，具有最高的法律效力",
+        "宪法的修改需由全国人大常委会或五分之一以上的全国人大代表提议",
+        "宪法规定了国家生活中最根本、最重要的问题",
+        "普通法律的制定程序比宪法更为严格"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题是「选错误」的题目，要找出表述不正确的选项",
+        "📖 关键知识：宪法的制定和修改程序比普通法律更为严格，而不是反过来",
+        "🎯 解题思路：D选项把宪法和普通法律的程序严格性弄反了——应该是宪法比普通法律更严格"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的制定和修改程序",
+        "source": "人教版八年级下册 第一单元 第一课「维护宪法权威」",
+        "keyMemory": "宪法修改程序比普通法律严格：提议门槛更高（1/5以上代表或常委会），通过标准更高（2/3以上多数）",
+        "commonMistake": "这类「找错误」的题要每个选项逐一判断，D选项把主语搞反了，容易因粗心读成正确表述",
+        "relatedTopics": "宪法是根本法的三个方面、宪法的最高法律效力"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["\u{1F4A1} 提示1", "\u{1F4D6} 提示2", "\u{1F3AF} 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">\u2713 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">\u2717 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+      'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+      '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["\u{1F4A1} 方向提示", "\u{1F4D6} 关键知识", "\u{1F3AF} 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function submitFill() {
+  if (answered) return;
+  var input = document.getElementById("fillInput").value.trim();
+  if (!input) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  processAnswer(answers.some(function(a) { return input === a.trim(); }));
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("\u{1F525} 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("\u26A1 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("\u{1F3C6} 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("\u{1F4D6} 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "\u2705 回答正确！" : "\u274C 回答错误") + "</div>" +
+    '<div class="kc-item">\u{1F4DA} <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">\u{1F4D6} <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">\u{1F4A1} <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">\u26A0\uFE0F <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">\u{1F517} <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 \u2192" : "查看成绩 \u{1F4CA}") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "\u{1F3C6} 优秀！知识掌握扎实！"
+    : pct >= 70 ? "\u{1F44D} 良好！继续加油！"
+    : pct >= 60 ? "\u2713 及格，部分知识点需要巩固"
+    : "\u{1F4AA} 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>\u{1F4CB} 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>\u00B7 " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">\u{1F504} 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 \u00B7 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">\u{1F501} 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
