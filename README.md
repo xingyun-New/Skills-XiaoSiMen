@@ -43,18 +43,12 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 科目 | 内容 | 类型 | 在线练习 |
 |------|------|------|---------|
 | 🔢 数学 | 一次函数练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-quiz.html) |
-| 🔢 数学 | 二次根式练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/quadratic-radical-quiz.html) |
-| 🔢 数学 | 数学综合游戏 | Game | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-games/math_game.html) |
 | 🔢 数学 | 一次函数中等难度挑战 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-medium-quiz.html) |
 
 ### 初中小四门 (zhongkao-xiaosimen)
 
 | 科目 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|------|---------|
-| 🌍 地理 | 八年级 | 综合练习 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习 -20260225.html) |
-| 📜 历史 | 八年级 | 下册综合 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-下册综合 -20260225.html) |
-| 🧬 生物 | 八年级 | 下册期末综合 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/biology-8-semester2-20260225.html) |
-| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260225.html) |
 | ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260226.html) |
 | 📜 历史 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固 -20260226.html) |
 
