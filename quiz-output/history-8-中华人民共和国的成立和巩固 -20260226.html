@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史 八年级下册 · 中华人民共和国的成立和巩固练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "历史 八年级下册 · 中华人民共和国的成立和巩固",
+  "subject": "历史",
+  "grade": "八年级",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "中华人民共和国成立的时间是？",
+      "options": ["1949 年 10 月 1 日", "1949 年 9 月 1 日", "1950 年 10 月 1 日", "1948 年 10 月 1 日"],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查新中国成立的时间",
+        "📖 关键知识：开国大典在 1949 年 10 月举行",
+        "🎯 解题思路：记住「1949 年 10 月 1 日」这个重要日期"
+      ],
+      "knowledgeCard": {
+        "topic": "开国大典",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1949 年 10 月 1 日，毛泽东在天安门城楼宣告中华人民共和国中央人民政府成立",
+        "commonMistake": "容易与 9 月中国人民政治协商会议第一届全体会议混淆",
+        "relatedTopics": "中国人民政治协商会议、国旗国歌确定"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "在开国大典上，毛泽东主席升起了中华人民共和国第一面什么旗帜？",
+      "options": ["五星红旗", "党旗", "军旗", "团旗"],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查新中国的国旗",
+        "📖 关键知识：五星红旗是中华人民共和国的国旗",
+        "🎯 解题思路：五星红旗由曾联松设计，象征革命和人民大团结"
+      ],
+      "knowledgeCard": {
+        "topic": "五星红旗",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "五星红旗：红色象征革命，五颗星象征中国共产党领导下的全国人民大团结",
+        "commonMistake": "容易混淆党旗（镰刀锤头）与国旗",
+        "relatedTopics": "国歌《义勇军进行曲》、国徽"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "西藏和平解放的时间是？",
+      "options": ["1950 年", "1951 年", "1952 年", "1953 年"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查西藏和平解放的时间",
+        "📖 关键知识：1951 年西藏地方政府与中央人民政府达成和平解放协议",
+        "🎯 解题思路：记住「1951 年」这个关键时间点"
+      ],
+      "knowledgeCard": {
+        "topic": "西藏和平解放",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1951 年，西藏和平解放，标志着祖国大陆获得统一",
+        "commonMistake": "容易与 1950 年抗美援朝开始时间混淆",
+        "relatedTopics": "祖国统一、民族区域自治制度"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "抗美援朝战争开始于哪一年？",
+      "options": ["1949 年", "1950 年", "1951 年", "1952 年"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查抗美援朝战争的开始时间",
+        "📖 关键知识：1950 年 10 月，中国人民志愿军赴朝作战",
+        "🎯 解题思路：朝鲜战争 1950 年 6 月爆发，中国 10 月出兵"
+      ],
+      "knowledgeCard": {
+        "topic": "抗美援朝",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1950 年 10 月—1953 年 7 月，中国人民志愿军赴朝作战，彭德怀任司令员",
+        "commonMistake": "容易与 1951 年西藏和平解放时间混淆",
+        "relatedTopics": "黄继光、邱少云等英雄人物"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "抗美援朝战争中，中国人民志愿军的司令员是？",
+      "options": ["林彪", "刘伯承", "彭德怀", "贺龙"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查志愿军司令员",
+        "📖 关键知识：彭德怀临危受命，担任志愿军司令员兼政委",
+        "🎯 解题思路：彭德怀以敢打硬仗著称，曾指挥百团大战"
+      ],
+      "knowledgeCard": {
+        "topic": "彭德怀与抗美援朝",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "彭德怀任中国人民志愿军司令员兼政治委员",
+        "commonMistake": "容易与其他开国元帅混淆",
+        "relatedTopics": "五次战役、上甘岭战役"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "抗美援朝战争胜利的标志是？",
+      "options": ["平壤解放", "汉城解放", "《朝鲜停战协定》签订", "美军撤出朝鲜"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查抗美援朝结束的标志",
+        "📖 关键知识：1953 年 7 月签订停战协定",
+        "🎯 解题思路：停战协定在板门店签订，标志着战争结束"
+      ],
+      "knowledgeCard": {
+        "topic": "《朝鲜停战协定》",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1953 年 7 月，中朝方面与「联合国军」方面在板门店签订《朝鲜停战协定》",
+        "commonMistake": "容易误认为是和平条约，实际是停战协定",
+        "relatedTopics": "抗美援朝精神、三八线"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "新中国成立后，在新解放区开展的土地改革运动，废除的是？",
+      "options": ["资本主义土地所有制", "封建土地所有制", "社会主义土地所有制", "集体土地所有制"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查土地改革的核心内容",
+        "📖 关键知识：土地改革废除封建剥削的土地制度",
+        "🎯 解题思路：封建土地所有制是地主阶级剥削农民的基础"
+      ],
+      "knowledgeCard": {
+        "topic": "土地改革",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1950—1952 年底，废除封建土地所有制，实行农民土地所有制",
+        "commonMistake": "容易混淆「封建」与「资本主义」",
+        "relatedTopics": "《中华人民共和国土地改革法》"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "1950 年，中央人民政府颁布的指导土地改革的法律文件是？",
+      "options": ["《中国土地法大纲》", "《中华人民共和国土地改革法》", "《土地法令》", "《农村土地承包法》"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查土地改革的法律依据",
+        "📖 关键知识：1950 年颁布《中华人民共和国土地改革法》",
+        "🎯 解题思路：注意区分 1947 年的《中国土地法大纲》与 1950 年的法律"
+      ],
+      "knowledgeCard": {
+        "topic": "《中华人民共和国土地改革法》",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1950 年颁布，规定废除地主阶级封建剥削的土地所有制，实行农民的土地所有制",
+        "commonMistake": "容易与 1947 年解放区的《中国土地法大纲》混淆",
+        "relatedTopics": "土地改革的意义"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "土地改革的完成，彻底摧毁了我国存在 2000 多年的？",
+      "options": ["封建君主专制制度", "封建土地制度", "资本主义制度", "奴隶制度"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查土地改革的历史意义",
+        "📖 关键知识：土地改革摧毁了封建土地制度",
+        "🎯 解题思路：地主阶级被消灭，农民成为土地的主人"
+      ],
+      "knowledgeCard": {
+        "topic": "土地改革的意义",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "彻底摧毁了封建土地制度，消灭了地主阶级，农民成为土地的主人",
+        "commonMistake": "容易与辛亥革命推翻君主专制混淆",
+        "relatedTopics": "解放农村生产力、巩固人民政权"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列哪一项不是新中国成立初期巩固人民政权的措施？",
+      "options": ["土地改革", "抗美援朝", "西藏和平解放", "改革开放"],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查新中国成立初期的历史事件",
+        "📖 关键知识：改革开放开始于 1978 年",
+        "🎯 解题思路：注意时间顺序，改革开放是 20 世纪 70 年代末的政策"
+      ],
+      "knowledgeCard": {
+        "topic": "巩固人民政权的措施",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "新中国成立初期（1949-1953）：土地改革、抗美援朝、西藏和平解放",
+        "commonMistake": "容易把不同时期的事件混淆",
+        "relatedTopics": "改革开放（1978 年）"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "被誉为「最可爱的人」的是？",
+      "options": ["八路军", "新四军", "中国人民志愿军", "解放军"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查抗美援朝时期的称呼",
+        "📖 关键知识：魏巍的报告文学《谁是最可爱的人》描写的是志愿军",
+        "🎯 解题思路：「最可爱的人」是抗美援朝时期对志愿军的赞誉"
+      ],
+      "knowledgeCard": {
+        "topic": "最可爱的人",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "作家魏巍在《谁是最可爱的人》中，将中国人民志愿军称为「最可爱的人」",
+        "commonMistake": "容易与其他时期的军队称呼混淆",
+        "relatedTopics": "黄继光、邱少云、罗盛教等英雄"
+      }
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "抗美援朝战争胜利的伟大意义不包括？",
+      "options": ["抵御了帝国主义侵略扩张", "捍卫了新中国安全", "确立了新中国的大国地位", "实现了祖国完全统一"],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查抗美援朝的意义",
+        "📖 关键知识：抗美援朝提高了中国国际地位，但台湾问题尚未解决",
+        "🎯 解题思路：注意「祖国完全统一」至今仍是未完成的任务"
+      ],
+      "knowledgeCard": {
+        "topic": "抗美援朝的意义",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "抵御侵略、捍卫安全、保卫和平、提高地位、凝聚民心",
+        "commonMistake": "容易夸大其作用，台湾问题尚未解决",
+        "relatedTopics": "新中国外交、国际地位"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "1949 年 9 月，第一届中国人民政治协商会议在北平召开，会议决定？",
+      "options": ["制定《中华人民共和国宪法》", "确定五星红旗为国旗", "宣布抗美援朝", "开始土地改革"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查政协第一届全体会议的内容",
+        "📖 关键知识：会议确定了国旗、国歌、首都等",
+        "🎯 解题思路：宪法是 1954 年制定的，抗美援朝和土改是之后的事"
+      ],
+      "knowledgeCard": {
+        "topic": "中国人民政治协商会议第一届全体会议",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1949 年 9 月，北平：确定国旗（五星红旗）、国歌（《义勇军进行曲》）、首都（北京）",
+        "commonMistake": "容易与 1954 年第一届全国人大混淆",
+        "relatedTopics": "《共同纲领》、开国大典"
+      }
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "第一届中国人民政治协商会议通过的具有临时宪法作用的文件是？",
+      "options": ["《中华人民共和国宪法》", "《中国人民政治协商会议共同纲领》", "《中华民国临时约法》", "《土地改革法》"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查新中国成立初期的临时宪法",
+        "📖 关键知识：《共同纲领》在 1954 年宪法颁布前起临时宪法作用",
+        "🎯 解题思路：1949 年还没有正式宪法，用《共同纲领》代替"
+      ],
+      "knowledgeCard": {
+        "topic": "《中国人民政治协商会议共同纲领》",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1949 年通过，在 1954 年宪法颁布前起临时宪法作用",
+        "commonMistake": "容易与 1954 年《中华人民共和国宪法》混淆",
+        "relatedTopics": "新中国第一部宪法（1954 年）"
+      }
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "土地改革完成后，我国农村实行的是？",
+      "options": ["地主土地所有制", "农民土地所有制", "农业生产合作社", "人民公社"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查土地改革后的土地制度",
+        "📖 关键知识：土改后土地归农民私有，尚未集体化",
+        "🎯 解题思路：农业合作化运动是 1953 年后开始的"
+      ],
+      "knowledgeCard": {
+        "topic": "农民土地所有制",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "土地改革后实行农民土地所有制（私有），1953 年后逐步走向集体化",
+        "commonMistake": "容易与后来的农业合作社、人民公社混淆",
+        "relatedTopics": "农业合作化运动（1953-1956）"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "黄继光和邱少云是哪次战争中的英雄？",
+      "options": ["抗日战争", "解放战争", "抗美援朝战争", "对越自卫反击战"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查英雄人物所属的战争",
+        "📖 关键知识：黄继光堵枪眼、邱少云烈火焚身都是抗美援朝事迹",
+        "🎯 解题思路：两位都是中国人民志愿军战士"
+      ],
+      "knowledgeCard": {
+        "topic": "抗美援朝英雄",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "黄继光（上甘岭战役堵枪眼）、邱少云（潜伏被火烧牺牲）都是志愿军英雄",
+        "commonMistake": "容易与其他战争英雄混淆",
+        "relatedTopics": "罗盛教、杨根思等志愿军烈士"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "新中国成立初期，西藏和平解放的方式是？",
+      "options": ["武力解放", "和平谈判", "民族自治", "一国两制"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查西藏解放的方式",
+        "📖 关键知识：通过和平谈判达成协议",
+        "🎯 解题思路：「一国两制」是改革开放后提出的，时间不符"
+      ],
+      "knowledgeCard": {
+        "topic": "西藏和平解放",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1951 年，中央人民政府与西藏地方政府通过和平谈判达成《十七条协议》",
+        "commonMistake": "容易与武力解放混淆，西藏是和平解放的",
+        "relatedTopics": "民族区域自治制度、祖国统一"
+      }
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "中华人民共和国的成立，开辟了中国历史的新纪元。这个「新纪元」新在？",
+      "options": ["①中国成为独立自主的国家 ②中国人民从此站起来了 ③中国进入社会主义社会 ④中国开始改革开放", "①②", "②③", "③④", "①④"],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查新中国成立的历史意义",
+        "📖 关键知识：新中国成立标志着国家独立、人民当家作主",
+        "🎯 解题思路：社会主义制度建立是 1956 年，改革开放是 1978 年"
+      ],
+      "knowledgeCard": {
+        "topic": "新中国成立的意义",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "新中国成立：国家独立、人民当家作主、结束百年屈辱、开辟新纪元",
+        "commonMistake": "容易把不同时期的事件混为一谈",
+        "relatedTopics": "半殖民地半封建社会结束、新民主主义社会开始"
+      }
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列事件按时间先后顺序排列正确的是？①开国大典 ②西藏和平解放 ③抗美援朝开始 ④土地改革基本完成",
+      "options": ["①②③④", "①③②④", "①③④②", "①②④③"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查新中国成立初期重大事件的时间顺序",
+        "📖 关键知识：1949 开国→1950 抗美援朝→1951 西藏→1952 土改完成",
+        "🎯 解题思路：记住各事件的具体年份再排序"
+      ],
+      "knowledgeCard": {
+        "topic": "新中国成立初期大事年表",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "1949.10 开国大典→1950.10 抗美援朝→1951 西藏和平解放→1952 底土改基本完成",
+        "commonMistake": "容易记混各事件的时间顺序",
+        "relatedTopics": "巩固人民政权的三大措施"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "新中国成立初期，为巩固人民政权而采取的措施中，具有「保家卫国」性质的是？",
+      "options": ["土地改革", "抗美援朝", "西藏和平解放", "制定《共同纲领》"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查各措施的性质和特点",
+        "📖 关键知识：抗美援朝是为了保卫国家安全、援助邻邦",
+        "🎯 解题思路：「保家卫国」是抗美援朝的口号"
+      ],
+      "knowledgeCard": {
+        "topic": "巩固人民政权的措施比较",
+        "source": "人教版八年级下册 第一单元",
+        "keyMemory": "土地改革（经济基础）、抗美援朝（保家卫国）、西藏和平解放（国家统一）",
+        "commonMistake": "容易混淆各措施的不同作用",
+        "relatedTopics": "三大措施的共同目标：巩固新生政权"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1]; // 0 提示=满分，1 提示=70%, 2 提示=40%, 3 提示=10%
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+      'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+      '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function submitFill() {
+  if (answered) return;
+  var input = document.getElementById("fillInput").value.trim();
+  if (!input) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  processAnswer(answers.some(function(a) { return input === a.trim(); }));
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
