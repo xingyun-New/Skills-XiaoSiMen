@@ -54,7 +54,8 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 🌍 地理 | 八年级 | 综合练习 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习-20260225.html) |
 | 📜 历史 | 八年级 | 下册综合 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-下册综合-20260225.html) |
 | 🧬 生物 | 八年级 | 下册期末综合 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/biology-8-semester2-20260225.html) |
-| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上-20260225.html) |
+| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260225.html) |
+| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260226.html) |
 
 ---
 
