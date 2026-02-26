@@ -49,8 +49,8 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 科目 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|------|---------|
-| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260226.html) |
-| 📜 历史 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固 -20260226.html) |
+| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上-20260226.html) |
+| 📜 历史 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固-20260226.html) |
 
 ---
 
