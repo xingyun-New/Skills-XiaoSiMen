@@ -1,945 +1,799 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>八年级道德与法治 - 坚持宪法至上 练习题</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>八年级道德与法治 · 坚持宪法至上练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
 
-        body {
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
 
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
 
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
-        }
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
 
-        .stat-item {
-            text-align: center;
-        }
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
 
-        .stat-label {
-            font-size: 14px;
-            color: #6c757d;
-            margin-top: 5px;
-        }
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
 
-        .progress-container {
-            padding: 20px;
-            background: #fff;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .question-container {
-            padding: 40px;
-        }
-
-        .question-number {
-            font-size: 14px;
-            color: #667eea;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .question-text {
-            font-size: 20px;
-            line-height: 1.6;
-            color: #212529;
-            margin-bottom: 30px;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .option {
-            padding: 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-
-        .option:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-            transform: translateX(5px);
-        }
-
-        .option.selected {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-
-        .option.correct {
-            border-color: #28a745;
-            background: #28a745;
-            color: white;
-        }
-
-        .option.incorrect {
-            border-color: #dc3545;
-            background: #dc3545;
-            color: white;
-        }
-
-        .feedback {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .feedback.correct {
-            background: #d4edda;
-            border: 2px solid #28a745;
-            display: block;
-        }
-
-        .feedback.incorrect {
-            background: #f8d7da;
-            border: 2px solid #dc3545;
-            display: block;
-        }
-
-        .feedback-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .feedback.correct .feedback-title {
-            color: #155724;
-        }
-
-        .feedback.incorrect .feedback-title {
-            color: #721c24;
-        }
-
-        .knowledge-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .knowledge-item {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .knowledge-item strong {
-            color: #667eea;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .hint-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .hint-level {
-            margin-bottom: 10px;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-        }
-
-        .hint-level strong {
-            color: #856404;
-        }
-
-        .result-screen {
-            display: none;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .result-title {
-            font-size: 32px;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        .result-score {
-            font-size: 48px;
-            font-weight: bold;
-            color: #28a745;
-            margin: 30px 0;
-        }
-
-        .result-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .result-stat {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .result-stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .result-stat-label {
-            font-size: 14px;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-
-        .weak-points {
-            text-align: left;
-            margin: 30px 0;
-            padding: 20px;
-            background: #fff3cd;
-            border-radius: 10px;
-        }
-
-        .weak-points h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-
-        .weak-point-item {
-            padding: 10px;
-            margin-bottom: 10px;
-            background: white;
-            border-radius: 5px;
-        }
-
-        @keyframes celebrate {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .celebrate {
-            animation: celebrate 0.5s ease;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 道德与法治</h1>
-            <p>八年级下册第一单元 - 坚持宪法至上</p>
-        </div>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-value" id="current-score">0</div>
-                <div class="stat-label">当前得分</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="correct-count">0</div>
-                <div class="stat-label">答对题数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="streak-count">0</div>
-                <div class="stat-label">连续答对</div>
-            </div>
-        </div>
-
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div style="text-align: center; margin-top: 10px; color: #6c757d;">
-                进度：<span id="progress-text">0/20</span>
-            </div>
-        </div>
-
-        <div class="question-container" id="question-container">
-            <div class="question-number" id="question-number">第 1 题</div>
-            <div class="question-text" id="question-text"></div>
-            <div class="options" id="options"></div>
-            
-            <div class="hint-section" id="hint-section">
-                <div style="font-weight: bold; color: #856404; margin-bottom: 10px;">💡 提示</div>
-                <div id="hint-content"></div>
-            </div>
-
-            <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" disabled>提交答案</button>
-            <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">下一题</button>
-
-            <div class="feedback" id="feedback"></div>
-        </div>
-
-        <div class="result-screen" id="result-screen">
-            <div class="result-title">🎉 练习完成！</div>
-            <div class="result-score" id="final-score"></div>
-            <div class="result-stats">
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-correct">0</div>
-                    <div class="result-stat-label">答对题数</div>
-                </div>
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-accuracy">0%</div>
-                    <div class="result-stat-label">正确率</div>
-                </div>
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-streak">0</div>
-                    <div class="result-stat-label">最高连对</div>
-                </div>
-            </div>
-            <div class="weak-points" id="weak-points"></div>
-            <button class="btn btn-primary" onclick="restartQuiz()">重新练习</button>
-        </div>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
     </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
 
-    <script type="application/json" id="quiz-json">
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "八年级道德与法治 · 坚持宪法至上",
+  "questions": [
     {
-        "questions": [
-            {
-                "id": 1,
-                "text": "我国宪法规定，中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家。这是我国的（  ）",
-                "options": ["国家性质", "根本制度", "根本任务", "政治制度"],
-                "answer": 0,
-                "knowledge": {
-                    "point": "我国的国家性质",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "工人阶级领导的、工农联盟为基础的人民民主专政的社会主义国家",
-                    "tip": "国家性质决定国家的一切制度",
-                    "link": "与人民代表大会制度相关联"
-                },
-                "hints": [
-                    "提示 1：这描述的是我国是什么性质的国家",
-                    "提示 2：宪法第一条明确规定了我国的国家性质",
-                    "提示 3：工人阶级领导、工农联盟基础，这是国家性质的表述"
-                ]
-            },
-            {
-                "id": 2,
-                "text": "我国的根本制度是（  ）",
-                "options": ["人民代表大会制度", "社会主义制度", "民族区域自治制度", "基层群众自治制度"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "我国的根本制度",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "社会主义制度是我国的根本制度",
-                    "tip": "根本制度只有一个，就是社会主义制度",
-                    "link": "与根本政治制度（人民代表大会制度）区分"
-                },
-                "hints": [
-                    "提示 1：注意区分「根本制度」和「根本政治制度」",
-                    "提示 2：宪法第二条明确规定",
-                    "提示 3：社会主义制度是根本制度，人民代表大会制度是根本政治制度"
-                ]
-            },
-            {
-                "id": 3,
-                "text": "宪法规定，中华人民共和国的一切权力属于（  ）",
-                "options": ["中国共产党", "人民", "政府", "人民代表大会"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "国家权力属于人民",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "一切权力属于人民是宪法的基本原则",
-                    "tip": "人民是国家的主人",
-                    "link": "与人民代表大会制度相联系"
-                },
-                "hints": [
-                    "提示 1：我国是人民当家作主的国家",
-                    "提示 2：宪法明确规定国家权力的归属",
-                    "提示 3：人民是国家的主人，一切权力属于人民"
-                ]
-            },
-            {
-                "id": 4,
-                "text": "我国宪法的核心价值追求是（  ）",
-                "options": ["维护社会稳定", "规范国家权力运行以保障公民权利", "促进经济发展", "维护国家统一"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "宪法的核心价值追求",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "规范国家权力运行以保障公民权利",
-                    "tip": "宪法既要规范权力，又要保障权利",
-                    "link": "与公民基本权利和义务相关联"
-                },
-                "hints": [
-                    "提示 1：宪法既要约束权力，又要保护权利",
-                    "提示 2：从宪法的作用思考",
-                    "提示 3：规范权力运行，保障公民权利是核心价值"
-                ]
-            },
-            {
-                "id": 5,
-                "text": "宪法规定，我国人民行使国家权力的机关是（  ）",
-                "options": ["人民政府", "人民法院", "人民代表大会", "人民检察院"],
-                "answer": 2,
-                "knowledge": {
-                    "point": "人民代表大会的性质",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "人民代表大会是人民行使国家权力的机关",
-                    "tip": "注意区分权力机关、行政机关、司法机关",
-                    "link": "与人民代表大会制度相关联"
-                },
-                "hints": [
-                    "提示 1：这是我国的权力机关",
-                    "提示 2：人民通过选举代表组成这个机关行使权力",
-                    "提示 3：人民代表大会是国家权力机关"
-                ]
-            },
-            {
-                "id": 6,
-                "text": "我国宪法规定，国家机构实行（  ）",
-                "options": ["首长负责制", "民主集中制原则", "少数服从多数", "集体领导制"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "国家机构的组织和活动原则",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "民主集中制是国家机构的基本原则",
-                    "tip": "民主基础上的集中，集中指导下的民主",
-                    "link": "与人民代表大会制度相关联"
-                },
-                "hints": [
-                    "提示 1：这是我国国家机构的根本组织原则",
-                    "提示 2：既要有民主，又要有集中",
-                    "提示 3：民主集中制原则"
-                ]
-            },
-            {
-                "id": 7,
-                "text": "宪法规定，中华人民共和国主席、副主席由（  ）选举产生",
-                "options": ["全国人民代表大会", "全国人大常委会", "国务院", "中共中央委员会"],
-                "answer": 0,
-                "knowledge": {
-                    "point": "国家主席的产生方式",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "国家主席、副主席由全国人大选举产生",
-                    "tip": "全国人大是最高国家权力机关，选举产生国家领导人",
-                    "link": "与全国人大的职权相关联"
-                },
-                "hints": [
-                    "提示 1：由最高国家权力机关选举",
-                    "提示 2：全国人民代表大会行使选举权",
-                    "提示 3：全国人大选举国家主席、副主席"
-                ]
-            },
-            {
-                "id": 8,
-                "text": "我国宪法规定，行使监督宪法实施职权的国家机关是（  ）",
-                "options": ["全国人民代表大会", "全国人民代表大会及其常务委员会", "国务院", "国家监察委员会"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "宪法监督机关",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "全国人大及其常委会监督宪法实施",
-                    "tip": "全国人大和全国人大常委会都有宪法监督权",
-                    "link": "与全国人大的职权相关联"
-                },
-                "hints": [
-                    "提示 1：这是最高国家权力机关的职权",
-                    "提示 2：包括全国人大和它的常设机关",
-                    "提示 3：全国人大及其常委会"
-                ]
-            },
-            {
-                "id": 9,
-                "text": "宪法的生命在于（  ）",
-                "options": ["制定", "修改", "实施", "宣传"],
-                "answer": 2,
-                "knowledge": {
-                    "point": "宪法的实施",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "宪法的生命在于实施，宪法的权威也在于实施",
-                    "tip": "宪法不能只停留在纸面上",
-                    "link": "与依宪治国相关联"
-                },
-                "hints": [
-                    "提示 1：宪法不能只是一纸空文",
-                    "提示 2：关键在于落实",
-                    "提示 3：实施是宪法的生命和权威所在"
-                ]
-            },
-            {
-                "id": 10,
-                "text": "我国宪法规定，宪法的修改由全国人民代表大会常务委员会或者（  ）以上的全国人民代表大会代表提议",
-                "options": ["三分之一", "四分之一", "五分之一", "六分之一"],
-                "answer": 2,
-                "knowledge": {
-                    "point": "宪法修改的程序",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "五分之一以上全国人大代表可提议修改宪法",
-                    "tip": "宪法修改程序比普通法律更严格",
-                    "link": "与宪法的稳定性相关联"
-                },
-                "hints": [
-                    "提示 1：宪法修改程序很严格",
-                    "提示 2：需要一定比例的代表联名",
-                    "提示 3：五分之一以上代表可以提议"
-                ]
-            },
-            {
-                "id": 11,
-                "text": "宪法修改时，需要由全国人民代表大会以（  ）通过",
-                "options": ["全体代表的过半数", "全体代表的三分之二以上", "到会代表的过半数", "到会代表的三分之二以上"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "宪法修改的表决程序",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "宪法修改需全体代表的三分之二以上多数通过",
-                    "tip": "比普通法律要求更高，体现宪法的稳定性",
-                    "link": "与宪法是根本法相关联"
-                },
-                "hints": [
-                    "提示 1：宪法修改需要更高的通过门槛",
-                    "提示 2：不是过半数，而是更高的比例",
-                    "提示 3：全体代表的三分之二以上"
-                ]
-            },
-            {
-                "id": 12,
-                "text": "我国设立国家宪法日是（  ）",
-                "options": ["3 月 5 日", "10 月 1 日", "12 月 4 日", "12 月 10 日"],
-                "answer": 2,
-                "knowledge": {
-                    "point": "国家宪法日",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "12 月 4 日是国家宪法日",
-                    "tip": "2014 年设立，纪念现行宪法颁布实施",
-                    "link": "与宪法宣传教育相关联"
-                },
-                "hints": [
-                    "提示 1：在 12 月份",
-                    "提示 2：与现行宪法颁布时间有关",
-                    "提示 3：12 月 4 日"
-                ]
-            },
-            {
-                "id": 13,
-                "text": "宪法规定，国家工作人员就职时应当依照法律规定公开进行（  ）",
-                "options": ["就职演讲", "宪法宣誓", "廉政承诺", "任职公示"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "宪法宣誓制度",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "国家工作人员就职时应当公开进行宪法宣誓",
-                    "tip": "体现对宪法的尊重和敬畏",
-                    "link": "与依宪治国、维护宪法权威相关联"
-                },
-                "hints": [
-                    "提示 1：这是为了增强宪法意识",
-                    "提示 2：向宪法作出庄严承诺",
-                    "提示 3：宪法宣誓制度"
-                ]
-            },
-            {
-                "id": 14,
-                "text": "我国宪法监督制度的内容包括（  ）\n①合宪性审查  ②备案审查  ③执法检查  ④司法审查",
-                "options": ["①②③", "①②④", "①③④", "②③④"],
-                "answer": 0,
-                "knowledge": {
-                    "point": "宪法监督的内容",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "合宪性审查、备案审查、执法检查都是宪法监督的方式",
-                    "tip": "我国不实行司法审查制度",
-                    "link": "与宪法实施监督相关联"
-                },
-                "hints": [
-                    "提示 1：我国没有司法审查制度",
-                    "提示 2：排除含有④的选项",
-                    "提示 3：①②③都是我国的宪法监督方式"
-                ]
-            },
-            {
-                "id": 15,
-                "text": "坚持依法治国首先要坚持（  ）",
-                "options": ["依宪治国", "依法行政", "公正司法", "全民守法"],
-                "answer": 0,
-                "knowledge": {
-                    "point": "依宪治国的地位",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "坚持依法治国首先要坚持依宪治国",
-                    "tip": "宪法是根本法，是治国安邦的总章程",
-                    "link": "与全面依法治国相关联"
-                },
-                "hints": [
-                    "提示 1：宪法是根本法",
-                    "提示 2：依法治国首先要依据宪法治理国家",
-                    "提示 3：依宪治国"
-                ]
-            },
-            {
-                "id": 16,
-                "text": "宪法规定，我国的根本政治制度是（  ）",
-                "options": ["社会主义制度", "人民代表大会制度", "民族区域自治制度", "基层群众自治制度"],
-                "answer": 1,
-                "knowledge": {
-                    "point": "根本政治制度",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "人民代表大会制度是我国的根本政治制度",
-                    "tip": "注意区分根本制度和根本政治制度",
-                    "link": "与人民当家作主相关联"
-                },
-                "hints": [
-                    "提示 1：这是我国的政权组织形式",
-                    "提示 2：人民通过代表大会行使权力",
-                    "提示 3：人民代表大会制度"
-                ]
-            },
-            {
-                "id": 17,
-                "text": "宪法规定，中华人民共和国的国家机构实行民主集中制原则。下列体现这一原则的是（  ）\n①人大代表由民主选举产生  ②国家行政机关由人大产生  ③中央和地方国家机构职权的划分  ④人民法院独立行使审判权",
-                "options": ["①②③", "①②④", "①③④", "②③④"],
-                "answer": 0,
-                "knowledge": {
-                    "point": "民主集中制的体现",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "民主集中制体现在多个方面",
-                    "tip": "④体现的是司法独立，不是民主集中制",
-                    "link": "与国家机构组织原则相关联"
-                },
-                "hints": [
-                    "提示 1：法院独立审判不是民主集中制的体现",
-                    "提示 2：排除含有④的选项",
-                    "提示 3：①②③都体现了民主集中制"
-                ]
-            },
-            {
-                "id": 18,
-                "text": "宪法规定，全国人民代表大会每届任期（  ）",
-                "options": ["三年", "四年", "五年", "六年"],
-                "answer": 2,
-                "knowledge": {
-                    "point": "全国人大的任期",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "全国人民代表大会每届任期五年",
-                    "tip": "与地方人大任期相同",
-                    "link": "与人民代表大会制度相关联"
-                },
-                "hints": [
-                    "提示 1：我国各级人大任期相同",
-                    "提示 2：不是三年或四年",
-                    "提示 3：五年任期"
-                ]
-            },
-            {
-                "id": 19,
-                "text": "加强宪法监督，需要（  ）\n①健全宪法实施和监督制度  ②增强人们的宪法意识  ③坚持依宪治国  ④完善全国人大及其常委会宪法监督制度",
-                "options": ["①②③", "①②④", "②③④", "①②③④"],
-                "answer": 3,
-                "knowledge": {
-                    "point": "加强宪法监督的措施",
-                    "source": "人教版八年级下册 第一单元 第二课",
-                    "key": "加强宪法监督需要多方面共同努力",
-                    "tip": "四个选项都是加强宪法监督的必要措施",
-                    "link": "与全面依法治国相关联"
-                },
-                "hints": [
-                    "提示 1：这是多选题的变形",
-                    "提示 2：四个方面都很重要",
-                    "提示 3：①②③④都正确"
-                ]
-            },
-            {
-                "id": 20,
-                "text": "宪法是治国安邦的总章程，这是因为（  ）\n①宪法规定了国家生活中的根本问题  ②宪法具有最高的法律效力  ③宪法的制定和修改程序最为严格  ④宪法是一切组织和个人的根本活动准则",
-                "options": ["①②③", "①②④", "①③④", "①②③④"],
-                "answer": 3,
-                "knowledge": {
-                    "point": "宪法的地位",
-                    "source": "人教版八年级下册 第一单元 第一课",
-                    "key": "宪法是根本法，是治国安邦的总章程",
-                    "tip": "四个方面都体现了宪法的重要地位",
-                    "link": "与宪法是根本法相关联"
-                },
-                "hints": [
-                    "提示 1：这是多选题的变形",
-                    "提示 2：四个方面都正确",
-                    "提示 3：①②③④都体现了宪法的地位"
-                ]
-            }
-        ]
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国宪法规定，中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家。这是我国的（  ）",
+      "options": ["国家性质", "根本制度", "根本任务", "政治制度"],
+      "answer": 0,
+      "hints": [
+        "💡 本题考查的是我国的国家性质相关知识点",
+        "📖 宪法第一条明确规定了我国的国家性质",
+        "🎯 工人阶级领导、工农联盟基础描述的是国家性质"
+      ],
+      "knowledgeCard": {
+        "topic": "我国的国家性质",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "工人阶级领导的、工农联盟为基础的人民民主专政的社会主义国家",
+        "commonMistake": "注意区分国家性质与根本制度",
+        "relatedTopics": "与人民代表大会制度相关联"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国的根本制度是（  ）",
+      "options": ["人民代表大会制度", "社会主义制度", "民族区域自治制度", "基层群众自治制度"],
+      "answer": 1,
+      "hints": [
+        "💡 注意区分「根本制度」和「根本政治制度」",
+        "📖 宪法第二条明确规定我国的根本制度",
+        "🎯 社会主义制度是根本制度，人民代表大会制度是根本政治制度"
+      ],
+      "knowledgeCard": {
+        "topic": "我国的根本制度",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "社会主义制度是我国的根本制度",
+        "commonMistake": "容易与人民代表大会制度混淆",
+        "relatedTopics": "与根本政治制度对比记忆"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法规定，中华人民共和国的一切权力属于（  ）",
+      "options": ["中国共产党", "人民", "政府", "人民代表大会"],
+      "answer": 1,
+      "hints": [
+        "💡 我国是人民当家作主的国家",
+        "📖 宪法明确规定国家权力的归属",
+        "🎯 人民是国家的主人，一切权力属于人民"
+      ],
+      "knowledgeCard": {
+        "topic": "国家权力属于人民",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "一切权力属于人民是宪法的基本原则",
+        "commonMistake": "不要与党的领导混淆",
+        "relatedTopics": "与人民代表大会制度相联系"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国宪法的核心价值追求是（  ）",
+      "options": ["维护社会稳定", "规范国家权力运行以保障公民权利", "促进经济发展", "维护国家统一"],
+      "answer": 1,
+      "hints": [
+        "💡 宪法既要约束权力，又要保护权利",
+        "📖 从宪法的作用思考其价值追求",
+        "🎯 规范权力运行，保障公民权利是核心价值"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的核心价值追求",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "规范国家权力运行以保障公民权利",
+        "commonMistake": "容易选成维护社会稳定",
+        "relatedTopics": "与公民基本权利和义务相关联"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法规定，我国人民行使国家权力的机关是（  ）",
+      "options": ["人民政府", "人民法院", "人民代表大会", "人民检察院"],
+      "answer": 2,
+      "hints": [
+        "💡 这是我国的权力机关",
+        "📖 人民通过选举代表组成这个机关行使权力",
+        "🎯 人民代表大会是国家权力机关"
+      ],
+      "knowledgeCard": {
+        "topic": "人民代表大会的性质",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "人民代表大会是人民行使国家权力的机关",
+        "commonMistake": "注意区分权力机关、行政机关、司法机关",
+        "relatedTopics": "与人民代表大会制度相关联"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国宪法规定，国家机构实行（  ）",
+      "options": ["首长负责制", "民主集中制原则", "少数服从多数", "集体领导制"],
+      "answer": 1,
+      "hints": [
+        "💡 这是我国国家机构的根本组织原则",
+        "📖 既要有民主，又要有集中",
+        "🎯 民主集中制原则"
+      ],
+      "knowledgeCard": {
+        "topic": "国家机构的组织和活动原则",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "民主集中制是国家机构的基本原则",
+        "commonMistake": "容易与少数服从多数混淆",
+        "relatedTopics": "与人民代表大会制度相关联"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "宪法规定，中华人民共和国主席、副主席由（  ）选举产生",
+      "options": ["全国人民代表大会", "全国人大常委会", "国务院", "中共中央委员会"],
+      "answer": 0,
+      "hints": [
+        "💡 由最高国家权力机关选举",
+        "📖 全国人民代表大会行使选举权",
+        "🎯 全国人大选举国家主席、副主席"
+      ],
+      "knowledgeCard": {
+        "topic": "国家主席的产生方式",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "国家主席、副主席由全国人大选举产生",
+        "commonMistake": "不要与全国人大常委会混淆",
+        "relatedTopics": "与全国人大的职权相关联"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国宪法规定，行使监督宪法实施职权的国家机关是（  ）",
+      "options": ["全国人民代表大会", "全国人民代表大会及其常务委员会", "国务院", "国家监察委员会"],
+      "answer": 1,
+      "hints": [
+        "💡 这是最高国家权力机关的职权",
+        "📖 包括全国人大和它的常设机关",
+        "🎯 全国人大及其常委会"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法监督机关",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "全国人大及其常委会监督宪法实施",
+        "commonMistake": "容易漏选常委会",
+        "relatedTopics": "与全国人大的职权相关联"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法的生命在于（  ）",
+      "options": ["制定", "修改", "实施", "宣传"],
+      "answer": 2,
+      "hints": [
+        "💡 宪法不能只是一纸空文",
+        "📖 关键在于落实",
+        "🎯 实施是宪法的生命和权威所在"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的实施",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "宪法的生命在于实施，宪法的权威也在于实施",
+        "commonMistake": "容易选成制定或修改",
+        "relatedTopics": "与依宪治国相关联"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国宪法规定，宪法的修改由全国人民代表大会常务委员会或者（  ）以上的全国人民代表大会代表提议",
+      "options": ["三分之一", "四分之一", "五分之一", "六分之一"],
+      "answer": 2,
+      "hints": [
+        "💡 宪法修改程序很严格",
+        "📖 需要一定比例的代表联名",
+        "🎯 五分之一以上代表可以提议"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法修改的程序",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "五分之一以上全国人大代表可提议修改宪法",
+        "commonMistake": "容易记错比例数字",
+        "relatedTopics": "与宪法的稳定性相关联"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "宪法修改时，需要由全国人民代表大会以（  ）通过",
+      "options": ["全体代表的过半数", "全体代表的三分之二以上", "到会代表的过半数", "到会代表的三分之二以上"],
+      "answer": 1,
+      "hints": [
+        "💡 宪法修改需要更高的通过门槛",
+        "📖 不是过半数，而是更高的比例",
+        "🎯 全体代表的三分之二以上"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法修改的表决程序",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "宪法修改需全体代表的三分之二以上多数通过",
+        "commonMistake": "容易与普通法律混淆",
+        "relatedTopics": "与宪法是根本法相关联"
+      }
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国设立国家宪法日是（  ）",
+      "options": ["3 月 5 日", "10 月 1 日", "12 月 4 日", "12 月 10 日"],
+      "answer": 2,
+      "hints": [
+        "💡 在 12 月份",
+        "📖 与现行宪法颁布时间有关",
+        "🎯 12 月 4 日"
+      ],
+      "knowledgeCard": {
+        "topic": "国家宪法日",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "12 月 4 日是国家宪法日",
+        "commonMistake": "容易与法制宣传日混淆",
+        "relatedTopics": "与宪法宣传教育相关联"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法规定，国家工作人员就职时应当依照法律规定公开进行（  ）",
+      "options": ["就职演讲", "宪法宣誓", "廉政承诺", "任职公示"],
+      "answer": 1,
+      "hints": [
+        "💡 这是为了增强宪法意识",
+        "📖 向宪法作出庄严承诺",
+        "🎯 宪法宣誓制度"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法宣誓制度",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "国家工作人员就职时应当公开进行宪法宣誓",
+        "commonMistake": "容易与其他就职仪式混淆",
+        "relatedTopics": "与依宪治国、维护宪法权威相关联"
+      }
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "我国宪法监督制度的内容包括（  ）\n①合宪性审查  ②备案审查  ③执法检查  ④司法审查",
+      "options": ["①②③", "①②④", "①③④", "②③④"],
+      "answer": 0,
+      "hints": [
+        "💡 我国没有司法审查制度",
+        "📖 排除含有④的选项",
+        "🎯 ①②③都是我国的宪法监督方式"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法监督的内容",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "合宪性审查、备案审查、执法检查都是宪法监督的方式",
+        "commonMistake": "误以为我国有司法审查",
+        "relatedTopics": "与宪法实施监督相关联"
+      }
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "坚持依法治国首先要坚持（  ）",
+      "options": ["依宪治国", "依法行政", "公正司法", "全民守法"],
+      "answer": 0,
+      "hints": [
+        "💡 宪法是根本法",
+        "📖 依法治国首先要依据宪法治理国家",
+        "🎯 依宪治国"
+      ],
+      "knowledgeCard": {
+        "topic": "依宪治国的地位",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "坚持依法治国首先要坚持依宪治国",
+        "commonMistake": "容易与依法行政混淆",
+        "relatedTopics": "与全面依法治国相关联"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法规定，我国的根本政治制度是（  ）",
+      "options": ["社会主义制度", "人民代表大会制度", "民族区域自治制度", "基层群众自治制度"],
+      "answer": 1,
+      "hints": [
+        "💡 这是我国的政权组织形式",
+        "📖 人民通过代表大会行使权力",
+        "🎯 人民代表大会制度"
+      ],
+      "knowledgeCard": {
+        "topic": "根本政治制度",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "人民代表大会制度是我国的根本政治制度",
+        "commonMistake": "注意区分根本制度和根本政治制度",
+        "relatedTopics": "与人民当家作主相关联"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "宪法规定，中华人民共和国的国家机构实行民主集中制原则。下列体现这一原则的是（  ）\n①人大代表由民主选举产生  ②国家行政机关由人大产生  ③中央和地方国家机构职权的划分  ④人民法院独立行使审判权",
+      "options": ["①②③", "①②④", "①③④", "②③④"],
+      "answer": 0,
+      "hints": [
+        "💡 法院独立审判不是民主集中制的体现",
+        "📖 排除含有④的选项",
+        "🎯 ①②③都体现了民主集中制"
+      ],
+      "knowledgeCard": {
+        "topic": "民主集中制的体现",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "民主集中制体现在多个方面",
+        "commonMistake": "误以为司法独立也是民主集中制",
+        "relatedTopics": "与国家机构组织原则相关联"
+      }
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "宪法规定，全国人民代表大会每届任期（  ）",
+      "options": ["三年", "四年", "五年", "六年"],
+      "answer": 2,
+      "hints": [
+        "💡 我国各级人大任期相同",
+        "📖 不是三年或四年",
+        "🎯 五年任期"
+      ],
+      "knowledgeCard": {
+        "topic": "全国人大的任期",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "全国人民代表大会每届任期五年",
+        "commonMistake": "容易与其他国家议会任期混淆",
+        "relatedTopics": "与人民代表大会制度相关联"
+      }
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "加强宪法监督，需要（  ）\n①健全宪法实施和监督制度  ②增强人们的宪法意识  ③坚持依宪治国  ④完善全国人大及其常委会宪法监督制度",
+      "options": ["①②③", "①②④", "②③④", "①②③④"],
+      "answer": 3,
+      "hints": [
+        "💡 这是多选题的变形",
+        "📖 四个方面都很重要",
+        "🎯 ①②③④都正确"
+      ],
+      "knowledgeCard": {
+        "topic": "加强宪法监督的措施",
+        "source": "人教版八年级下册 第一单元 第二课",
+        "keyMemory": "加强宪法监督需要多方面共同努力",
+        "commonMistake": "容易漏选某个选项",
+        "relatedTopics": "与全面依法治国相关联"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "宪法是治国安邦的总章程，这是因为（  ）\n①宪法规定了国家生活中的根本问题  ②宪法具有最高的法律效力  ③宪法的制定和修改程序最为严格  ④宪法是一切组织和个人的根本活动准则",
+      "options": ["①②③", "①②④", "①③④", "①②③④"],
+      "answer": 3,
+      "hints": [
+        "💡 这是多选题的变形",
+        "📖 四个方面都正确",
+        "🎯 ①②③④都体现了宪法的地位"
+      ],
+      "knowledgeCard": {
+        "topic": "宪法的地位",
+        "source": "人教版八年级下册 第一单元 第一课",
+        "keyMemory": "宪法是根本法，是治国安邦的总章程",
+        "commonMistake": "容易漏选某个方面",
+        "relatedTopics": "与宪法是根本法相关联"
+      }
     }
-    </script>
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
 
-    <script>
-        let currentQuestion = 0;
-        let score = 0;
-        let correctCount = 0;
-        let streakCount = 0;
-        let maxStreak = 0;
-        let selectedOption = null;
-        let answered = false;
-        let wrongQuestions = [];
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
 
-        const quizData = JSON.parse(document.getElementById('quiz-json').textContent);
-        const questions = quizData.questions;
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1]; // 0 提示=满分，1 提示=70%, 2 提示=40%, 3 提示=10%
 
-        function loadQuestion() {
-            const question = questions[currentQuestion];
-            document.getElementById('question-number').textContent = `第 ${currentQuestion + 1} 题`;
-            document.getElementById('question-text').textContent = question.text;
-            
-            const optionsContainer = document.getElementById('options');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'option';
-                optionDiv.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
-                optionDiv.onclick = () => selectOption(index);
-                optionsContainer.appendChild(optionDiv);
-            });
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
 
-            document.getElementById('feedback').className = 'feedback';
-            document.getElementById('feedback').innerHTML = '';
-            document.getElementById('submit-btn').classList.remove('hidden');
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('next-btn').classList.add('hidden');
-            document.getElementById('hint-section').style.display = 'none';
-            
-            selectedOption = null;
-            answered = false;
-            
-            updateProgress();
-        }
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
 
-        function selectOption(index) {
-            if (answered) return;
-            
-            selectedOption = index;
-            const options = document.querySelectorAll('.option');
-            options.forEach((option, i) => {
-                option.classList.remove('selected');
-                if (i === index) {
-                    option.classList.add('selected');
-                }
-            });
-            
-            document.getElementById('submit-btn').disabled = false;
-        }
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
 
-        function submitAnswer() {
-            if (selectedOption === null || answered) return;
-            
-            answered = true;
-            const question = questions[currentQuestion];
-            const options = document.querySelectorAll('.option');
-            const feedback = document.getElementById('feedback');
-            
-            options.forEach((option, index) => {
-                if (index === question.answer) {
-                    option.classList.add('correct');
-                } else if (index === selectedOption && index !== question.answer) {
-                    option.classList.add('incorrect');
-                }
-            });
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
 
-            if (selectedOption === question.answer) {
-                score += 5;
-                correctCount++;
-                streakCount++;
-                if (streakCount > maxStreak) {
-                    maxStreak = streakCount;
-                }
-                
-                feedback.className = 'feedback correct';
-                feedback.innerHTML = `
-                    <div class="feedback-title">✅ 回答正确！</div>
-                    <div class="knowledge-card">
-                        <div class="knowledge-item"><strong>📚 考点：</strong>${question.knowledge.point}</div>
-                        <div class="knowledge-item"><strong>📖 出处：</strong>${question.knowledge.source}</div>
-                        <div class="knowledge-item"><strong>💡 关键记忆：</strong>${question.knowledge.key}</div>
-                        <div class="knowledge-item"><strong>🔗 关联知识：</strong>${question.knowledge.link}</div>
-                    </div>
-                `;
-                
-                document.querySelector('.container').classList.add('celebrate');
-                setTimeout(() => {
-                    document.querySelector('.container').classList.remove('celebrate');
-                }, 500);
-            } else {
-                streakCount = 0;
-                wrongQuestions.push(question);
-                
-                feedback.className = 'feedback incorrect';
-                feedback.innerHTML = `
-                    <div class="feedback-title">❌ 回答错误</div>
-                    <div class="knowledge-card">
-                        <div class="knowledge-item"><strong>📚 考点：</strong>${question.knowledge.point}</div>
-                        <div class="knowledge-item"><strong>📖 出处：</strong>${question.knowledge.source}</div>
-                        <div class="knowledge-item"><strong>💡 关键记忆：</strong>${question.knowledge.key}</div>
-                        <div class="knowledge-item"><strong>⚠️ 易错提醒：</strong>${question.knowledge.tip}</div>
-                        <div class="knowledge-item"><strong>🔗 关联知识：</strong>${question.knowledge.link}</div>
-                    </div>
-                `;
-            }
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+      'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+      '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  }
 
-            updateStats();
-            document.getElementById('submit-btn').classList.add('hidden');
-            document.getElementById('next-btn').classList.remove('hidden');
-        }
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
 
-        function nextQuestion() {
-            currentQuestion++;
-            
-            if (currentQuestion >= questions.length) {
-                showResult();
-            } else {
-                loadQuestion();
-            }
-        }
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
 
-        function updateStats() {
-            document.getElementById('current-score').textContent = score;
-            document.getElementById('correct-count').textContent = correctCount;
-            document.getElementById('streak-count').textContent = streakCount;
-        }
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
 
-        function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progress-fill').style.width = `${progress}%`;
-            document.getElementById('progress-text').textContent = `${currentQuestion + 1}/${questions.length}`;
-        }
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
 
-        function showResult() {
-            document.getElementById('question-container').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            
-            const accuracy = Math.round((correctCount / questions.length) * 100);
-            
-            document.getElementById('final-score').textContent = `${score}分`;
-            document.getElementById('final-correct').textContent = `${correctCount}/${questions.length}`;
-            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
-            document.getElementById('final-streak').textContent = maxStreak;
-            
-            if (wrongQuestions.length > 0) {
-                const weakPointsHtml = `
-                    <h3>📝 需要加强的知识点</h3>
-                    ${wrongQuestions.map(q => `
-                        <div class="weak-point-item">
-                            <strong>${q.knowledge.point}</strong><br>
-                            <small>${q.knowledge.source}</small>
-                        </div>
-                    `).join('')}
-                `;
-                document.getElementById('weak-points').innerHTML = weakPointsHtml;
-            } else {
-                document.getElementById('weak-points').innerHTML = '<h3>🎉 太棒了！所有题目都答对了！</h3>';
-            }
-        }
+function submitFill() {
+  if (answered) return;
+  var input = document.getElementById("fillInput").value.trim();
+  if (!input) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  processAnswer(answers.some(function(a) { return input === a.trim(); }));
+}
 
-        function restartQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            correctCount = 0;
-            streakCount = 0;
-            maxStreak = 0;
-            wrongQuestions = [];
-            answered = false;
-            
-            document.getElementById('result-screen').style.display = 'none';
-            document.getElementById('question-container').style.display = 'block';
-            
-            updateStats();
-            loadQuestion();
-        }
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
 
-        // 初始化
-        loadQuestion();
-    </script>
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
 </body>
 </html>
