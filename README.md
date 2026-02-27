@@ -54,6 +54,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 📜 历史 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固-20260226.html) |
 | ⚖️ 道法 | 八年级 | 下册综合练习 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-下册综合练习-20260227.html) |
 | ⚖️ 道法 | 八年级 | 理解权利义务 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-理解权利义务-20260227.html) |
+| 📜 历史 | 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-社会主义制度建立与建设探索-20260227.html) |
 
 ---
 
