@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史·八年级下册·中国特色社会主义道路练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #667eea; transform: scale(1.02); }
+
+    .fill-input {
+      width: 100%; padding: 14px 18px; font-size: 1.1em;
+      border: 2px solid #e0e0e0; border-radius: 14px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .fill-input:focus { border-color: #667eea; }
+    .submit-btn {
+      width: 100%; padding: 14px; margin-top: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    .material-section {
+      background: #f5f5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .material-content {
+      line-height: 1.8;
+      font-size: 1em;
+      color: #333;
+    }
+    .material-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.95em;
+    }
+    .material-content th, .material-content td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .material-content th {
+      background: #e3f2fd;
+      font-weight: bold;
+    }
+    .sub-questions {
+      margin-top: 16px;
+    }
+    .sub-question-item {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .sub-question-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .sub-question-points {
+      font-size: 0.85em;
+      color: #9c27b0;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 0.95em;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    .answer-textarea:focus {
+      border-color: #9c27b0;
+    }
+    .submit-material-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover {
+      transform: scale(1.02);
+    }
+    .scoring-rubric {
+      background: #f3e5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+    .scoring-title {
+      font-weight: bold;
+      color: #7b1fa2;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    .scoring-item {
+      margin: 6px 0;
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #444;
+    }
+    .scoring-item::before {
+      content: "✓ ";
+      color: #9c27b0;
+      font-weight: bold;
+    }
+    .self-assess {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) {
+      border-color: #9c27b0;
+      background: #f3e5f5;
+      transform: scale(1.02);
+    }
+    .assess-btn.correct {
+      border-color: #4CAF50;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .assess-btn.partial {
+      border-color: #FF9800;
+      background: #FFF3E0;
+      color: #E65100;
+    }
+    .assess-btn.wrong {
+      border-color: #f44336;
+      background: #FFEBEE;
+      color: #c62828;
+    }
+    .assess-btn.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .assess-score {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "历史·八年级下册·中国特色社会主义道路",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "作出把党和国家工作中心转移到经济建设上来、实行改革开放的历史性决策的会议是：",
+      "options": ["中共七大", "中共八大", "中共十一届三中全会", "中共十四大"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查的是改革开放开端的标志性会议",
+        "📖 关键知识：1978 年 12 月召开的这次会议是建国以来党的历史上具有深远意义的伟大转折",
+        "🎯 解题思路：关键词「改革开放」「经济建设」，这次会议标志着中国进入社会主义现代化建设新时期"
+      ],
+      "knowledgeCard": {
+        "topic": "中共十一届三中全会",
+        "source": "人教版八年级下册 第三单元 第 7 课",
+        "keyMemory": "1978 年，十一届三中全会——改革开放的开端，伟大转折点",
+        "commonMistake": "中共七大（1945 年）确立毛泽东思想；中共八大（1956 年）探索社会主义建设；十四大（1992 年）提出建立社会主义市场经济体制",
+        "relatedTopics": "改革开放的历程、邓小平理论的形成"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国改革开放后，经济体制改革首先从哪个领域开始？",
+      "options": ["城市", "农村", "沿海地区", "工业"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查经济体制改革的起点",
+        "📖 关键知识：1978 年安徽凤阳小岗村农民率先实行分田包产到户，拉开了农村改革的序幕",
+        "🎯 解题思路：记住「农村先行」——家庭联产承包责任制是最早的改革措施"
+      ],
+      "knowledgeCard": {
+        "topic": "家庭联产承包责任制",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "农村改革先行——家庭联产承包责任制（包产到户、包干到户）",
+        "commonMistake": "城市经济体制改革在 1984 年才全面展开，晚于农村改革",
+        "relatedTopics": "人民公社化运动的教训、农村生产力的解放"
+      }
+    },
+    {
+      "id": 3,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "家庭联产承包责任制是在土地公有制基础上实行的。（  ）",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查家庭联产承包责任制的所有制性质",
+        "📖 关键知识：家庭联产承包责任制坚持土地集体所有，农民只有使用权，没有所有权",
+        "🎯 解题思路：改革开放没有改变社会主义公有制性质，只是改变经营方式"
+      ],
+      "knowledgeCard": {
+        "topic": "家庭联产承包责任制的性质",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "土地公有制不变，改变的是经营方式（集体经营→家庭承包经营）",
+        "commonMistake": "容易误认为「包产到户」就是土地私有，这是错误的理解"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "1980 年，我国设立的四个经济特区是：",
+      "options": [
+        "上海、广州、深圳、珠海",
+        "深圳、珠海、汕头、厦门",
+        "深圳、珠海、汕头、海南",
+        "广州、深圳、珠海、厦门"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查最早的经济特区",
+        "📖 关键知识：1980 年设立深圳、珠海、汕头（广东三省）、厦门（福建）四个经济特区",
+        "🎯 解题思路：记忆口诀「深珠汕厦」，海南是 1988 年才成为经济特区的"
+      ],
+      "knowledgeCard": {
+        "topic": "经济特区的建立",
+        "source": "人教版八年级下册 第三单元 第 9 课",
+        "keyMemory": "1980 年「深珠汕厦」四个经济特区，深圳成为对外开放的「窗口」",
+        "commonMistake": "海南是 1988 年设立的经济特区，不是 1980 年的四个之一；上海浦东新区是 1990 年开发的",
+        "relatedTopics": "对外开放格局的形成、经济特区的作用"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "邓小平理论被确立为党的指导思想是在：",
+      "options": ["中共十二大", "中共十三大", "中共十四大", "中共十五大"],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查邓小平理论确立为指导思想的时间",
+        "📖 关键知识：1997 年中共十五大把邓小平理论确立为党的指导思想并写入党章",
+        "🎯 解题思路：邓小平 1997 年 2 月逝世，十五大（1997 年 9 月）将其理论确立为指导思想"
+      ],
+      "knowledgeCard": {
+        "topic": "邓小平理论的确立",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "1997 年中共十五大——邓小平理论确立为党的指导思想",
+        "commonMistake": "十四大（1992 年）提出建立社会主义市场经济体制；十三大（1987 年）系统阐述社会主义初级阶段理论",
+        "relatedTopics": "中国特色社会主义理论体系、马克思主义中国化"
+      }
+    },
+    {
+      "id": 6,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "中共十四大明确提出建立社会主义市场经济体制的目标。（  ）",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查中共十四大的主要内容",
+        "📖 关键知识：1992 年中共十四大明确提出我国经济体制改革的目标是建立社会主义市场经济体制",
+        "🎯 解题思路：1992 年邓小平南方谈话后，十四大正式确立市场经济改革目标"
+      ],
+      "knowledgeCard": {
+        "topic": "中共十四大的历史贡献",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "1992 年十四大——建立社会主义市场经济体制",
+        "commonMistake": "不要与十五大（邓小平理论）、十六大（三个代表）混淆"
+      }
+    },
+    {
+      "id": 7,
+      "type": "fillblank",
+      "difficulty": 1,
+      "question": "1978 年，安徽凤阳______村农民率先实行分田包产到户，自负盈亏，成为我国农村改革的发源地。",
+      "answer": ["小岗"],
+      "hints": [
+        "💡 方向提示：本题考查农村改革的发源地",
+        "📖 关键知识：1978 年冬，安徽凤阳小岗村 18 户农民签订「生死状」，率先实行家庭联产承包责任制",
+        "🎯 解题思路：记住「小岗村」这个地名，它是中国农村改革的第一村"
+      ],
+      "knowledgeCard": {
+        "topic": "农村改革的开端",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "安徽凤阳小岗村——中国农村改革发源地",
+        "relatedTopics": "家庭联产承包责任制的推广、人民公社的解体"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国对外开放格局形成的过程是：",
+      "options": [
+        "经济特区→沿海开放城市→沿海经济开放区→内地",
+        "沿海开放城市→经济特区→内地→沿海经济开放区",
+        "经济特区→内地→沿海开放城市→沿海经济开放区",
+        "沿海经济开放区→经济特区→沿海开放城市→内地"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查对外开放的推进顺序",
+        "📖 关键知识：我国对外开放是「点→线→面」逐步推进的过程",
+        "🎯 解题思路：从 1980 年四个经济特区（点）开始，到 14 个沿海城市（线），再到开放区（面），最后到内地"
+      ],
+      "knowledgeCard": {
+        "topic": "对外开放格局的形成",
+        "source": "人教版八年级下册 第三单元 第 9 课",
+        "keyMemory": "「经济特区→沿海开放城市→沿海经济开放区→内地」，全方位、多层次、宽领域",
+        "commonMistake": "顺序不能颠倒，经济特区是最早的突破口"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "1992 年邓小平南方谈话强调的核心内容是：",
+      "options": [
+        "坚持四项基本原则",
+        "发展才是硬道理",
+        "以阶级斗争为纲",
+        "计划经济为主，市场调节为辅"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查邓小平南方谈话的核心观点",
+        "📖 关键知识：邓小平南方谈话强调「发展才是硬道理」，提出判断改革成败的「三个有利于」标准",
+        "🎯 解题思路：南方谈话是为了推动改革开放深入发展，核心就是强调发展经济"
+      ],
+      "knowledgeCard": {
+        "topic": "邓小平南方谈话",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "1992 年南方谈话——「发展才是硬道理」「三个有利于」「计划和市场都是经济手段」",
+        "commonMistake": "「以阶级斗争为纲」是文革时期的错误方针；「计划经济为主」是改革开放前的认识",
+        "relatedTopics": "社会主义市场经济体制的建立、改革开放的深化"
+      }
+    },
+    {
+      "id": 10,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "国有企业改革是城市经济体制改革的中心环节。（  ）",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查城市经济体制改革的重点",
+        "📖 关键知识：1984 年中共十二届三中全会通过《关于经济体制改革的决定》，城市改革全面展开，中心环节是国有企业改革",
+        "🎯 解题思路：城市改革主要是增强企业活力，国有企业是国民经济的支柱"
+      ],
+      "knowledgeCard": {
+        "topic": "城市经济体制改革",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "1984 年城市改革全面展开，中心环节是国有企业改革，目标是增强企业活力",
+        "commonMistake": "农村改革先行（1978 年），城市改革在后（1984 年）"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国社会主义初级阶段的基本路线是在哪次会议上系统阐述的？",
+      "options": ["中共十一届三中全会", "中共十二大", "中共十三大", "中共十四大"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查社会主义初级阶段基本路线的提出",
+        "📖 关键知识：1987 年中共十三大系统阐述了社会主义初级阶段理论，提出了「一个中心，两个基本点」的基本路线",
+        "🎯 解题思路：十三大——初级阶段理论；十四大——市场经济；十五大——邓小平理论"
+      ],
+      "knowledgeCard": {
+        "topic": "社会主义初级阶段理论",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "1987 年十三大——社会主义初级阶段理论、「一个中心两个基本点」",
+        "commonMistake": "十一届三中全会（1978 年）是改革开放开端，但尚未系统阐述初级阶段理论",
+        "relatedTopics": "邓小平理论的形成过程、中国特色社会主义道路"
+      }
+    },
+    {
+      "id": 12,
+      "type": "fillblank",
+      "difficulty": 1,
+      "question": "中共十一届三中全会确立的党和国家的工作中心是______建设。",
+      "answer": ["经济"],
+      "hints": [
+        "💡 方向提示：本题考查十一届三中全会的核心决策",
+        "📖 关键知识：十一届三中全会果断停止使用「以阶级斗争为纲」的口号，把党和国家工作中心转移到经济建设上来",
+        "🎯 解题思路：改革开放的核心就是发展经济，改善人民生活"
+      ],
+      "knowledgeCard": {
+        "topic": "十一届三中全会的决策",
+        "source": "人教版八年级下册 第三单元 第 7 课",
+        "keyMemory": "十一届三中全会——工作中心转移到经济建设，实行改革开放",
+        "relatedTopics": "从「以阶级斗争为纲」到「以经济建设为中心」的历史性转变"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于家庭联产承包责任制的说法，不正确的是：",
+      "options": [
+        "土地所有权归农民个人",
+        "农民有生产自主权",
+        "分配方式是「交够国家的，留足集体的，剩下都是自己的」",
+        "调动了农民的生产积极性"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查家庭联产承包责任制的性质",
+        "📖 关键知识：家庭联产承包责任制坚持土地集体所有制，农民只有使用权",
+        "🎯 解题思路：注意题干是「不正确的是」，土地所有权仍然归集体，不是农民个人"
+      ],
+      "knowledgeCard": {
+        "topic": "家庭联产承包责任制的性质",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "土地集体所有（不变），家庭承包经营（变化），自负盈亏",
+        "commonMistake": "容易混淆「所有权」和「使用权」——所有权归集体，使用权归农户"
+      }
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "被誉为「一夜崛起之城」的经济特区是：",
+      "options": ["珠海", "汕头", "厦门", "深圳"],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：本题考查经济特区的发展成就",
+        "📖 关键知识：深圳从一个小渔村迅速发展成为现代化大都市，创造了世界工业化、城市化发展的奇迹",
+        "🎯 解题思路：深圳是经济特区的代表，对外开放的「窗口」"
+      ],
+      "knowledgeCard": {
+        "topic": "深圳经济特区的发展",
+        "source": "人教版八年级下册 第三单元 第 9 课",
+        "keyMemory": "深圳——「一夜崛起之城」「中国硅谷」，经济特区的代表和对外开放的窗口",
+        "relatedTopics": "经济特区的作用、改革开放的伟大成就"
+      }
+    },
+    {
+      "id": 15,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "中共十二大（1982 年）邓小平明确提出「走自己的道路，建设有中国特色的社会主义」。（  ）",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查「中国特色社会主义」概念的提出",
+        "📖 关键知识：1982 年中共十二大开幕词中，邓小平首次明确提出「走自己的道路，建设有中国特色的社会主义」",
+        "🎯 解题思路：「中国特色社会主义」是十二大（1982 年）提出的，不是十三大或十四大"
+      ],
+      "knowledgeCard": {
+        "topic": "中国特色社会主义的提出",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "1982 年十二大——邓小平首次提出「建设有中国特色的社会主义」",
+        "commonMistake": "不要与十三大（初级阶段理论）、十四大（市场经济）混淆"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "「计划多一点还是市场多一点，不是社会主义与资本主义的本质区别」这一论断出自：",
+      "options": ["中共十一届三中全会", "邓小平南方谈话", "中共十四大", "中共十五大"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查对计划和市场关系的认识突破",
+        "📖 关键知识：1992 年邓小平南方谈话明确指出「计划和市场都是经济手段」，不是社会主义与资本主义的本质区别",
+        "🎯 解题思路：这一论断打破了传统观念束缚，为建立社会主义市场经济体制奠定了理论基础"
+      ],
+      "knowledgeCard": {
+        "topic": "邓小平南方谈话的理论突破",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "南方谈话——「计划和市场都是经济手段」「发展才是硬道理」",
+        "commonMistake": "传统观念认为计划经济=社会主义，市场经济=资本主义，邓小平突破了这一认识",
+        "relatedTopics": "社会主义市场经济体制的建立、思想解放的重要性"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国城市经济体制改革的重点是：",
+      "options": ["个体经济改革", "国有企业改革", "集体经济改革", "外资企业改革"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查城市经济体制改革的重点",
+        "📖 关键知识：城市经济体制改革以国有企业改革为重点，目标是增强企业活力",
+        "🎯 解题思路：国有企业是国民经济的主导力量，改革重点是增强企业活力"
+      ],
+      "knowledgeCard": {
+        "topic": "城市经济体制改革的重点",
+        "source": "人教版八年级下册 第三单元 第 8 课",
+        "keyMemory": "城市改革重点：国有企业改革；目标：增强企业活力；方式：政企分开、按劳分配",
+        "commonMistake": "不要与农村改革（家庭联产承包责任制）混淆"
+      }
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列属于我国第一批沿海开放城市的是：",
+      "options": ["深圳", "珠海", "广州", "汕头"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查沿海开放城市与经济特区的区别",
+        "📖 关键知识：1984 年开放 14 个沿海城市，包括广州、上海、天津、大连等，深圳、珠海、汕头是 1980 年的经济特区",
+        "🎯 解题思路：深圳、珠海、汕头是经济特区（1980 年），广州是沿海开放城市（1984 年）"
+      ],
+      "knowledgeCard": {
+        "topic": "沿海开放城市",
+        "source": "人教版八年级下册 第三单元 第 9 课",
+        "keyMemory": "1984 年 14 个沿海开放城市：广（州）上（海）天（津）大（连）等，不包括深圳、珠海、汕头、厦门（这四个是经济特区）",
+        "commonMistake": "经济特区（1980 年）≠ 沿海开放城市（1984 年）"
+      }
+    },
+    {
+      "id": 19,
+      "type": "material",
+      "difficulty": 3,
+      "material": "材料一：1978 年 12 月 18 日至 22 日，中国共产党第十一届中央委员会第三次全体会议在北京举行。全会彻底否定了「两个凡是」的错误方针，重新确立了解放思想、实事求是的思想路线；停止使用「以阶级斗争为纲」的口号，作出了把党和国家工作中心转移到经济建设上来、实行改革开放的历史性决策。\n\n材料二：安徽凤阳小岗村生产队 1978 年粮食产量 3.5 万斤，1979 年实行包产到户后，粮食产量达到 13.3 万斤，是上一年的 3.8 倍。社员高兴地说：「大包干，大包干，直来直去不拐弯，保证国家的，留足集体的，剩下都是自己的。」",
+      "materialLabel": "材料来源：改编自人教版八年级历史教材",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "根据材料一，概括中共十一届三中全会的主要内容。（4 分）",
+          "points": 4,
+          "answer": "①重新确立解放思想、实事求是的思想路线；②停止使用「以阶级斗争为纲」的口号；③作出把党和国家工作中心转移到经济建设上来的决策；④实行改革开放的历史性决策。（每点 1 分）",
+          "scoring": ["答出「解放思想、实事求是」得 1 分", "答出「停止以阶级斗争为纲」得 1 分", "答出「工作中心转移到经济建设」得 1 分", "答出「改革开放」得 1 分"]
+        },
+        {
+          "id": 2,
+          "question": "材料二反映了我国农村实行什么政策？这一政策产生了什么作用？（4 分）",
+          "points": 4,
+          "answer": "政策：家庭联产承包责任制（或包产到户、大包干）。（2 分）\n作用：①调动了农民的生产积极性；②促进了农业生产的发展；③提高了农民的生活水平。（任答两点得 2 分）",
+          "scoring": ["答出「家庭联产承包责任制」或「包产到户」得 2 分", "答出作用任一点得 1 分，满分 2 分"]
+        },
+        {
+          "id": 3,
+          "question": "结合所学知识，谈谈你对改革开放的认识。（2 分）",
+          "points": 2,
+          "answer": "①改革开放是强国之路，是决定当代中国命运的关键抉择；②改革开放符合中国国情，得到了人民的拥护；③我们要继续坚持改革开放，不断推进中国特色社会主义事业。（任答两点，言之有理即可）",
+          "scoring": ["答出「改革开放是强国之路/关键抉择」得 1 分", "答出「坚持改革开放」或言之有理得 1 分"]
+        }
+      ],
+      "hints": [
+        "💡 方向提示：本题考查十一届三中全会和农村改革",
+        "📖 关键知识：材料一对应十一届三中全会内容，材料二对应家庭联产承包责任制",
+        "🎯 解题思路：第 (1) 问直接从材料一提取信息；第 (2) 问根据「包产到户」判断政策，从产量变化分析作用；第 (3) 问是开放性题目，从改革开放的意义角度作答"
+      ],
+      "knowledgeCard": {
+        "topic": "改革开放的开端与农村改革",
+        "source": "人教版八年级下册 第三单元 第 7、8 课",
+        "keyMemory": "十一届三中全会——改革开放开端；家庭联产承包责任制——农村改革",
+        "commonMistake": "材料分析题要先审设问，再阅读材料，从材料中提取关键信息，结合所学知识作答",
+        "relatedTopics": "中共十一届三中全会、家庭联产承包责任制、改革开放的意义",
+        "answerTechnique": "材料分析题答题技巧：①先审设问，明确答题方向；②阅读材料，划出关键词句；③联系教材，组织答案；④分点作答，条理清晰"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于中国特色社会主义理论体系的说法，正确的是：",
+      "options": [
+        "毛泽东思想是中国特色社会主义理论体系的组成部分",
+        "邓小平理论第一次比较系统地初步回答了在中国这样经济文化比较落后的国家如何建设社会主义的问题",
+        "「三个代表」重要思想是在中共十四大上确立为党的指导思想的",
+        "科学发展观是在中共十七大上首次提出的"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查中国特色社会主义理论体系的形成过程",
+        "📖 关键知识：邓小平理论第一次系统回答了在中国如何建设社会主义的问题；毛泽东思想不属于中国特色社会主义理论体系；三个代表在十六大确立；科学发展观在十七大写入党章",
+        "🎯 解题思路：用排除法——A 错（毛泽东思想是马克思主义中国化的第一次飞跃）；C 错（十六大）；D 错（十七大提出但十八大确立为指导思想）"
+      ],
+      "knowledgeCard": {
+        "topic": "中国特色社会主义理论体系",
+        "source": "人教版八年级下册 第三单元 第 10 课",
+        "keyMemory": "中国特色社会主义理论体系包括：邓小平理论、「三个代表」重要思想、科学发展观、习近平新时代中国特色社会主义思想（毛泽东思想不属于此体系）",
+        "commonMistake": "毛泽东思想是马克思主义中国化的第一次历史性飞跃，但不属于中国特色社会主义理论体系",
+        "relatedTopics": "马克思主义中国化的历程、党的指导思想的发展"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+var materialScore = 0;
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+      'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+      '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  } else if (q.type === "material") {
+    optHtml = renderMaterialQuestion(q);
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function submitFill() {
+  if (answered) return;
+  var input = document.getElementById("fillInput").value.trim();
+  if (!input) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  processAnswer(answers.some(function(a) { return input === a.trim(); }));
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+/* ========== 材料分析题专用函数 ========== */
+function renderMaterialQuestion(q) {
+  var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
+  var subQuestionsHtml = '';
+  if (q.subQuestions && q.subQuestions.length > 0) {
+    subQuestionsHtml = '<div class="sub-questions">' +
+      q.subQuestions.map(function(sq, i) {
+        return '<div class="sub-question-item">' +
+          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
+          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
+          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
+          'placeholder="请在此处输入你的答案..."></textarea>' +
+          '</div>';
+      }).join("") + '</div>';
+  }
+  return '<div class="material-section">' + materialLabel +
+    '<div class="material-content">' + q.material + '</div></div>' + subQuestionsHtml +
+    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
+    '<div id="materialFeedback"></div>';
+}
+
+function submitMaterial() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var inputs = [];
+  var allFilled = true;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      var val = document.getElementById("material-answer-" + i).value.trim();
+      inputs.push(val);
+      if (!val) allFilled = false;
+    }
+  }
+  if (!allFilled) {
+    alert("请先完成所有小题的作答！");
+    return;
+  }
+  answered = true;
+  document.querySelectorAll(".answer-textarea").forEach(function(el) {
+    el.disabled = true;
+  });
+  var btn = document.querySelector(".submit-material-btn");
+  if (btn) btn.style.display = "none";
+  showMaterialFeedback(q);
+}
+
+function showMaterialFeedback(q) {
+  var kc = q.knowledgeCard;
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  var scoringHtml = '';
+  if (q.subQuestions) {
+    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 评分标准</div>' +
+      q.subQuestions.map(function(sq, i) {
+        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
+          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
+          '<div class="scoring-item">答对关键词语即可得分</div>';
+        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
+          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
+      }).join("") + '</div>';
+  }
+  var assessHtml = '<div class="self-assess">' +
+    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
+    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
+    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
+    '❌ 错误<div class="assess-score">得 0 分</div></button>' +
+    '</div>';
+  var feedbackArea = document.getElementById("materialFeedback");
+  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
+    '<div class="kc-title">📖 参考答案与解析</div>' +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
+    (kc.answerTechnique ? '<div class="kc-item">💡 <b>答题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
+    '</div>' + scoringHtml + assessHtml;
+}
+
+function selfAssess(level) {
+  var q = quizData.questions[currentIndex];
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  document.querySelectorAll(".assess-btn").forEach(function(btn) {
+    btn.classList.add("disabled");
+  });
+  var earnedPoints = 0;
+  var isCorrect = false;
+  if (level === "correct") {
+    earnedPoints = totalPoints;
+    isCorrect = true;
+    document.getElementById("assessCorrect").classList.add("correct");
+  } else if (level === "partial") {
+    earnedPoints = Math.round(totalPoints * 0.5);
+    isCorrect = true;
+    document.getElementById("assessPartial").classList.add("partial");
+  } else {
+    document.getElementById("assessWrong").classList.add("wrong");
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  if (isCorrect) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
+    score += earnedPointsWithBonus;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 自评得分 +" + earnedPointsWithBonus);
+  }
+  updateStats();
+  var feedbackArea = document.getElementById("materialFeedback");
+  var kc = q.knowledgeCard;
+  var extraHtml = '';
+  if (!isCorrect) {
+    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
+  }
+  if (kc.relatedTopics) {
+    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
+  }
+  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
+    '" style="margin-top:16px;">' + extraHtml +
+    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
+    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+}
+
+init();
+</script>
+</body>
+</html>
