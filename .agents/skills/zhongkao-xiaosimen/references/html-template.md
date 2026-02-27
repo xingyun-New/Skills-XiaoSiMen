@@ -11,23 +11,23 @@
 
 ## JSON 数据格式
 
+### 客观题格式（选择题/判断题/填空题）
+
 ```json
 {
   "title": "八年级地理 · 中国自然环境",
-  "subject": "地理",
-  "grade": "八年级",
   "questions": [
     {
       "id": 1,
       "type": "choice",
       "difficulty": 2,
       "question": "题干文字",
-      "options": ["选项A", "选项B", "选项C", "选项D"],
+      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
       "answer": 1,
       "hints": [
-        "💡 方向提示：本题考查的是XX章节的XX知识点",
+        "💡 方向提示：本题考查的是 XX 章节的 XX 知识点",
         "📖 关键知识：具体的知识点内容",
-        "🎯 解题思路：根据XX可以判断出答案是XX"
+        "🎯 解题思路：根据 XX 可以判断出答案是 XX"
       ],
       "knowledgeCard": {
         "topic": "考点名称",
@@ -38,6 +38,47 @@
       }
     }
   ]
+}
+```
+
+### 材料分析题格式
+
+```json
+{
+  "id": 11,
+  "type": "material",
+  "difficulty": 3,
+  "material": "材料文字内容，支持\\n换行和<table>表格标签",
+  "materialLabel": "材料来源：改编自 2025 年中考题（可选）",
+  "subQuestions": [
+    {
+      "id": 1,
+      "question": "第 1 小问的问题？",
+      "points": 4,
+      "answer": "参考答案要点...",
+      "scoring": ["答出关键词 X 得 2 分", "答出 Y 得 2 分"]
+    },
+    {
+      "id": 2,
+      "question": "第 2 小问的问题？",
+      "points": 4,
+      "answer": "参考答案...",
+      "scoring": ["答出要点 1 得 2 分", "答出要点 2 得 2 分"]
+    }
+  ],
+  "hints": [
+    "💡 方向提示：本题考查 XX 章节的知识点",
+    "📖 关键知识：核心知识点内容",
+    "🎯 解题思路：从 XX 角度分析，结合材料中的 XX 信息"
+  ],
+  "knowledgeCard": {
+    "topic": "考点名称",
+    "source": "人教版八年级下册 第 X 单元",
+    "keyMemory": "核心记忆点",
+    "commonMistake": "易错提醒",
+    "relatedTopics": "关联知识",
+    "answerTechnique": "答题技巧（可选）"
+  }
 }
 ```
 
@@ -253,6 +294,167 @@
     }
     @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
 
+    /* 材料分析题样式 */
+    .material-section {
+      background: #f5f5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .material-content {
+      line-height: 1.8;
+      font-size: 1em;
+      color: #333;
+    }
+    .material-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.95em;
+    }
+    .material-content th, .material-content td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .material-content th {
+      background: #e3f2fd;
+      font-weight: bold;
+    }
+    .sub-questions {
+      margin-top: 16px;
+    }
+    .sub-question-item {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .sub-question-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .sub-question-points {
+      font-size: 0.85em;
+      color: #9c27b0;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 0.95em;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    .answer-textarea:focus {
+      border-color: #9c27b0;
+    }
+    .submit-material-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover {
+      transform: scale(1.02);
+    }
+    .scoring-rubric {
+      background: #f3e5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+    .scoring-title {
+      font-weight: bold;
+      color: #7b1fa2;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    .scoring-item {
+      margin: 6px 0;
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #444;
+    }
+    .scoring-item::before {
+      content: "✓ ";
+      color: #9c27b0;
+      font-weight: bold;
+    }
+    .self-assess {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) {
+      border-color: #9c27b0;
+      background: #f3e5f5;
+      transform: scale(1.02);
+    }
+    .assess-btn.correct {
+      border-color: #4CAF50;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .assess-btn.partial {
+      border-color: #FF9800;
+      background: #FFF3E0;
+      color: #E65100;
+    }
+    .assess-btn.wrong {
+      border-color: #f44336;
+      background: #FFEBEE;
+      color: #c62828;
+    }
+    .assess-btn.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .assess-score {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
+    }
+
     @media (max-width: 600px) {
       body { padding: 12px; }
       .card { padding: 20px; border-radius: 16px; }
@@ -294,7 +496,8 @@ var originalQuestions = JSON.parse(document.getElementById("quiz-json").textCont
 
 var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
 var answered = false, wrongQuestions = [], hintsUsed = 0;
-var hintPenalty = [1.0, 0.7, 0.4, 0.1]; // 0提示=满分, 1提示=70%, 2提示=40%, 3提示=10%
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+var materialScore = 0;
 
 function init() {
   document.getElementById("quizTitle").textContent = quizData.title;
@@ -344,6 +547,8 @@ function renderQuestion() {
     optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
       'onkeydown="if(event.key===\'Enter\')submitFill()">' +
       '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  } else if (q.type === "material") {
+    optHtml = renderMaterialQuestion(q);
   }
 
   area.innerHTML = '<div class="card"><div class="question-header">' +
@@ -483,6 +688,143 @@ function showAchievement(text) {
   el.className = "achievement-popup"; el.textContent = text;
   document.body.appendChild(el);
   setTimeout(function() { el.remove(); }, 3000);
+}
+
+/* ========== 材料分析题专用函数 ========== */
+function renderMaterialQuestion(q) {
+  var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
+  var subQuestionsHtml = '';
+  if (q.subQuestions && q.subQuestions.length > 0) {
+    subQuestionsHtml = '<div class="sub-questions">' +
+      q.subQuestions.map(function(sq, i) {
+        return '<div class="sub-question-item">' +
+          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
+          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
+          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
+          'placeholder="请在此处输入你的答案..."></textarea>' +
+          '</div>';
+      }).join("") + '</div>';
+  }
+  return '<div class="material-section">' + materialLabel +
+    '<div class="material-content">' + q.material + '</div></div>' + subQuestionsHtml +
+    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
+    '<div id="materialFeedback"></div>';
+}
+
+function submitMaterial() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var inputs = [];
+  var allFilled = true;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      var val = document.getElementById("material-answer-" + i).value.trim();
+      inputs.push(val);
+      if (!val) allFilled = false;
+    }
+  }
+  if (!allFilled) {
+    alert("请先完成所有小题的作答！");
+    return;
+  }
+  answered = true;
+  document.querySelectorAll(".answer-textarea").forEach(function(el) {
+    el.disabled = true;
+  });
+  var btn = document.querySelector(".submit-material-btn");
+  if (btn) btn.style.display = "none";
+  showMaterialFeedback(q);
+}
+
+function showMaterialFeedback(q) {
+  var kc = q.knowledgeCard;
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  var scoringHtml = '';
+  if (q.subQuestions) {
+    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 评分标准</div>' +
+      q.subQuestions.map(function(sq, i) {
+        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
+          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
+          '<div class="scoring-item">答对关键词语即可得分</div>';
+        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
+          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
+      }).join("") + '</div>';
+  }
+  var assessHtml = '<div class="self-assess">' +
+    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
+    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
+    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
+    '❌ 错误<div class="assess-score">得 0 分</div></button>' +
+    '</div>';
+  var feedbackArea = document.getElementById("materialFeedback");
+  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
+    '<div class="kc-title">📖 参考答案与解析</div>' +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
+    (kc.answerTechnique ? '<div class="kc-item">💡 <b>答题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
+    '</div>' + scoringHtml + assessHtml;
+}
+
+function selfAssess(level) {
+  var q = quizData.questions[currentIndex];
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  document.querySelectorAll(".assess-btn").forEach(function(btn) {
+    btn.classList.add("disabled");
+  });
+  var earnedPoints = 0;
+  var isCorrect = false;
+  if (level === "correct") {
+    earnedPoints = totalPoints;
+    isCorrect = true;
+    document.getElementById("assessCorrect").classList.add("correct");
+  } else if (level === "partial") {
+    earnedPoints = Math.round(totalPoints * 0.5);
+    isCorrect = true;
+    document.getElementById("assessPartial").classList.add("partial");
+  } else {
+    document.getElementById("assessWrong").classList.add("wrong");
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  if (isCorrect) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
+    score += earnedPointsWithBonus;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 自评得分 +" + earnedPointsWithBonus);
+  }
+  updateStats();
+  var feedbackArea = document.getElementById("materialFeedback");
+  var kc = q.knowledgeCard;
+  var extraHtml = '';
+  if (!isCorrect) {
+    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
+  }
+  if (kc.relatedTopics) {
+    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
+  }
+  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
+    '" style="margin-top:16px;">' + extraHtml +
+    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
+    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
 }
 
 init();
