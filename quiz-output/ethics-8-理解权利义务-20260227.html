@@ -185,6 +185,126 @@
     }
     @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
 
+    .material-section {
+      background: #f5f5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .material-content {
+      line-height: 1.8;
+      font-size: 1em;
+      color: #333;
+    }
+    .sub-questions { margin-top: 16px; }
+    .sub-question-item {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .sub-question-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .sub-question-points {
+      font-size: 0.85em;
+      color: #9c27b0;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 0.95em;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    .answer-textarea:focus { border-color: #9c27b0; }
+    .submit-material-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover { transform: scale(1.02); }
+    .scoring-rubric {
+      background: #f3e5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+    .scoring-title {
+      font-weight: bold;
+      color: #7b1fa2;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    .scoring-item {
+      margin: 6px 0;
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #444;
+    }
+    .scoring-item::before {
+      content: "\2713 ";
+      color: #9c27b0;
+      font-weight: bold;
+    }
+    .self-assess {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) {
+      border-color: #9c27b0;
+      background: #f3e5f5;
+      transform: scale(1.02);
+    }
+    .assess-btn.correct { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32; }
+    .assess-btn.partial { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
+    .assess-btn.wrong { border-color: #f44336; background: #FFEBEE; color: #c62828; }
+    .assess-btn.disabled { pointer-events: none; opacity: 0.6; }
+    .assess-score { font-size: 0.85em; color: #666; margin-top: 4px; }
+
     @media (max-width: 600px) {
       body { padding: 12px; }
       .card { padding: 20px; border-radius: 16px; }
@@ -211,7 +331,7 @@
   <div id="quizArea"></div>
 </div>
 
-<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<!-- ========== 题目数据（纯 JSON） ========== -->
 <script type="application/json" id="quiz-json">
 {
   "title": "八年级道法 · 理解权利义务",
@@ -370,31 +490,6 @@
       "id": 7,
       "type": "choice",
       "difficulty": 3,
-      "question": "某市民张某发现邻居私自搭建违章建筑，向城管部门举报。张某行使的是：",
-      "options": [
-        "选举权",
-        "建议权",
-        "监督权",
-        "人身自由权"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查公民政治权利中的监督权",
-        "📖 关键知识：公民对国家机关及其工作人员有监督的权利，对违法行为有检举权",
-        "🎯 解题思路：向有关部门举报违法行为属于行使监督权中的检举权，选C"
-      ],
-      "knowledgeCard": {
-        "topic": "公民的监督权",
-        "source": "人教版八年级下册 第二单元 第三课",
-        "keyMemory": "监督权包括批评权、建议权、检举权、申诉权、控告权。举报违法行为属于行使检举权，是监督权的重要组成部分",
-        "commonMistake": "「建议权」是对国家机关工作提出合理化建议的权利，而举报违法行为属于「检举权」，两者都属于监督权范畴，但具体类型不同。本题选「监督权」作为大的类别",
-        "relatedTopics": "公民依法行使监督权，有利于国家机关及其工作人员依法行使权力、改进工作"
-      }
-    },
-    {
-      "id": 8,
-      "type": "choice",
-      "difficulty": 3,
       "question": "关于权利和义务的关系，下列说法正确的是：",
       "options": [
         "权利和义务可以分离，公民可以只享受权利不履行义务",
@@ -417,9 +512,9 @@
       }
     },
     {
-      "id": 9,
+      "id": 8,
       "type": "truefalse",
-      "difficulty": 1,
+      "difficulty": 2,
       "question": "年满18周岁的中国公民都享有选举权和被选举权。",
       "answer": false,
       "hints": [
@@ -431,27 +526,96 @@
         "topic": "选举权和被选举权的条件",
         "source": "人教版八年级下册 第二单元 第三课",
         "keyMemory": "享有选举权和被选举权需同时满足三个条件：①中国公民；②年满18周岁；③未被剥夺政治权利",
-        "commonMistake": "很多同学只记住了前两个条件而忽略了「未被剥夺政治权利」这一重要限制条件，被剥夺政治权利的人即使年满18周岁也不享有选举权和被选举权",
+        "commonMistake": "很多同学只记住了前两个条件而忽略了「未被剥夺政治权利」这一重要限制条件",
         "relatedTopics": "选举权和被选举权是公民最基本的政治权利；剥夺政治权利是一种附加刑"
       }
     },
     {
-      "id": 10,
-      "type": "truefalse",
+      "id": 9,
+      "type": "material",
       "difficulty": 2,
-      "question": "法定义务是由宪法和法律规定的，具有强制性，公民必须履行，不能放弃。",
-      "answer": true,
+      "question": "阅读下列材料，回答问题。",
+      "material": "材料一：初中生小李在社交平台上看到同学的搞笑照片，未经同学同意就将照片下载并配上侮辱性文字发布到班级群中，引起同学们哄笑。被拍照的同学小王感到非常委屈和愤怒。\n\n材料二：小王将此事告知班主任后，班主任对小李进行了批评教育。小李不以为然地说：「我有言论自由，发个照片怎么了？再说同学之间开个玩笑而已。」",
+      "materialLabel": "情境素材：校园生活案例",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "小李的行为侵犯了小王的哪些权利？",
+          "points": 3,
+          "answer": "小李侵犯了小王的：①肖像权（未经同意使用他人照片）；②名誉权/人格尊严权（配上侮辱性文字进行侮辱）；③隐私权（未经允许传播他人照片）。",
+          "scoring": ["答出肖像权得1分", "答出名誉权或人格尊严权得1分", "答出隐私权得1分"]
+        },
+        {
+          "id": 2,
+          "question": "小李说「我有言论自由」，你认为他的说法对吗？请说明理由。",
+          "points": 4,
+          "answer": "不对。①公民虽然享有言论自由，但行使权利必须在法律允许的范围内；②公民行使权利不得损害其他公民的合法权利；③小李以「言论自由」为借口侵犯他人的肖像权、名誉权，超越了权利的边界，是违法行为，而非正当行使权利。",
+          "scoring": ["答出权利有边界/不是绝对自由得2分", "答出不得损害他人合法权利得1分", "结合材料分析得1分"]
+        },
+        {
+          "id": 3,
+          "question": "如果你是小王，你会通过哪些合法途径维护自己的权益？（至少写出两种）",
+          "points": 3,
+          "answer": "①要求小李删除照片并道歉（协商和解）；②请求老师或学校进行调解；③向小李的家长反映情况，要求家长教育管束；④必要时可向人民法院提起诉讼，要求停止侵害、恢复名誉、赔偿损失。",
+          "scoring": ["每答出一种合法途径得1分", "答出两种及以上即可得满分", "答出诉讼途径额外加分"]
+        }
+      ],
       "hints": [
-        "💡 方向提示：本题考查公民法定义务的特征",
-        "📖 关键知识：法定义务具有强制性，不履行要承担法律责任",
-        "🎯 解题思路：法定义务由国家强制力保证实施，公民必须履行，不得拒绝和放弃"
+        "💡 方向提示：本题考查公民权利的类别、权利的边界以及维权途径",
+        "📖 关键知识：公民享有人格尊严权（含名誉权、肖像权）和隐私权；行使权利不得损害他人合法权利；维权有多种合法途径",
+        "🎯 解题思路：第1问从具体侵权行为分析对应的权利；第2问从「权利有边界」角度分析；第3问从协商到诉讼列举维权途径"
       ],
       "knowledgeCard": {
-        "topic": "法定义务的特征",
+        "topic": "公民权利的行使与维护",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "权利行使有边界，不得损害他人权利；维权途径：协商→调解→投诉→诉讼",
+        "commonMistake": "不要把「以牙还牙」（如在网上骂回去）当成合法维权途径；也不要忘记「协商和解」这种最基本的途径",
+        "relatedTopics": "人格尊严权、肖像权、名誉权、隐私权的区别与联系",
+        "answerTechnique": "①先审设问，明确答题方向；②回到材料提取关键信息（未经同意、侮辱性文字）；③联系课本知识点分点作答；④注意分值分配，几分答几点"
+      }
+    },
+    {
+      "id": 10,
+      "type": "material",
+      "difficulty": 3,
+      "question": "阅读下列材料，回答问题。",
+      "material": "材料一：公民赵某经营一家小餐馆，生意不错。但他为了少交税款，故意隐瞒营业收入，做假账逃税。税务部门发现后，依法对赵某作出补缴税款、加收滞纳金和罚款的处理决定。\n\n材料二：公民李某是一名适龄青年，今年收到了征兵通知。但李某认为当兵太辛苦，以「个人有选择自由」为由拒绝服兵役。当地人民武装部依法对李某进行了处罚。",
+      "materialLabel": "情境素材：公民义务案例",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "赵某和李某分别违反了什么义务？",
+          "points": 3,
+          "answer": "①赵某违反了依法纳税的义务；②李某违反了依法服兵役的义务。这两项都是宪法和法律规定的公民基本义务。",
+          "scoring": ["答出赵某违反纳税义务得1.5分", "答出李某违反服兵役义务得1.5分"]
+        },
+        {
+          "id": 2,
+          "question": "李某以「个人有选择自由」为由拒绝服兵役，这种说法为什么是错误的？",
+          "points": 4,
+          "answer": "①法定义务由宪法和法律规定，具有强制性，公民必须履行，不能自由选择放弃；②权利与义务相统一，公民在享受权利的同时必须履行义务；③依法服兵役是宪法规定的公民基本义务，任何适龄公民都必须履行，拒绝服兵役是违法行为；④「个人自由」不能凌驾于法定义务之上，自由是有限度的。",
+          "scoring": ["答出法定义务具有强制性得2分", "答出权利义务统一关系得1分", "结合材料或具体法律规定分析得1分"]
+        },
+        {
+          "id": 3,
+          "question": "上述材料给我们什么启示？",
+          "points": 3,
+          "answer": "①法定义务须履行：公民必须自觉履行宪法和法律规定的义务，如依法纳税、依法服兵役等；②违反义务须担责：不履行法定义务要承担相应的法律责任；③权利义务相统一：我们不能只享受权利不履行义务，要做到权利与义务相统一；④增强法治意识：我们要增强公民意识和法治观念，自觉做到学法、懂法、守法、用法。",
+          "scoring": ["答出法定义务必须履行得1分", "答出违反义务要担责得1分", "答出权利义务统一或增强法治意识得1分"]
+        }
+      ],
+      "hints": [
+        "💡 方向提示：本题考查公民基本义务和依法履行义务的相关知识",
+        "📖 关键知识：法定义务具有强制性，包括纳税、服兵役等；违反义务须承担法律责任",
+        "🎯 解题思路：第1问对号入座找义务；第2问从法定义务的强制性和权利义务关系切入；第3问总结公民应如何对待义务"
+      ],
+      "knowledgeCard": {
+        "topic": "依法履行义务",
         "source": "人教版八年级下册 第二单元 第四课",
-        "keyMemory": "法定义务由宪法和法律规定，具有强制性。公民必须履行法定义务，不得放弃、拒绝，否则要承担法律责任",
-        "commonMistake": "部分同学将「法定义务」和「道德义务」混淆。道德义务靠自觉和舆论，法定义务靠国家强制力保障，不履行会受到法律制裁",
-        "relatedTopics": "法定义务与道德义务的区别与联系；违反义务须担责"
+        "keyMemory": "法定义务须履行、违反义务须担责；公民的基本义务具有强制性，不可放弃或拒绝",
+        "commonMistake": "启示类题目容易答得太笼统，要结合具体义务（纳税、服兵役）来谈，不能只写空话套话",
+        "relatedTopics": "公民基本义务的种类；权利与义务相统一；法律责任的分类（民事、行政、刑事）",
+        "answerTechnique": "启示类答题框架：①是什么（指出涉及的知识点）→②为什么（说明原因/道理）→③怎么做（对我们的要求），分点作答、条理清晰"
       }
     }
   ]
@@ -466,6 +630,7 @@ var originalQuestions = JSON.parse(document.getElementById("quiz-json").textCont
 var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
 var answered = false, wrongQuestions = [], hintsUsed = 0;
 var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+var materialScore = 0;
 
 function init() {
   document.getElementById("quizTitle").textContent = quizData.title;
@@ -515,6 +680,8 @@ function renderQuestion() {
     optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
       'onkeydown="if(event.key===\'Enter\')submitFill()">' +
       '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  } else if (q.type === "material") {
+    optHtml = renderMaterialQuestion(q);
   }
 
   area.innerHTML = '<div class="card"><div class="question-header">' +
@@ -654,6 +821,143 @@ function showAchievement(text) {
   el.className = "achievement-popup"; el.textContent = text;
   document.body.appendChild(el);
   setTimeout(function() { el.remove(); }, 3000);
+}
+
+/* ========== 材料分析题专用函数 ========== */
+function renderMaterialQuestion(q) {
+  var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
+  var subQuestionsHtml = '';
+  if (q.subQuestions && q.subQuestions.length > 0) {
+    subQuestionsHtml = '<div class="sub-questions">' +
+      q.subQuestions.map(function(sq, i) {
+        return '<div class="sub-question-item">' +
+          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
+          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
+          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
+          'placeholder="请在此处输入你的答案..."></textarea>' +
+          '</div>';
+      }).join("") + '</div>';
+  }
+  return '<div class="material-section">' + materialLabel +
+    '<div class="material-content">' + q.material.replace(/\n/g, '<br>') + '</div></div>' + subQuestionsHtml +
+    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
+    '<div id="materialFeedback"></div>';
+}
+
+function submitMaterial() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var inputs = [];
+  var allFilled = true;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      var val = document.getElementById("material-answer-" + i).value.trim();
+      inputs.push(val);
+      if (!val) allFilled = false;
+    }
+  }
+  if (!allFilled) {
+    alert("请先完成所有小题的作答！");
+    return;
+  }
+  answered = true;
+  document.querySelectorAll(".answer-textarea").forEach(function(el) {
+    el.disabled = true;
+  });
+  var btn = document.querySelector(".submit-material-btn");
+  if (btn) btn.style.display = "none";
+  showMaterialFeedback(q);
+}
+
+function showMaterialFeedback(q) {
+  var kc = q.knowledgeCard;
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  var scoringHtml = '';
+  if (q.subQuestions) {
+    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 评分标准</div>' +
+      q.subQuestions.map(function(sq, i) {
+        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
+          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
+          '<div class="scoring-item">答对关键词语即可得分</div>';
+        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
+          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
+      }).join("") + '</div>';
+  }
+  var assessHtml = '<div class="self-assess">' +
+    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
+    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
+    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
+    '❌ 错误<div class="assess-score">得 0 分</div></button>' +
+    '</div>';
+  var feedbackArea = document.getElementById("materialFeedback");
+  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
+    '<div class="kc-title">📖 参考答案与解析</div>' +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
+    (kc.answerTechnique ? '<div class="kc-item">💡 <b>答题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
+    '</div>' + scoringHtml + assessHtml;
+}
+
+function selfAssess(level) {
+  var q = quizData.questions[currentIndex];
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  document.querySelectorAll(".assess-btn").forEach(function(btn) {
+    btn.classList.add("disabled");
+  });
+  var earnedPoints = 0;
+  var isCorrect = false;
+  if (level === "correct") {
+    earnedPoints = totalPoints;
+    isCorrect = true;
+    document.getElementById("assessCorrect").classList.add("correct");
+  } else if (level === "partial") {
+    earnedPoints = Math.round(totalPoints * 0.5);
+    isCorrect = true;
+    document.getElementById("assessPartial").classList.add("partial");
+  } else {
+    document.getElementById("assessWrong").classList.add("wrong");
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  if (isCorrect) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
+    score += earnedPointsWithBonus;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 自评得分 +" + earnedPointsWithBonus);
+  }
+  updateStats();
+  var feedbackArea = document.getElementById("materialFeedback");
+  var kc = q.knowledgeCard;
+  var extraHtml = '';
+  if (!isCorrect) {
+    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
+  }
+  if (kc.relatedTopics) {
+    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
+  }
+  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
+    '" style="margin-top:16px;">' + extraHtml +
+    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
+    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
 }
 
 init();
