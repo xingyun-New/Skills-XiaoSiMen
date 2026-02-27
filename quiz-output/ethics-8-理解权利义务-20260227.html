@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【道法】八年级下册 · 理解权利义务 练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #667eea; transform: scale(1.02); }
+    .tf-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .tf-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .tf-btn.disabled { pointer-events: none; opacity: 0.7; }
+
+    .fill-input {
+      width: 100%; padding: 14px 18px; font-size: 1.1em;
+      border: 2px solid #e0e0e0; border-radius: 14px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .fill-input:focus { border-color: #667eea; }
+    .submit-btn {
+      width: 100%; padding: 14px; margin-top: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "八年级道法 · 理解权利义务",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国公民最基本、最重要的权利是：",
+      "options": [
+        "政治权利和自由",
+        "人身自由",
+        "社会经济权利",
+        "受教育权"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查公民基本权利中最核心的一项",
+        "📖 关键知识：宪法规定公民享有广泛的权利，其中有一项是一切权利的基础",
+        "🎯 解题思路：没有这项权利，公民的其他权利都无法实现，它保障的是公民的人身不受侵犯"
+      ],
+      "knowledgeCard": {
+        "topic": "人身自由权",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "人身自由是公民最基本、最重要的权利，是公民享有其他一切权利的基础和前提",
+        "commonMistake": "容易将「政治权利和自由」误认为最基本的权利。注意：政治权利是重要的，但人身自由才是「最基本」的",
+        "relatedTopics": "人身自由包括：人身自由不受侵犯、人格尊严不受侵犯、住宅不受侵犯、通信自由和通信秘密受法律保护"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列属于公民政治权利和自由的是：",
+      "options": [
+        "人身自由权",
+        "选举权和被选举权",
+        "受教育权",
+        "劳动权"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查公民政治权利和自由的具体内容",
+        "📖 关键知识：政治权利和自由包括选举权和被选举权、政治自由和监督权",
+        "🎯 解题思路：A是人身权利，C是文化教育权利，D是社会经济权利，只有B属于政治权利"
+      ],
+      "knowledgeCard": {
+        "topic": "公民的政治权利和自由",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "政治权利和自由包括：①选举权和被选举权（最基本的政治权利）；②政治自由（言论、出版、集会、结社、游行、示威）；③监督权（批评权、建议权、检举权、申诉权、控告权）",
+        "commonMistake": "容易混淆各类权利的分类，「选举权和被选举权」是最基本的政治权利，注意区分政治权利与人身权利、社会经济权利",
+        "relatedTopics": "选举权和被选举权的条件：年满18周岁的中国公民，未被剥夺政治权利"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "小华在网上发帖辱骂同学小明，并公开小明的家庭住址和电话号码。小华的行为侵犯了小明的：",
+      "options": [
+        "生命健康权和隐私权",
+        "人格尊严权和隐私权",
+        "政治自由权和名誉权",
+        "通信自由权和荣誉权"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查公民人身权利中的具体权利类别",
+        "📖 关键知识：辱骂他人涉及人格尊严，公开个人信息涉及隐私保护",
+        "🎯 解题思路：辱骂侵犯的是名誉权（属于人格尊严权），公开住址和电话侵犯的是隐私权"
+      ],
+      "knowledgeCard": {
+        "topic": "人格尊严权与隐私权",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "人格尊严权包括名誉权、荣誉权、肖像权、姓名权、隐私权等；任何人不得侮辱、诽谤他人，不得侵犯他人隐私",
+        "commonMistake": "辱骂不是侵犯「生命健康权」，生命健康权指的是身体、生命、健康不受侵犯；公开个人信息不是侵犯「通信自由」",
+        "relatedTopics": "网络空间不是法外之地，在网络上同样要尊重他人权利，遵守法律法规"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "在我国，既是公民权利又是公民义务的是：",
+      "options": [
+        "依法纳税",
+        "依法服兵役",
+        "劳动和受教育",
+        "维护民族团结"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查权利与义务的统一关系中一个特殊类型",
+        "📖 关键知识：有些事项在宪法中既被规定为权利，也被规定为义务",
+        "🎯 解题思路：A、B、D是纯义务，只有「劳动」和「受教育」在宪法中同时被规定为权利和义务"
+      ],
+      "knowledgeCard": {
+        "topic": "权利与义务的统一——劳动和受教育",
+        "source": "人教版八年级下册 第二单元 第三课/第四课",
+        "keyMemory": "宪法规定：劳动和受教育既是公民的权利，也是公民的义务。这是权利与义务相统一的典型体现",
+        "commonMistake": "纳税、服兵役、维护民族团结都只是义务，不是权利。只有劳动和受教育具有双重属性",
+        "relatedTopics": "权利与义务的关系：相互依存、相互促进，公民既要依法行使权利，也要自觉履行义务"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "公民行使权利时，下列做法正确的是：",
+      "options": [
+        "想怎么行使就怎么行使，权利是绝对自由的",
+        "行使权利不得损害国家的、社会的、集体的利益和其他公民的合法权利",
+        "为了维护自己的权利可以采取任何手段",
+        "只要不违法就可以随意行使权利"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查依法行使权利的边界和要求",
+        "📖 关键知识：公民的权利不是无限的，行使权利有边界",
+        "🎯 解题思路：权利不是绝对的，行使权利必须在法律允许的范围内，不能损害他人和公共利益"
+      ],
+      "knowledgeCard": {
+        "topic": "依法行使权利",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "公民行使权利不能超越法律许可的范围，不得损害国家的、社会的、集体的利益和其他公民的合法自由和权利",
+        "commonMistake": "权利不是「绝对自由」的，任何权利都有边界。「只要不违法」也不够准确，还需要不损害他人合法权益",
+        "relatedTopics": "维权途径：协商、调解、仲裁、诉讼；公民在行使自由和权利的时候不得损害国家的、社会的、集体的利益"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列属于公民基本义务的是：<br>①维护国家统一和全国各民族团结<br>②遵守宪法和法律<br>③享有言论自由<br>④依法纳税",
+      "options": [
+        "①②③",
+        "①②④",
+        "②③④",
+        "①③④"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查公民基本义务的具体内容",
+        "📖 关键知识：需要区分哪些是义务、哪些是权利",
+        "🎯 解题思路：「言论自由」属于政治自由权利而不是义务，排除含③的选项"
+      ],
+      "knowledgeCard": {
+        "topic": "公民的基本义务",
+        "source": "人教版八年级下册 第二单元 第四课",
+        "keyMemory": "公民基本义务包括：①遵守宪法和法律；②维护国家统一和全国各民族团结；③维护国家安全、荣誉和利益；④依法服兵役；⑤依法纳税等",
+        "commonMistake": "言论自由是公民的政治权利和自由，不是义务。注意区分权利和义务的内容",
+        "relatedTopics": "法定义务须履行、违反义务须担责；公民的义务具有强制性"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "某市民张某发现邻居私自搭建违章建筑，向城管部门举报。张某行使的是：",
+      "options": [
+        "选举权",
+        "建议权",
+        "监督权",
+        "人身自由权"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查公民政治权利中的监督权",
+        "📖 关键知识：公民对国家机关及其工作人员有监督的权利，对违法行为有检举权",
+        "🎯 解题思路：向有关部门举报违法行为属于行使监督权中的检举权，选C"
+      ],
+      "knowledgeCard": {
+        "topic": "公民的监督权",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "监督权包括批评权、建议权、检举权、申诉权、控告权。举报违法行为属于行使检举权，是监督权的重要组成部分",
+        "commonMistake": "「建议权」是对国家机关工作提出合理化建议的权利，而举报违法行为属于「检举权」，两者都属于监督权范畴，但具体类型不同。本题选「监督权」作为大的类别",
+        "relatedTopics": "公民依法行使监督权，有利于国家机关及其工作人员依法行使权力、改进工作"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "关于权利和义务的关系，下列说法正确的是：",
+      "options": [
+        "权利和义务可以分离，公民可以只享受权利不履行义务",
+        "权利和义务是完全对等的，享受多少权利就要履行多少义务",
+        "公民的权利与义务相互依存、相互促进，是统一的",
+        "先履行义务才能享受权利，义务比权利更重要"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查权利和义务的辩证统一关系",
+        "📖 关键知识：权利和义务相互依存、相互促进，不可分割",
+        "🎯 解题思路：A说可以分离是错的；B说完全对等太绝对；D说先后关系和重要性排序也不对；C表述最准确"
+      ],
+      "knowledgeCard": {
+        "topic": "权利与义务的关系",
+        "source": "人教版八年级下册 第二单元 第三课/第四课",
+        "keyMemory": "权利与义务相互依存、相互促进。公民既是权利的享有者，也是义务的承担者。权利的实现需要义务的履行，义务的履行促进权利的实现",
+        "commonMistake": "权利和义务不能分割，但也不是简单的「完全对等」或「先后」关系。它们是相互依存的统一关系，不存在谁先谁后、谁更重要的问题",
+        "relatedTopics": "宪法规定：任何公民享有宪法和法律规定的权利，同时必须履行宪法和法律规定的义务"
+      }
+    },
+    {
+      "id": 9,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "年满18周岁的中国公民都享有选举权和被选举权。",
+      "answer": false,
+      "hints": [
+        "💡 方向提示：本题考查选举权和被选举权的条件",
+        "📖 关键知识：享有选举权和被选举权需要同时满足多个条件",
+        "🎯 解题思路：除了年满18周岁和中国公民身份外，还需要「未被剥夺政治权利」这一条件"
+      ],
+      "knowledgeCard": {
+        "topic": "选举权和被选举权的条件",
+        "source": "人教版八年级下册 第二单元 第三课",
+        "keyMemory": "享有选举权和被选举权需同时满足三个条件：①中国公民；②年满18周岁；③未被剥夺政治权利",
+        "commonMistake": "很多同学只记住了前两个条件而忽略了「未被剥夺政治权利」这一重要限制条件，被剥夺政治权利的人即使年满18周岁也不享有选举权和被选举权",
+        "relatedTopics": "选举权和被选举权是公民最基本的政治权利；剥夺政治权利是一种附加刑"
+      }
+    },
+    {
+      "id": 10,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "法定义务是由宪法和法律规定的，具有强制性，公民必须履行，不能放弃。",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查公民法定义务的特征",
+        "📖 关键知识：法定义务具有强制性，不履行要承担法律责任",
+        "🎯 解题思路：法定义务由国家强制力保证实施，公民必须履行，不得拒绝和放弃"
+      ],
+      "knowledgeCard": {
+        "topic": "法定义务的特征",
+        "source": "人教版八年级下册 第二单元 第四课",
+        "keyMemory": "法定义务由宪法和法律规定，具有强制性。公民必须履行法定义务，不得放弃、拒绝，否则要承担法律责任",
+        "commonMistake": "部分同学将「法定义务」和「道德义务」混淆。道德义务靠自觉和舆论，法定义务靠国家强制力保障，不履行会受到法律制裁",
+        "relatedTopics": "法定义务与道德义务的区别与联系；违反义务须担责"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+      'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+      '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  if (val !== q.answer) (val ? t : f).classList.add("wrong");
+}
+
+function submitFill() {
+  if (answered) return;
+  var input = document.getElementById("fillInput").value.trim();
+  if (!input) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  processAnswer(answers.some(function(a) { return input === a.trim(); }));
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>" + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
