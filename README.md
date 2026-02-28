@@ -1,4 +1,4 @@
-# 交互式学习练习系统 (Skills-XiaoSiMen)
+﻿# 交互式学习练习系统 (Skills-XiaoSiMen)
 
 一套 Cursor Agent Skills，用于生成交互式学习练习题，覆盖 **数学** 和 **初中小四门**（地理、历史、生物、道德与法治）。
 
@@ -55,6 +55,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | ⚖️ 道法 | 八年级 | 下册综合练习 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-下册综合练习-20260227.html) |
 | ⚖️ 道法 | 八年级 | 理解权利义务 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-理解权利义务-20260227.html) |
 | 📜 历史 | 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-社会主义制度建立与建设探索-20260227.html) |
+| 📜 历史 | 八年级 | 中国特色社会主义道路 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中国特色社会主义道路 -20260228.html) |
 
 ---
 
