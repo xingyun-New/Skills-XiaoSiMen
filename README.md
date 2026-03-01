@@ -1,4 +1,4 @@
-﻿# 交互式学习练习系统 (Skills-XiaoSiMen)
+# 交互式学习练习系统 (Skills-XiaoSiMen)
 
 一套 Cursor Agent Skills，用于生成交互式学习练习题，覆盖 **数学** 和 **初中小四门**（地理、历史、生物、道德与法治）。
 
@@ -38,25 +38,39 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 通过 GitHub Pages 直接在浏览器中打开，无需下载：
 
-### 数学 (Math Teacher)
+### 🔢 数学 (Math Teacher)
 
-| 科目 | 内容 | 类型 | 在线练习 |
+| 内容 | 类型 | 在线练习 |
+|------|------|---------|
+| 一次函数练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-quiz.html) |
+| 一次函数中等难度挑战 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-medium-quiz.html) |
+| 平行四边形专项练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/parallelogram-quiz.html) |
+
+### ⚖️ 道德与法治
+
+| 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|---------|
-| 🔢 数学 | 一次函数练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-quiz.html) |
-| 🔢 数学 | 一次函数中等难度挑战 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-medium-quiz.html) |
-| 🔢 数学 | 平行四边形专项练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/parallelogram-quiz.html) |
+| 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260226.html) |
+| 八年级 | 下册综合练习 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-下册综合练习 -20260227.html) |
+| 八年级 | 理解权利义务 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-理解权利义务 -20260227.html) |
+| 八年级 | 人民当家作主 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-人民当家作主 -20260228.html) |
+| 八年级 | 坚持宪法至上（新） | 2026-03-01 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上 -20260301.html) |
 
-### 初中小四门 (zhongkao-xiaosimen)
+### 📜 历史
 
-| 科目 | 年级 | 内容 | 日期 | 在线练习 |
-|------|------|------|------|---------|
-| ⚖️ 道法 | 八年级 | 坚持宪法至上 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-坚持宪法至上-20260226.html) |
-| 📜 历史 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固-20260226.html) |
-| ⚖️ 道法 | 八年级 | 下册综合练习 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-下册综合练习-20260227.html) |
-| ⚖️ 道法 | 八年级 | 理解权利义务 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-理解权利义务-20260227.html) |
-| 📜 历史 | 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-社会主义制度建立与建设探索-20260227.html) |
-| 📜 历史 | 八年级 | 中国特色社会主义道路 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中国特色社会主义道路 -20260228.html) |
-| ⚖️ 道法 | 八年级 | 人民当家作主 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/ethics-8-人民当家作主 -20260228.html) |
+| 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|---------|
+| 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固 -20260226.html) |
+| 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-社会主义制度建立与建设探索 -20260227.html) |
+| 八年级 | 中国特色社会主义道路 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中国特色社会主义道路 -20260228.html) |
+
+### 🌍 地理
+
+> 暂无地理练习，输入"请生成八年级地理练习题"立即创建！
+
+### 🧬 生物
+
+> 暂无生物练习，输入"请生成八年级生物练习题"立即创建！
 
 ---
 
@@ -128,4 +142,3 @@ quiz-output/                              # 小四门练习题输出
 ## 许可证
 
 MIT
-
