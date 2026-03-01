@@ -1,120 +1,9 @@
-# HTML 交互练习页面模板
-
-生成独立的 HTML 练习页面时，必须严格遵循以下结构。生成的文件是纯 HTML + CSS + JavaScript 单文件，无任何外部依赖。
-
-## 核心架构：数据与逻辑分离
-
-题目数据放在 `<script type="application/json">` 标签中，**不是** JavaScript 代码，而是纯 JSON。这样做的好处：
-- JSON 转义规则简单明确（只需 `\"` 转义双引号）
-- 浏览器用 `JSON.parse()` 解析，不会因引号问题报错
-- 数据与代码彻底分离，更安全可靠
-
-## JSON 数据格式
-
-### 客观题格式（选择题/判断题/填空题）
-
-```json
-{
-  "title": "八年级地理 · 中国自然环境",
-  "questions": [
-    {
-      "id": 1,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "题干文字",
-      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查的是 XX 章节的 XX 知识点",
-        "📖 关键知识：具体的知识点内容",
-        "🎯 解题思路：根据 XX 可以判断出答案是 XX"
-      ],
-      "knowledgeCard": {
-        "topic": "考点名称",
-        "source": "人教版八年级上册 第二章",
-        "keyMemory": "核心记忆点",
-        "commonMistake": "易错提醒",
-        "relatedTopics": "关联知识"
-      }
-    }
-  ]
-}
-```
-
-### 材料分析题格式
-
-```json
-{
-  "id": 11,
-  "type": "material",
-  "difficulty": 3,
-  "material": "材料文字内容，支持\\n换行和<table>表格标签",
-  "materialLabel": "材料来源：改编自 2025 年中考题（可选）",
-  "subQuestions": [
-    {
-      "id": 1,
-      "question": "第 1 小问的问题？",
-      "points": 4,
-      "answer": "参考答案要点...",
-      "scoring": ["答出关键词 X 得 2 分", "答出 Y 得 2 分"]
-    },
-    {
-      "id": 2,
-      "question": "第 2 小问的问题？",
-      "points": 4,
-      "answer": "参考答案...",
-      "scoring": ["答出要点 1 得 2 分", "答出要点 2 得 2 分"]
-    }
-  ],
-  "hints": [
-    "💡 方向提示：本题考查 XX 章节的知识点",
-    "📖 关键知识：核心知识点内容",
-    "🎯 解题思路：从 XX 角度分析，结合材料中的 XX 信息"
-  ],
-  "knowledgeCard": {
-    "topic": "考点名称",
-    "source": "人教版八年级下册 第 X 单元",
-    "keyMemory": "核心记忆点",
-    "commonMistake": "易错提醒",
-    "relatedTopics": "关联知识",
-    "answerTechnique": "答题技巧（可选）"
-  }
-}
-```
-
-### hints 字段说明
-
-每道题必须包含 `hints` 数组，含3级渐进式提示：
-
-| 级别 | 作用 | 扣分 | 示例 |
-|------|------|------|------|
-| 提示1 | 方向提示：指出知识点范围 | 基础分 -30% | 「本题考查秦岭—淮河线的地理意义」 |
-| 提示2 | 关键知识：给出核心知识点 | 基础分 -60% | 「秦岭—淮河线与800mm等降水量线大致重合」 |
-| 提示3 | 解题思路：接近给出答案 | 基础分 -90% | 「800mm线是关键，排除400mm的选项即可」 |
-
-### JSON 转义规则（只需关注这几条）
-
-| 字符 | JSON 中写法 | 示例 |
-|------|-----------|------|
-| 双引号 `"` | `\"` | `"所谓\"地上河\""` |
-| 反斜杠 `\` | `\\` | `"C:\\路径"` |
-| 换行 | `\n` | `"第一行\n第二行"` |
-
-**中文引号 `""` 和 `「」` 在 JSON 中无需转义**，可以直接使用。建议优先用中文引号来包裹专有名词，彻底避免转义。
-
-## 完整 HTML 模板
-
-以下为完整可用的 HTML 模板。生成时：
-1. 替换 `<script id="quiz-json">` 中的 JSON 数据
-2. 替换 `<title>` 标签的文字
-
-```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>【科目】【年级】· 【主题】练习</title>
+  <title>地理·八年级下册·北方地区练习</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -300,7 +189,6 @@
       font-size: 1.1em; font-weight: bold; cursor: pointer;
     }
 
-    /* 提示按钮和提示区域 */
     .hint-bar {
       display: flex; align-items: center; gap: 10px;
       margin-bottom: 16px; flex-wrap: wrap;
@@ -378,167 +266,6 @@
     }
     @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
 
-    /* 材料分析题样式 */
-    .material-section {
-      background: #f5f5f5;
-      border-left: 4px solid #9c27b0;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      border-radius: 0 10px 10px 0;
-    }
-    .material-label {
-      font-size: 0.85em;
-      color: #666;
-      margin-bottom: 8px;
-      font-style: italic;
-    }
-    .material-content {
-      line-height: 1.8;
-      font-size: 1em;
-      color: #333;
-    }
-    .material-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0;
-      font-size: 0.95em;
-    }
-    .material-content th, .material-content td {
-      border: 1px solid #ddd;
-      padding: 8px 12px;
-      text-align: left;
-    }
-    .material-content th {
-      background: #e3f2fd;
-      font-weight: bold;
-    }
-    .sub-questions {
-      margin-top: 16px;
-    }
-    .sub-question-item {
-      margin-bottom: 20px;
-      background: #fafafa;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #e0e0e0;
-    }
-    .sub-question-text {
-      font-weight: 500;
-      margin-bottom: 10px;
-      color: #333;
-      line-height: 1.6;
-    }
-    .sub-question-points {
-      font-size: 0.85em;
-      color: #9c27b0;
-      font-weight: bold;
-      margin-left: 8px;
-    }
-    .answer-textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      font-size: 0.95em;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s;
-      font-family: inherit;
-      line-height: 1.6;
-    }
-    .answer-textarea:focus {
-      border-color: #9c27b0;
-    }
-    .submit-material-btn {
-      width: 100%;
-      padding: 14px;
-      margin-top: 16px;
-      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .submit-material-btn:hover {
-      transform: scale(1.02);
-    }
-    .scoring-rubric {
-      background: #f3e5f5;
-      border-left: 4px solid #9c27b0;
-      padding: 14px 16px;
-      margin-top: 16px;
-      border-radius: 0 8px 8px 0;
-    }
-    .scoring-title {
-      font-weight: bold;
-      color: #7b1fa2;
-      margin-bottom: 8px;
-      font-size: 0.95em;
-    }
-    .scoring-item {
-      margin: 6px 0;
-      font-size: 0.9em;
-      line-height: 1.5;
-      color: #444;
-    }
-    .scoring-item::before {
-      content: "✓ ";
-      color: #9c27b0;
-      font-weight: bold;
-    }
-    .self-assess {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .assess-btn {
-      flex: 1;
-      min-width: 100px;
-      padding: 12px 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      background: #fafafa;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.95em;
-      transition: all 0.2s;
-      text-align: center;
-    }
-    .assess-btn:hover:not(.disabled) {
-      border-color: #9c27b0;
-      background: #f3e5f5;
-      transform: scale(1.02);
-    }
-    .assess-btn.correct {
-      border-color: #4CAF50;
-      background: #E8F5E9;
-      color: #2E7D32;
-    }
-    .assess-btn.partial {
-      border-color: #FF9800;
-      background: #FFF3E0;
-      color: #E65100;
-    }
-    .assess-btn.wrong {
-      border-color: #f44336;
-      background: #FFEBEE;
-      color: #c62828;
-    }
-    .assess-btn.disabled {
-      pointer-events: none;
-      opacity: 0.6;
-    }
-    .assess-score {
-      font-size: 0.85em;
-      color: #666;
-      margin-top: 4px;
-    }
-
     @media (max-width: 600px) {
       body { padding: 12px; }
       .card { padding: 20px; border-radius: 16px; }
@@ -568,8 +295,110 @@
 <!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
 <script type="application/json" id="quiz-json">
 {
-  "title": "请替换标题",
-  "questions": []
+  "title": "地理·八年级下册·北方地区",
+  "questions": [
+    {
+      "id": 1,
+      "type": "fillblank",
+      "difficulty": 2,
+      "question": "北方地区位于秦岭—淮河以北，____高原和____高原以东，____以南，____以东。",
+      "answer": ["内蒙古；黄土；青藏高原；大兴安岭"],
+      "hints": [
+        "💡 方向提示：本题考查北方地区的位置范围",
+        "📖 关键知识：北方地区东临渤海和黄海，西至高原",
+        "🎯 解题思路：记住四个边界：内蒙古高原、黄土高原、青藏高原、大兴安岭"
+      ],
+      "knowledgeCard": {
+        "topic": "北方地区的范围",
+        "source": "人教版八年级下册 第六章",
+        "keyMemory": "北方地区：秦岭 - 淮河以北，内蒙古高原和黄土高原以东，青藏高原以南，大兴安岭以东",
+        "commonMistake": "容易把东西南北的边界记混，注意是以北、以东、以南、以东的顺序",
+        "relatedTopics": "四大地理区域、地形区"
+      }
+    },
+    {
+      "id": 2,
+      "type": "fillblank",
+      "difficulty": 2,
+      "question": "东北三省的地形以____和____为主，地表结构大致呈____状的三带。",
+      "answer": ["平原；山地；半环"],
+      "hints": [
+        "💡 方向提示：本题考查东北三省的地形特征",
+        "📖 关键知识：东北有我国最大的平原和重要山地",
+        "🎯 解题思路：东北地形特点是山环水绕，平原居中"
+      ],
+      "knowledgeCard": {
+        "topic": "东北三省的地形",
+        "source": "人教版八年级下册 第六章",
+        "keyMemory": "东北三省：平原和山地为主，半环状三带（山地→丘陵→平原）",
+        "commonMistake": "容易把「半环状」写成「环状」或「放射状」",
+        "relatedTopics": "地形区、东北地区"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "北方地区的主要气候类型是？",
+      "options": [
+        "A. 热带季风气候",
+        "B. 亚热带季风气候",
+        "C. 温带季风气候",
+        "D. 温带大陆性气候"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查北方地区的气候类型",
+        "📖 关键知识：北方地区位于秦岭 - 淮河以北",
+        "🎯 解题思路：秦岭 - 淮河以北是温带，季风气候显著"
+      ],
+      "knowledgeCard": {
+        "topic": "北方地区的气候",
+        "source": "人教版八年级下册 第六章",
+        "keyMemory": "北方地区：温带季风气候，夏季高温多雨，冬季寒冷干燥",
+        "commonMistake": "容易与温带大陆性气候混淆，北方地区东部是季风气候",
+        "relatedTopics": "气候类型、季风区"
+      }
+    },
+    {
+      "id": 4,
+      "type": "fillblank",
+      "difficulty": 2,
+      "question": "东北平原是我国面积____的平原，黑土广布，土壤____，适宜种植____、玉米、____等农作物。",
+      "answer": ["最大；肥沃；小麦；大豆"],
+      "hints": [
+        "💡 方向提示：本题考查东北平原的农业特点",
+        "📖 关键知识：东北平原黑土肥沃，是我国重要商品粮基地",
+        "🎯 解题思路：东北主要种植温带作物，春小麦、玉米、大豆、甜菜"
+      ],
+      "knowledgeCard": {
+        "topic": "东北平原的农业",
+        "source": "人教版八年级下册 第六章",
+        "keyMemory": "东北平原：最大平原、黑土肥沃、春小麦/玉米/大豆/甜菜",
+        "commonMistake": "容易把「小麦」写成「水稻」，东北主要种植春小麦而非水稻",
+        "relatedTopics": "商品粮基地、农作物分布"
+      }
+    },
+    {
+      "id": 5,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "黄土高原是世界上黄土分布最广、最厚的地区。",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查黄土高原的地位",
+        "📖 关键知识：黄土高原黄土层深厚",
+        "🎯 解题思路：黄土高原确实是世界之最"
+      ],
+      "knowledgeCard": {
+        "topic": "黄土高原的地位",
+        "source": "人教版八年级下册 第六章",
+        "keyMemory": "黄土高原：世界黄土分布最广、最厚的地区",
+        "commonMistake": "无明显易错点",
+        "relatedTopics": "地形区、世界地理之最"
+      }
+    }
+  ]
 }
 </script>
 <!-- ========== 题目数据结束 ========== -->
@@ -608,7 +437,7 @@ function renderQuestion() {
 
   var hintBtnHtml = "";
   if (q.hints && q.hints.length > 0) {
-    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
     var costs = ["-30%", "-60%", "-90%"];
     hintBtnHtml = '<div class="hint-bar">' +
       q.hints.map(function(_, i) {
@@ -629,7 +458,7 @@ function renderQuestion() {
       '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
   } else if (q.type === "fillblank") {
     var answers = Array.isArray(q.answer) ? q.answer : [q.answers];
-    var correctAnswer = answers[0].split("；");
+    var correctAnswer = answers[0].split(";");
     var numBlanks = correctAnswer.length;
     if (numBlanks === 1) {
       optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
@@ -863,181 +692,7 @@ function showAchievement(text) {
   setTimeout(function() { el.remove(); }, 3000);
 }
 
-/* ========== 材料分析题专用函数 ========== */
-function renderMaterialQuestion(q) {
-  var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
-  var subQuestionsHtml = '';
-  if (q.subQuestions && q.subQuestions.length > 0) {
-    subQuestionsHtml = '<div class="sub-questions">' +
-      q.subQuestions.map(function(sq, i) {
-        return '<div class="sub-question-item">' +
-          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
-          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
-          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
-          'placeholder="请在此处输入你的答案..."></textarea>' +
-          '</div>';
-      }).join("") + '</div>';
-  }
-  return '<div class="material-section">' + materialLabel +
-    '<div class="material-content">' + q.material + '</div></div>' + subQuestionsHtml +
-    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
-    '<div id="materialFeedback"></div>';
-}
-
-function submitMaterial() {
-  if (answered) return;
-  var q = quizData.questions[currentIndex];
-  var inputs = [];
-  var allFilled = true;
-  if (q.subQuestions) {
-    for (var i = 0; i < q.subQuestions.length; i++) {
-      var val = document.getElementById("material-answer-" + i).value.trim();
-      inputs.push(val);
-      if (!val) allFilled = false;
-    }
-  }
-  if (!allFilled) {
-    alert("请先完成所有小题的作答！");
-    return;
-  }
-  answered = true;
-  document.querySelectorAll(".answer-textarea").forEach(function(el) {
-    el.disabled = true;
-  });
-  var btn = document.querySelector(".submit-material-btn");
-  if (btn) btn.style.display = "none";
-  showMaterialFeedback(q);
-}
-
-function showMaterialFeedback(q) {
-  var kc = q.knowledgeCard;
-  var totalPoints = 0;
-  if (q.subQuestions) {
-    for (var i = 0; i < q.subQuestions.length; i++) {
-      totalPoints += q.subQuestions[i].points;
-    }
-  }
-  var scoringHtml = '';
-  if (q.subQuestions) {
-    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 评分标准</div>' +
-      q.subQuestions.map(function(sq, i) {
-        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
-          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
-          '<div class="scoring-item">答对关键词语即可得分</div>';
-        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
-          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
-      }).join("") + '</div>';
-  }
-  var assessHtml = '<div class="self-assess">' +
-    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
-    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
-    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
-    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
-    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
-    '❌ 错误<div class="assess-score">得 0 分</div></button>' +
-    '</div>';
-  var feedbackArea = document.getElementById("materialFeedback");
-  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
-    '<div class="kc-title">📖 参考答案与解析</div>' +
-    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
-    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
-    (kc.answerTechnique ? '<div class="kc-item">💡 <b>答题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
-    '</div>' + scoringHtml + assessHtml;
-}
-
-function selfAssess(level) {
-  var q = quizData.questions[currentIndex];
-  var totalPoints = 0;
-  if (q.subQuestions) {
-    for (var i = 0; i < q.subQuestions.length; i++) {
-      totalPoints += q.subQuestions[i].points;
-    }
-  }
-  document.querySelectorAll(".assess-btn").forEach(function(btn) {
-    btn.classList.add("disabled");
-  });
-  var earnedPoints = 0;
-  var isCorrect = false;
-  if (level === "correct") {
-    earnedPoints = totalPoints;
-    isCorrect = true;
-    document.getElementById("assessCorrect").classList.add("correct");
-  } else if (level === "partial") {
-    earnedPoints = Math.round(totalPoints * 0.5);
-    isCorrect = true;
-    document.getElementById("assessPartial").classList.add("partial");
-  } else {
-    document.getElementById("assessWrong").classList.add("wrong");
-    streak = 0;
-    wrongQuestions.push({ index: currentIndex });
-  }
-  if (isCorrect) {
-    streak++;
-    if (streak > maxStreak) maxStreak = streak;
-    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
-    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
-    score += earnedPointsWithBonus;
-    correctTotal++;
-    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
-    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
-    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
-    if (hintsUsed > 0) showAchievement("📖 自评得分 +" + earnedPointsWithBonus);
-  }
-  updateStats();
-  var feedbackArea = document.getElementById("materialFeedback");
-  var kc = q.knowledgeCard;
-  var extraHtml = '';
-  if (!isCorrect) {
-    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
-  }
-  if (kc.relatedTopics) {
-    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
-  }
-  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
-    '" style="margin-top:16px;">' + extraHtml +
-    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
-    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
-    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
-}
-
 init();
 </script>
 </body>
 </html>
-```
-
-## 生成要点
-
-1. **只替换 JSON 数据块**：找到 `<script type="application/json" id="quiz-json">` 标签，只替换其中的 JSON 内容
-2. **替换页面标题**：`<title>` 标签的文字
-3. **使用 Write 工具**：将完整 HTML 写入 `quiz-output/` 目录
-4. **文件命名**：`{subject}-{grade}-{topic}-{date}.html`
-
-## JSON 数据生成规则（必须遵守）
-
-### 所有字符串值必须用双引号 `"` 包裹
-
-```json
-"keyMemory": "记住「960万」这个数字"
-```
-
-### 字符串内部的双引号用 `\"` 转义
-
-```json
-"commonMistake": "注意\"地上河\"是黄河下游的特征"
-```
-
-### 推荐用中文引号避免转义
-
-优先使用「」或 "" 包裹专有名词，天然不需要转义：
-
-```json
-"commonMistake": "「南多北少」是干扰项，正确答案是「东多西少」"
-```
-
-### 禁止事项
-
-- 不要在 JSON 字符串中使用未转义的 `"` `\`
-- 不要在 JSON 字符串中使用真实换行（用 `\n` 代替）
-- 不要在 JSON 中使用单引号 `'` 作为字符串定界符
-- 不要使用尾随逗号（最后一个元素后不要加逗号）
