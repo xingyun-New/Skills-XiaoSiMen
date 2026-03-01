@@ -66,7 +66,9 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 ### 🌍 地理
 
-> 暂无地理练习，输入"请生成八年级地理练习题"立即创建！
+| 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|---------|
+| 八年级 | 中国的地理差异 | 2026-03-01 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-中国的地理差异 -20260301.html) |
 
 ### 🧬 生物
 
