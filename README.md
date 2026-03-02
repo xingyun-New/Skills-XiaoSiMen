@@ -74,6 +74,12 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 > 暂无生物练习，输入"请生成八年级生物练习题"立即创建！
 
+### 📝 语文
+
+| 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|---------|
+| 八年级 | 《诗经》二首（关雎·蒹葭） | 2026-03-02 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/chinese-8-诗经二首-20260302.html) |
+
 ---
 
 ## 项目结构
