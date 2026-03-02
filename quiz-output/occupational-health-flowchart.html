@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>职业病危害因素评价项目流程图</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+    }
+    .flowchart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .phase-marker {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 12px 40px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin: 30px 0 20px 0;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .phase-marker.phase-1 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .phase-marker.phase-2 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .phase-marker.phase-3 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .phase-marker.phase-4 { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .phase-marker.phase-5 { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; }
+    .steps-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1000px;
+    }
+    .step-card {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      border-radius: 16px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      position: relative;
+      border: 3px solid transparent;
+    }
+    .step-card:hover { transform: translateY(-5px); }
+    .step-card.phase-1 { border-color: #f5576c; }
+    .step-card.phase-2 { border-color: #00f2fe; }
+    .step-card.phase-3 { border-color: #38f9d7; }
+    .step-card.phase-4 { border-color: #fee140; }
+    .step-card.phase-5 { border-color: #fed6e3; }
+    .step-number {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .step-card.phase-1 .step-number { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .step-card.phase-2 .step-number { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .step-card.phase-3 .step-number { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .step-card.phase-4 .step-number { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .step-card.phase-5 .step-number { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; }
+    .step-title {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 12px;
+      margin-top: 5px;
+    }
+    .step-desc {
+      font-size: 0.9em;
+      color: #555;
+      line-height: 1.6;
+    }
+    .step-desc ul { padding-left: 18px; margin-top: 8px; }
+    .step-desc li { margin: 4px 0; }
+    .arrow-down {
+      width: 3px;
+      height: 40px;
+      background: linear-gradient(to bottom, #667eea, #764ba2);
+      margin: 10px 0;
+      position: relative;
+    }
+    .arrow-down::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 12px solid #764ba2;
+    }
+    .output-section {
+      margin-top: 40px;
+      padding: 25px;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      border-radius: 16px;
+      border: 3px solid #667eea;
+    }
+    .output-section h3 { color: #333; margin-bottom: 15px; font-size: 1.3em; }
+    .output-list { display: flex; flex-wrap: wrap; gap: 15px; }
+    .output-item {
+      background: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 0.95em;
+      color: #333;
+      border-left: 4px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>📋 职业病危害因素评价项目流程图</h1>
+  <p class="subtitle">标准化工作流程 · 五个阶段 · 质量控制</p>
+  
+  <div class="flowchart">
+    <div class="phase-marker phase-1">第一阶段：前期准备与资料收集</div>
+    <div class="steps-container">
+      <div class="step-card phase-1"><div class="step-number">1</div><div class="step-title">接受委托</div><div class="step-desc"><ul><li>签订技术服务合同</li><li>明确评价范围和要求</li><li>确定项目团队</li></ul></div></div>
+      <div class="step-card phase-1"><div class="step-number">2</div><div class="step-title">收集资料</div><div class="step-desc"><ul><li>项目可行性研究报告</li><li>初步设计文件</li><li>类比企业调查资料</li><li>法律法规标准规范</li></ul></div></div>
+      <div class="step-card phase-1"><div class="step-number">3</div><div class="step-title">现场调查</div><div class="step-desc"><ul><li>生产工艺流程调查</li><li>原辅材料使用情况</li><li>设备布局与车间布置</li><li>职业病防护设施配置</li></ul></div></div>
+    </div>
+    
+    <div class="arrow-down"></div>
+    
+    <div class="phase-marker phase-2">第二阶段：危害因素识别与分析</div>
+    <div class="steps-container">
+      <div class="step-card phase-2"><div class="step-number">4</div><div class="step-title">危害因素识别</div><div class="step-desc"><ul><li>化学因素（粉尘、毒物）</li><li>物理因素（噪声、高温）</li><li>生物因素</li><li>放射性因素</li></ul></div></div>
+      <div class="step-card phase-2"><div class="step-number">5</div><div class="step-title">暴露评估</div><div class="step-desc"><ul><li>确定接触人群</li><li>估算接触浓度/强度</li><li>计算接触时间和频率</li><li>评估接触水平</li></ul></div></div>
+      <div class="step-card phase-2"><div class="step-number">6</div><div class="step-title">类比检测（可选）</div><div class="step-desc"><ul><li>选择类比企业</li><li>现场采样检测</li><li>实验室分析</li><li>数据整理分析</li></ul></div></div>
+    </div>
+    
+    <div class="arrow-down"></div>
+    
+    <div class="phase-marker phase-3">第三阶段：防护设施评价</div>
+    <div class="steps-container">
+      <div class="step-card phase-3"><div class="step-number">7</div><div class="step-title">防护设施调查</div><div class="step-desc"><ul><li>通风排毒设施</li><li>除尘设施</li><li>降噪减振设施</li><li>应急救援设施</li></ul></div></div>
+      <div class="step-card phase-3"><div class="step-number">8</div><div class="step-title">符合性评价</div><div class="step-desc"><ul><li>对照法律法规标准</li><li>评价设施配置合理性</li><li>评价设施运行效果</li><li>提出改进建议</li></ul></div></div>
+    </div>
+    
+    <div class="arrow-down"></div>
+    
+    <div class="phase-marker phase-4">第四阶段：综合评价与报告编制</div>
+    <div class="steps-container">
+      <div class="step-card phase-4"><div class="step-number">9</div><div class="step-title">风险综合评价</div><div class="step-desc"><ul><li>危害程度分级</li><li>风险等级判定</li><li>关键控制点确定</li><li>职业卫生管理评价</li></ul></div></div>
+      <div class="step-card phase-4"><div class="step-number">10</div><div class="step-title">编制评价报告</div><div class="step-desc"><ul><li>报告初稿编制</li><li>内部审核（三级审核）</li><li>修改完善</li><li>出具正式报告</li></ul></div></div>
+      <div class="step-card phase-4"><div class="step-number">11</div><div class="step-title">专家评审（预评价）</div><div class="step-desc"><ul><li>组织专家评审会</li><li>汇报评价结果</li><li>记录专家意见</li><li>修改报告并回复</li></ul></div></div>
+    </div>
+    
+    <div class="arrow-down"></div>
+    
+    <div class="phase-marker phase-5">第五阶段：归档与后续服务</div>
+    <div class="steps-container">
+      <div class="step-card phase-5"><div class="step-number">12</div><div class="step-title">资料归档</div><div class="step-desc"><ul><li>评价报告及附件</li><li>原始记录整理</li><li>检测数据归档</li><li>电子档案备份</li></ul></div></div>
+      <div class="step-card phase-5"><div class="step-number">13</div><div class="step-title">后续服务</div><div class="step-desc"><ul><li>报告备案协助</li><li>整改技术咨询</li><li>定期检测服务</li><li>职业卫生培训</li></ul></div></div>
+    </div>
+  </div>
+  
+  <div class="output-section">
+    <h3>📄 最终交付成果</h3>
+    <div class="output-list">
+      <div class="output-item">职业病危害预评价报告</div>
+      <div class="output-item">职业病危害控制效果评价报告</div>
+      <div class="output-item">现场检测原始记录</div>
+      <div class="output-item">类比检测数据（如有）</div>
+      <div class="output-item">专家评审意见及回复</div>
+      <div class="output-item">整改建议书</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
