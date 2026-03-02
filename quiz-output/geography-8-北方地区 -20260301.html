@@ -458,7 +458,7 @@ function renderQuestion() {
       '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
   } else if (q.type === "fillblank") {
     var answers = Array.isArray(q.answer) ? q.answer : [q.answers];
-    var correctAnswer = answers[0].split(";");
+    var correctAnswer = answers[0].split(/[;；]/);
     var numBlanks = correctAnswer.length;
     if (numBlanks === 1) {
       optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
@@ -528,7 +528,7 @@ function submitFill() {
   if (answered) return;
   var q = quizData.questions[currentIndex];
   var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
-  var correctAnswer = answers[0].split(";");
+  var correctAnswer = answers[0].split(/[;；]/);
   var numBlanks = correctAnswer.length;
   
   var isAllCorrect = true;
@@ -601,7 +601,7 @@ function showFeedback(isCorrect, q) {
   if (q.type === "fillblank" && q.fillBlankResult && q.fillBlankResult.total > 1) {
     var result = q.fillBlankResult;
     var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
-    var correctAnswer = answers[0].split(";");
+    var correctAnswer = answers[0].split(/[;；]/);
     
     fillBlankFeedback = '<div class="fillblank-detail">' +
       '<div class="kc-title" style="margin-bottom:12px;">📝 各空判分详情</div>';

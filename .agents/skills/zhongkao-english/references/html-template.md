@@ -1,9 +1,120 @@
+# HTML 交互练习页面模板
+
+生成独立的 HTML 练习页面时，必须严格遵循以下结构。生成的文件是纯 HTML + CSS + JavaScript 单文件，无任何外部依赖。
+
+## 核心架构：数据与逻辑分离
+
+题目数据放在 `<script type="application/json">` 标签中，**不是** JavaScript 代码，而是纯 JSON。这样做的好处：
+- JSON 转义规则简单明确（只需 `\"` 转义双引号）
+- 浏览器用 `JSON.parse()` 解析，不会因引号问题报错
+- 数据与代码彻底分离，更安全可靠
+
+## JSON 数据格式
+
+### 客观题格式（选择题/判断题/填空题）
+
+```json
+{
+  "title": "八年级地理 · 中国自然环境",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "题干文字",
+      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查的是 XX 章节的 XX 知识点",
+        "📖 关键知识：具体的知识点内容",
+        "🎯 解题思路：根据 XX 可以判断出答案是 XX"
+      ],
+      "knowledgeCard": {
+        "topic": "考点名称",
+        "source": "外研版八年级上册 Module 2",
+        "keyMemory": "核心记忆点",
+        "commonMistake": "易错提醒",
+        "relatedTopics": "关联知识"
+      }
+    }
+  ]
+}
+```
+
+### 材料分析题格式
+
+```json
+{
+  "id": 11,
+  "type": "material",
+  "difficulty": 3,
+  "material": "材料文字内容，支持\\n换行和<table>表格标签",
+  "materialLabel": "材料来源：改编自 2025 年中考题（可选）",
+  "subQuestions": [
+    {
+      "id": 1,
+      "question": "第 1 小问的问题？",
+      "points": 4,
+      "answer": "参考答案要点...",
+      "scoring": ["答出关键词 X 得 2 分", "答出 Y 得 2 分"]
+    },
+    {
+      "id": 2,
+      "question": "第 2 小问的问题？",
+      "points": 4,
+      "answer": "参考答案...",
+      "scoring": ["答出要点 1 得 2 分", "答出要点 2 得 2 分"]
+    }
+  ],
+  "hints": [
+    "💡 方向提示：本题考查 XX 章节的知识点",
+    "📖 关键知识：核心知识点内容",
+    "🎯 解题思路：从 XX 角度分析，结合材料中的 XX 信息"
+  ],
+  "knowledgeCard": {
+    "topic": "考点名称",
+    "source": "外研版八年级下册 Module X",
+    "keyMemory": "核心记忆点",
+    "commonMistake": "易错提醒",
+    "relatedTopics": "关联知识",
+    "answerTechnique": "答题技巧（可选）"
+  }
+}
+```
+
+### hints 字段说明
+
+每道题必须包含 `hints` 数组，含3级渐进式提示：
+
+| 级别 | 作用 | 扣分 | 示例 |
+|------|------|------|------|
+| 提示1 | 方向提示：指出知识点范围 | 基础分 -30% | 「本题考查秦岭—淮河线的地理意义」 |
+| 提示2 | 关键知识：给出核心知识点 | 基础分 -60% | 「秦岭—淮河线与800mm等降水量线大致重合」 |
+| 提示3 | 解题思路：接近给出答案 | 基础分 -90% | 「800mm线是关键，排除400mm的选项即可」 |
+
+### JSON 转义规则（只需关注这几条）
+
+| 字符 | JSON 中写法 | 示例 |
+|------|-----------|------|
+| 双引号 `"` | `\"` | `"所谓\"地上河\""` |
+| 反斜杠 `\` | `\\` | `"C:\\路径"` |
+| 换行 | `\n` | `"第一行\n第二行"` |
+
+**中文引号 `""` 和 `「」` 在 JSON 中无需转义**，可以直接使用。建议优先用中文引号来包裹专有名词，彻底避免转义。
+
+## 完整 HTML 模板
+
+以下为完整可用的 HTML 模板。生成时：
+1. 替换 `<script id="quiz-json">` 中的 JSON 数据
+2. 替换 `<title>` 标签的文字
+
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>【语文】【八年级下册】·《诗经》二首练习</title>
+  <title>【科目】【年级】· 【主题】练习</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -103,6 +214,7 @@
     .fill-blank-item label { font-weight: bold; color: #667eea; min-width: 80px; }
     .fill-blank-item .fill-input { flex: 1; }
     
+    /* 填空题判分详情样式 */
     .fillblank-detail {
       background: #f5f5f5;
       border-left: 4px solid #2196F3;
@@ -188,6 +300,7 @@
       font-size: 1.1em; font-weight: bold; cursor: pointer;
     }
 
+    /* 提示按钮和提示区域 */
     .hint-bar {
       display: flex; align-items: center; gap: 10px;
       margin-bottom: 16px; flex-wrap: wrap;
@@ -265,6 +378,167 @@
     }
     @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
 
+    /* 材料分析题样式 */
+    .material-section {
+      background: #f5f5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .material-content {
+      line-height: 1.8;
+      font-size: 1em;
+      color: #333;
+    }
+    .material-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.95em;
+    }
+    .material-content th, .material-content td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .material-content th {
+      background: #e3f2fd;
+      font-weight: bold;
+    }
+    .sub-questions {
+      margin-top: 16px;
+    }
+    .sub-question-item {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .sub-question-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .sub-question-points {
+      font-size: 0.85em;
+      color: #9c27b0;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 0.95em;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    .answer-textarea:focus {
+      border-color: #9c27b0;
+    }
+    .submit-material-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover {
+      transform: scale(1.02);
+    }
+    .scoring-rubric {
+      background: #f3e5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+    .scoring-title {
+      font-weight: bold;
+      color: #7b1fa2;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    .scoring-item {
+      margin: 6px 0;
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #444;
+    }
+    .scoring-item::before {
+      content: "✓ ";
+      color: #9c27b0;
+      font-weight: bold;
+    }
+    .self-assess {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) {
+      border-color: #9c27b0;
+      background: #f3e5f5;
+      transform: scale(1.02);
+    }
+    .assess-btn.correct {
+      border-color: #4CAF50;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .assess-btn.partial {
+      border-color: #FF9800;
+      background: #FFF3E0;
+      color: #E65100;
+    }
+    .assess-btn.wrong {
+      border-color: #f44336;
+      background: #FFEBEE;
+      color: #c62828;
+    }
+    .assess-btn.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .assess-score {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
+    }
+
     @media (max-width: 600px) {
       body { padding: 12px; }
       .card { padding: 20px; border-radius: 16px; }
@@ -294,468 +568,8 @@
 <!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
 <script type="application/json" id="quiz-json">
 {
-  "title": "【语文】【八年级下册】·《诗经》二首（关雎·蒹葭）",
-  "questions": [
-    {
-      "id": 1,
-      "type": "choice",
-      "difficulty": 1,
-      "question": "下列加点字的注音完全正确的一项是：",
-      "options": [
-        "关关雎鸠（jiū）　窈窕淑女（yáo tiǎo）　参差荇菜（cēn cī）",
-        "关关雎鸠（jiū）　窈窕淑女（yǎo tiǎo）　参差荇菜（cān chā）",
-        "关关雎鸠（jiū）　窈窕淑女（yǎo tiǎo）　参差荇菜（cēn cī）",
-        "关关雎鸠（jiù）　窈窕淑女（yáo tiáo）　参差荇菜（cēn cī）"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查《关雎》中的易错字音",
-        "📖 关键知识：「窈窕」读 yǎo tiǎo，「参差」读 cēn cī，都是联绵词",
-        "🎯 解题思路：「窈」读第三声 yǎo，「参差」是 cēn cī 不是 cān chā，排除后选 C"
-      ],
-      "knowledgeCard": {
-        "topic": "《诗经》字音辨析",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「窈窕」yǎo tiǎo（第三声 + 第三声），「参差」cēn cī（第一声 + 第一声），「雎鸠」jiū（第一声）",
-        "commonMistake": "「窈」常被误读为第二声 yáo，「参差」常被误读为 cān chā，这两个都是联绵词，读音特殊",
-        "relatedTopics": "联绵词的读音规律、古今异读"
-      }
-    },
-    {
-      "id": 2,
-      "type": "choice",
-      "difficulty": 1,
-      "question": "下列对「蒹葭」一词的解释，正确的一项是：",
-      "options": [
-        "蒹葭：一种水鸟，生活在芦苇丛中",
-        "蒹葭：芦苇的统称，蒹指没长穗的芦苇，葭指初生的芦苇",
-        "蒹葭：古代一种乐器的名称",
-        "蒹葭：形容草木茂盛的样子"
-      ],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》标题的含义",
-        "📖 关键知识：「蒹葭苍苍」中的「蒹葭」指芦苇，是诗歌的起兴之物",
-        "🎯 解题思路：蒹葭是植物不是动物，排除 A；C、D 明显错误，选 B"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》词语解释",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "蒹葭（jiān jiā）：芦苇。「蒹」指没长穗的芦苇，「葭」指初生的芦苇",
-        "commonMistake": "不要把「蒹葭」误认为动物，它是诗歌起兴的意象，营造凄清的氛围",
-        "relatedTopics": "《诗经》中的植物意象、起兴手法"
-      }
-    },
-    {
-      "id": 3,
-      "type": "fillblank",
-      "difficulty": 1,
-      "question": "关关雎鸠，______。窈窕淑女，______。（《诗经·关雎》）",
-      "answer": ["在河之洲；君子好逑"],
-      "hints": [
-        "💡 方向提示：本题考查《关雎》开篇名句的直接默写",
-        "📖 关键知识：这是全诗的开头，用雎鸠鸟的鸣叫起兴，引出对淑女的追求",
-        "🎯 解题思路：上句写雎鸠在河中小洲上鸣叫，下句写君子对淑女的爱慕"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》名句默写",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「关关雎鸠，在河之洲。窈窕淑女，君子好逑」——以雎鸠和鸣起兴，引出君子对淑女的追求",
-        "commonMistake": "「洲」不要写成「州」；「逑」不要写成「求」，「逑」意为配偶",
-        "relatedTopics": "《诗经》起兴手法、爱情诗"
-      }
-    },
-    {
-      "id": 4,
-      "type": "fillblank",
-      "difficulty": 1,
-      "question": "蒹葭苍苍，______。所谓伊人，______。（《诗经·蒹葭》）",
-      "answer": ["白露为霜；在水一方"],
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》首章的直接默写",
-        "📖 关键知识：这是全诗的开篇，描绘了深秋清晨的凄清景象",
-        "🎯 解题思路：上句写芦苇茂盛、露水成霜，下句写所思慕的人在水的那一边"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》名句默写",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「蒹葭苍苍，白露为霜。所谓伊人，在水一方」——以秋景起兴，营造凄清朦胧的意境",
-        "commonMistake": "「苍苍」不要写成「沧沧」；「霜」不要写成「双」；「伊人」指那个人（意中人）",
-        "relatedTopics": "《诗经》中的秋景描写、朦胧美"
-      }
-    },
-    {
-      "id": 5,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "下列对《关雎》中「参差荇菜，左右流之」的理解，不正确的一项是：",
-      "options": [
-        "「流」在这里是「捞取」的意思",
-        "这句诗描写了淑女采摘荇菜时的劳动情景",
-        "「参差」形容荇菜长短不齐的样子",
-        "这句诗运用了比喻的修辞手法，把淑女比作荇菜"
-      ],
-      "answer": 3,
-      "hints": [
-        "💡 方向提示：本题考查对《关雎》诗句内容和手法的理解",
-        "📖 关键知识：「流」是动词，意为捞取；这句是写实描写，不是比喻",
-        "🎯 解题思路：D 项说「比喻」错误，这句是赋的手法，直接描写采摘情景"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》诗句赏析",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「流」：捞取。「参差」：长短不齐。这句用赋的手法，写淑女采摘荇菜的劳动场景",
-        "commonMistake": "不要把这句理解为比喻，它是赋（直接铺陈叙述）的手法，不是比",
-        "relatedTopics": "《诗经》赋比兴手法、劳动场景描写"
-      }
-    },
-    {
-      "id": 6,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "《蒹葭》中反复出现「溯洄从之」「溯游从之」，下列对这两个词语的解释，正确的一项是：",
-      "options": [
-        "「溯洄」指顺流而下，「溯游」指逆流而上",
-        "「溯洄」指逆流而上，「溯游」指顺流而下",
-        "「溯洄」和「溯游」都指逆流而上",
-        "「溯洄」和「溯游」都指顺流而下"
-      ],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》中重点实词的含义",
-        "📖 关键知识：「溯」是逆流而上，「洄」是曲折的水道，「游」是水流",
-        "🎯 解题思路：「溯洄」是逆着弯曲的水流而上，「溯游」是顺着直流的水流而下，表现追寻的艰难"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》实词解释",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「溯洄」：逆流而上。「溯游」：顺流而下。表现主人公不畏艰险、执着追寻的精神",
-        "commonMistake": "容易把「溯洄」和「溯游」的方向弄反，记住「溯」本身就有「逆流而上」的意思",
-        "relatedTopics": "《诗经》中的动词运用、追寻主题"
-      }
-    },
-    {
-      "id": 7,
-      "type": "choice",
-      "difficulty": 1,
-      "question": "下列关于《诗经》的文学常识，表述不正确的一项是：",
-      "options": [
-        "《诗经》是我国最早的一部诗歌总集，收录了从西周到春秋时期的诗歌 305 篇",
-        "《诗经》分为「风」「雅」「颂」三部分，「风」是各地的民歌",
-        "《关雎》和《蒹葭》都选自《诗经·秦风》",
-        "《诗经》常用的表现手法是赋、比、兴"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查《诗经》的基本文学常识",
-        "📖 关键知识：《关雎》选自《诗经·周南》，《蒹葭》选自《诗经·秦风》",
-        "🎯 解题思路：C 项说「都选自《秦风》」错误，《关雎》在《周南》中"
-      ],
-      "knowledgeCard": {
-        "topic": "《诗经》文学常识",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "《诗经》305 篇，分「风」「雅」「颂」，手法「赋」「比」「兴」。《关雎》出自《周南》，《蒹葭》出自《秦风》",
-        "commonMistake": "《关雎》是《诗经》首篇，出自《周南》（南方民歌），不是《秦风》",
-        "relatedTopics": "《诗经》六义、十五国风"
-      }
-    },
-    {
-      "id": 8,
-      "type": "fillblank",
-      "difficulty": 2,
-      "question": "《关雎》中，表达君子对淑女日夜思念、辗转难眠的诗句是：______，______。______，______。",
-      "answer": ["求之不得；寤寐思服；悠哉悠哉；辗转反侧"],
-      "hints": [
-        "💡 方向提示：本题考查《关雎》中描写相思之苦的名句",
-        "📖 关键知识：这四句是全诗情感的高潮，写追求不到时的痛苦",
-        "🎯 解题思路：注意「寤寐」（醒和睡）、「悠哉」（思念绵绵）、「辗转反侧」（翻来覆去）这些关键词"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》理解性默写",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「求之不得，寤寐思服。悠哉悠哉，辗转反侧」——写相思之苦，成为描写爱情的经典名句",
-        "commonMistake": "「寤寐」wù mèi（醒和睡）不要写错；「悠哉」不要写成「优哉」；「辗转」不要写成「展转」",
-        "relatedTopics": "《诗经》中的心理描写、爱情诗"
-      }
-    },
-    {
-      "id": 9,
-      "type": "fillblank",
-      "difficulty": 2,
-      "question": "《蒹葭》中，三章都以秋景起兴，分别用「______」「______」「______」三个字形容芦苇的茂盛，渲染了凄清的氛围。",
-      "answer": ["苍苍；萋萋；采采"],
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》重章叠句的特点",
-        "📖 关键知识：三章开头句式相同，只换少数词语，这是《诗经》的典型手法",
-        "🎯 解题思路：三章分别是「蒹葭苍苍」「蒹葭萋萋」「蒹葭采采」，都形容芦苇茂盛"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》重章叠句",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "《蒹葭》三章分别用「苍苍」「萋萋」「采采」形容芦苇，是重章叠句手法的典型代表",
-        "commonMistake": "「萋萋」不要写成「凄凄」；「采采」不要写成「彩彩」，这里不是色彩的意思",
-        "relatedTopics": "《诗经》重章叠句、叠词运用"
-      }
-    },
-    {
-      "id": 10,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "下列对《关雎》和《蒹葭》的比较分析，不正确的一项是：",
-      "options": [
-        "两首诗都选自《诗经》，都运用了起兴的表现手法",
-        "《关雎》描写了君子对淑女的热烈追求，《蒹葭》描写了对「伊人」的执着追寻",
-        "《关雎》的感情基调是欢快明朗的，《蒹葭》的感情基调是凄清朦胧的",
-        "两首诗都采用了重章叠句的形式，每章只换少数词语"
-      ],
-      "answer": 3,
-      "hints": [
-        "💡 方向提示：本题考查两首诗的比较阅读",
-        "📖 关键知识：《关雎》有欢快也有相思之苦，《蒹葭》重章叠句更明显",
-        "🎯 解题思路：D 项错误，《关雎》五章，重章叠句不明显；《蒹葭》三章，重章叠句典型"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》《蒹葭》比较阅读",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "相同点：都用起兴，都写爱情。不同点：《关雎》感情由乐到苦再到乐，《蒹葭》始终凄清朦胧；《蒹葭》重章叠句更典型",
-        "commonMistake": "《关雎》五章，结构较复杂；《蒹葭》三章，重章叠句更明显，不要混淆",
-        "relatedTopics": "《诗经》艺术手法、爱情诗比较"
-      }
-    },
-    {
-      "id": 11,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "对《蒹葭》中「所谓伊人，在水一方」的赏析，不正确的一项是：",
-      "options": [
-        "「伊人」指主人公所思慕的人，可以是恋人，也可以是理想或贤才",
-        "「在水一方」写出了伊人所在之地的遥远和难以到达",
-        "这句诗运用了夸张的修辞手法，极言距离之远",
-        "这句诗营造了一种朦胧、神秘、可望而不可即的意境"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查对《蒹葭》名句的赏析",
-        "📖 关键知识：「在水一方」是实写位置，不是夸张手法",
-        "🎯 解题思路：C 项说「夸张」错误，这句是写实描写，没有夸张"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》名句赏析",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「所谓伊人，在水一方」——「伊人」意象具有多义性，可指恋人、理想、贤才等，营造朦胧意境",
-        "commonMistake": "这句不是夸张手法，是写实描写。「一方」意为「那一边」，不是极言其远",
-        "relatedTopics": "《诗经》意象的多义性、朦胧美"
-      }
-    },
-    {
-      "id": 12,
-      "type": "fillblank",
-      "difficulty": 2,
-      "question": "《关雎》中，描写君子想象与淑女成婚后欢乐场面的诗句是：______，______。______，______。",
-      "answer": ["窈窕淑女；琴瑟友之；窈窕淑女；钟鼓乐之"],
-      "hints": [
-        "💡 方向提示：本题考查《关雎》最后两章的内容",
-        "📖 关键知识：这两章写君子想象与淑女在一起的场景，感情由苦转乐",
-        "🎯 解题思路：注意「琴瑟」「钟鼓」两种乐器，「友之」「乐之」表示亲近和使……快乐"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》理解性默写",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「窈窕淑女，琴瑟友之」「窈窕淑女，钟鼓乐之」——写想象中和淑女在一起的欢乐场景，感情达到高潮",
-        "commonMistake": "「琴瑟」不要写成「琴瑟」；「友」在这里是动词，意为亲近；「乐」读 lè，使动用法",
-        "relatedTopics": "《诗经》中的音乐意象、虚实结合"
-      }
-    },
-    {
-      "id": 13,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "下列对《关雎》中「悠哉悠哉，辗转反侧」的赏析，正确的一项是：",
-      "options": [
-        "运用了对偶的修辞手法，句式整齐",
-        "运用了反复的修辞手法，「悠哉」重复，强调了思念之深",
-        "运用了比喻的修辞手法，把思念比作辗转反侧",
-        "运用了夸张的修辞手法，极言思念之苦"
-      ],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查对诗句修辞手法的辨析",
-        "📖 关键知识：「悠哉悠哉」是反复，「辗转反侧」是动作描写",
-        "🎯 解题思路：A 项「对偶」不准确；C 项「比喻」错误；D 项「夸张」不准确；B 项正确"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》修辞手法赏析",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「悠哉悠哉」运用反复手法，强化思念之情；「辗转反侧」是动作描写，生动形象",
-        "commonMistake": "不要把「悠哉悠哉」理解为对偶，它是同一词语的反复，起强调作用",
-        "relatedTopics": "《诗经》修辞手法、心理描写"
-      }
-    },
-    {
-      "id": 14,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "《蒹葭》中，「白露为霜」「白露未晞」「白露未已」的变化，暗示了：",
-      "options": [
-        "季节的变化，从深秋到初冬",
-        "时间的推移，从天亮前到太阳升起",
-        "地点的变化，从河边到岸边",
-        "情感的变化，从悲伤到喜悦"
-      ],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》中景物描写的作用",
-        "📖 关键知识：「霜→晞（干）→已（完）」是露水蒸发的过程",
-        "🎯 解题思路：露水从凝结成霜到晒干到消失，暗示时间从清晨到天亮，主人公伫立很久",
-        "🎯 解题思路：露水从凝结成霜到晒干到消失，暗示时间从清晨到天亮，表现主人公伫立之久"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》景物描写的作用",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「白露为霜→白露未晞→白露未已」——暗示时间推移（清晨到天亮），表现主人公追寻时间之长、情感之执着",
-        "commonMistake": "不是季节变化，是一天之内时间的变化。「晞」意为晒干，「已」意为完",
-        "relatedTopics": "《诗经》中的时间描写、以景衬情"
-      }
-    },
-    {
-      "id": 15,
-      "type": "fillblank",
-      "difficulty": 2,
-      "question": "《蒹葭》中，写主人公不畏艰险、上下追寻的诗句是：______，道阻且长。______，宛在水中央。",
-      "answer": ["溯洄从之；溯游从之"],
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》中表现追寻精神的诗句",
-        "📖 关键知识：「溯洄」「溯游」表现不畏艰险，「宛在」写出朦胧感",
-        "🎯 解题思路：上句写逆流而上追寻，下句写顺流而下追寻，伊人仿佛在水中央"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》理解性默写",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「溯洄从之，道阻且长。溯游从之，宛在水中央」——表现执着追寻的精神和朦胧的意境",
-        "commonMistake": "「溯洄」不要写成「溯回」；「宛」意为仿佛，不要写成「婉」",
-        "relatedTopics": "《诗经》中的追寻主题、朦胧美"
-      }
-    },
-    {
-      "id": 16,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "下列关于《关雎》的说法，不正确的一项是：",
-      "options": [
-        "《关雎》是《诗经》的第一篇，被称为「诗之首」",
-        "「关关」是拟声词，模拟雎鸠鸟的鸣叫声",
-        "「君子好逑」的「逑」意为「追求」",
-        "全诗以雎鸠和鸣起兴，引出君子对淑女的思慕"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查《关雎》的字词解释和文学地位",
-        "📖 关键知识：「逑」是名词，意为配偶，不是动词「追求」",
-        "🎯 解题思路：C 项错误，「好逑」意为好的配偶，「逑」=「仇」（配偶）"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》字词解释",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "「逑」（qiú）：配偶。「君子好逑」意为君子的好配偶。注意不是「追求」的意思",
-        "commonMistake": "「逑」常被误解为「追求」，实际是名词「配偶」，通「仇」（匹配、配偶）",
-        "relatedTopics": "《诗经》通假字、古今异义"
-      }
-    },
-    {
-      "id": 17,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "下列对《蒹葭》艺术特色的分析，不正确的一项是：",
-      "options": [
-        "全诗三章，采用重章叠句的形式，一唱三叹，回环往复",
-        "以秋景起兴，营造凄清、朦胧的意境",
-        "运用了大量比喻，把伊人比作芦苇、白露等",
-        "「伊人」形象具有多义性，给读者留下丰富的想象空间"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》的艺术手法",
-        "📖 关键知识：《蒹葭》主要用起兴，不是比喻",
-        "🎯 解题思路：C 项错误，诗中没有把伊人比作芦苇、白露，芦苇、白露是起兴之物"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》艺术特色",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "《蒹葭》艺术特色：①重章叠句 ②以景起兴 ③意境朦胧 ④意象多义。没有大量使用比喻",
-        "commonMistake": "起兴和比喻不同：起兴是先言他物以引起所咏之词，比喻是打比方。蒹葭、白露是起兴，不是比喻",
-        "relatedTopics": "《诗经》赋比兴手法辨析"
-      }
-    },
-    {
-      "id": 18,
-      "type": "fillblank",
-      "difficulty": 2,
-      "question": "《蒹葭》中，三章分别写伊人在「______」「______」「______」三个不同的位置，表现了伊人的飘忽不定和难以追寻。",
-      "answer": ["在水一方；在水之湄；在水之涘"],
-      "hints": [
-        "💡 方向提示：本题考查《蒹葭》中伊人位置的变化",
-        "📖 关键知识：三章分别写伊人在水的不同位置，「湄」「涘」都指水边",
-        "🎯 解题思路：第一章「在水一方」，第二章「在水之湄」，第三章「在水之涘」"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》意象分析",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "伊人位置：「在水一方」（那一边）→「在水之湄」（水草交接处）→「在水之涘」（水边），表现飘忽不定",
-        "commonMistake": "「湄」（méi）指水草交接处；「涘」（sì）指水边。二字都从水，与水有关",
-        "relatedTopics": "《诗经》中的空间描写、朦胧美"
-      }
-    },
-    {
-      "id": 19,
-      "type": "choice",
-      "difficulty": 3,
-      "question": "下列对《关雎》和《蒹葭》的主题理解，最准确的一项是：",
-      "options": [
-        "两首诗都是爱情诗，主题完全相同",
-        "《关雎》是爱情诗，《蒹葭》是哲理诗，主题完全不同",
-        "两首诗表面写爱情，但都可以引申为对理想、事业的执着追求",
-        "《关雎》写单相思的痛苦，《蒹葭》写两情相悦的欢乐"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查两首诗主题的深层理解",
-        "📖 关键知识：《诗经》中的爱情诗往往有多重解读空间",
-        "🎯 解题思路：A 项「完全相同」太绝对；B 项「完全不同」太绝对；D 项说反了；C 项最准确"
-      ],
-      "knowledgeCard": {
-        "topic": "《关雎》《蒹葭》主题探究",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "两首诗表面写爱情，但「伊人」「淑女」可以象征理想、贤才、事业等，具有多义性和象征意义",
-        "commonMistake": "不要把主题理解得太单一，《诗经》经典作品往往有多重解读空间",
-        "relatedTopics": "《诗经》的象征手法、诗歌的多义性"
-      }
-    },
-    {
-      "id": 20,
-      "type": "choice",
-      "difficulty": 3,
-      "question": "王国维在《人间词话》中说：「《诗·蒹葭》一篇，最得风人深致。」下列对这句话的理解，不正确的一项是：",
-      "options": [
-        "「风人」指《诗经》国风的作者，这里指《蒹葭》最能体现《诗经》的艺术特色",
-        "「深致」意为深远的情致，指《蒹葭》意境深远、含蓄蕴藉",
-        "这句话是说《蒹葭》的语言最通俗易懂，最接近民间口语",
-        "这句话高度评价了《蒹葭》的艺术成就，认为它代表了《诗经》的最高水平"
-      ],
-      "answer": 2,
-      "hints": [
-        "💡 方向提示：本题考查对名家评价的理解",
-        "📖 关键知识：王国维评价的是艺术成就，不是语言通俗性",
-        "🎯 解题思路：C 项错误，「最得风人深致」不是说语言通俗，而是说意境深远、艺术成就高"
-      ],
-      "knowledgeCard": {
-        "topic": "《蒹葭》名家评价",
-        "source": "人教版八年级下册 第三单元 第 12 课",
-        "keyMemory": "王国维评价《蒹葭》「最得风人深致」，意为最能体现《诗经》深远含蓄的艺术特色，是极高评价",
-        "commonMistake": "「风人深致」不是指语言通俗，而是指意境深远、艺术成就高",
-        "relatedTopics": "《诗经》艺术特色、名家评诗"
-      }
-    }
-  ]
+  "title": "请替换标题",
+  "questions": []
 }
 </script>
 <!-- ========== 题目数据结束 ========== -->
@@ -794,7 +608,7 @@ function renderQuestion() {
 
   var hintBtnHtml = "";
   if (q.hints && q.hints.length > 0) {
-    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
     var costs = ["-30%", "-60%", "-90%"];
     hintBtnHtml = '<div class="hint-bar">' +
       q.hints.map(function(_, i) {
@@ -896,10 +710,12 @@ function submitFill() {
     if (!input) return; answered = true;
     isAllCorrect = answers.some(function(a) { return input === a.trim(); });
   } else {
+    // 多空题目：分别验证每个空
     for (var i = 0; i < numBlanks; i++) {
       var input = document.getElementById("fillInput-" + i).value.trim();
       if (!input) { alert("请完成所有空的填写！"); return; }
       
+      // 标记每个输入框的对错
       var inputEl = document.getElementById("fillInput-" + i);
       var isThisCorrect = (input === correctAnswer[i].trim());
       
@@ -912,11 +728,12 @@ function submitFill() {
         inputEl.style.borderColor = "#f44336";
         inputEl.style.backgroundColor = "#FFEBEE";
       }
-      inputEl.disabled = true;
+      inputEl.disabled = true; // 禁用输入框
     }
     answered = true;
   }
   
+  // 记录每个空的判断结果，用于反馈显示
   q.fillBlankResult = {
     total: numBlanks,
     correct: correctCount,
@@ -950,6 +767,7 @@ function showFeedback(isCorrect, q) {
   var kc = q.knowledgeCard;
   var cls = isCorrect ? "correct-card" : "wrong-card";
   
+  // 填空题特殊反馈：显示每个空的判断结果
   var fillBlankFeedback = "";
   if (q.type === "fillblank" && q.fillBlankResult && q.fillBlankResult.total > 1) {
     var result = q.fillBlankResult;
@@ -957,25 +775,25 @@ function showFeedback(isCorrect, q) {
     var correctAnswer = answers[0].split(/[;；]/);
     
     fillBlankFeedback = '<div class="fillblank-detail">' +
-      '<div class="kc-title" style="margin-bottom:12px;">📝 各空判分详情</div>' +
+      '<div class="kc-title" style="margin-bottom:12px;">📝 各空判分详情</div>';
     
-      correctAnswer.map(function(_, i) {
-        var inputEl = document.getElementById("fillInput-" + i);
-        var userVal = inputEl ? inputEl.value.trim() : "";
-        var isThisCorrect = (userVal === correctAnswer[i].trim());
-        
-        return '<div class="fillblank-item ' + (isThisCorrect ? 'correct' : 'wrong') + '">' +
-          '<span class="blank-num">' + (i+1) + '</span>' +
-          '<span class="blank-status">' + (isThisCorrect ? '✓ 正确' : '✗ 错误') + '</span>' +
-          '<span class="blank-user">你的答案：' + (userVal || "未填") + '</span>' +
-          (!isThisCorrect ? '<span class="blank-correct">正确答案：' + correctAnswer[i] + '</span>' : '') +
-          '</div>';
-      }).join("") +
+    for (var i = 0; i < result.total; i++) {
+      var userInput = document.getElementById("fillInput-" + i);
+      var userVal = userInput ? userInput.value.trim() : "";
+      var isThisCorrect = (userVal === correctAnswer[i].trim());
       
-      '<div class="fillblank-summary">' +
-        '共 ' + result.total + ' 空，答对 ' + result.correct + ' 空' +
-        (result.allCorrect ? ' <span class="summary-correct">✅ 全部正确！</span>' : ' <span class="summary-wrong">💪 继续加油！</span>') +
-        '</div></div>';
+      fillBlankFeedback += '<div class="fillblank-item ' + (isThisCorrect ? 'correct' : 'wrong') + '">' +
+        '<span class="blank-num">' + (i+1) + '</span>' +
+        '<span class="blank-status">' + (isThisCorrect ? '✓ 正确' : '✗ 错误') + '</span>' +
+        '<span class="blank-user">你的答案：' + (userVal || "未填") + '</span>' +
+        (!isThisCorrect ? '<span class="blank-correct">正确答案：' + correctAnswer[i] + '</span>' : '') +
+        '</div>';
+    }
+    
+    fillBlankFeedback += '<div class="fillblank-summary">' +
+      '共 ' + result.total + ' 空，答对 ' + result.correct + ' 空' +
+      (result.allCorrect ? ' <span class="summary-correct">✅ 全部正确！</span>' : ' <span class="summary-wrong">💪 继续加油！</span>') +
+      '</div></div>';
   }
   
   var h = '<div class="knowledge-card ' + cls + '">' +
@@ -987,6 +805,7 @@ function showFeedback(isCorrect, q) {
   if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
   h += "</div>";
   
+  // 插入填空题详细反馈
   if (fillBlankFeedback) {
     h = fillBlankFeedback + h;
   }
@@ -1044,6 +863,7 @@ function showAchievement(text) {
   setTimeout(function() { el.remove(); }, 3000);
 }
 
+/* ========== 材料分析题专用函数 ========== */
 function renderMaterialQuestion(q) {
   var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
   var subQuestionsHtml = '';
@@ -1184,3 +1004,40 @@ init();
 </script>
 </body>
 </html>
+```
+
+## 生成要点
+
+1. **只替换 JSON 数据块**：找到 `<script type="application/json" id="quiz-json">` 标签，只替换其中的 JSON 内容
+2. **替换页面标题**：`<title>` 标签的文字
+3. **使用 Write 工具**：将完整 HTML 写入 `quiz-output/` 目录
+4. **文件命名**：`{subject}-{grade}-{topic}-{date}.html`
+
+## JSON 数据生成规则（必须遵守）
+
+### 所有字符串值必须用双引号 `"` 包裹
+
+```json
+"keyMemory": "记住「960万」这个数字"
+```
+
+### 字符串内部的双引号用 `\"` 转义
+
+```json
+"commonMistake": "注意\"地上河\"是黄河下游的特征"
+```
+
+### 推荐用中文引号避免转义
+
+优先使用「」或 "" 包裹专有名词，天然不需要转义：
+
+```json
+"commonMistake": "「南多北少」是干扰项，正确答案是「东多西少」"
+```
+
+### 禁止事项
+
+- 不要在 JSON 字符串中使用未转义的 `"` `\`
+- 不要在 JSON 字符串中使用真实换行（用 `\n` 代替）
+- 不要在 JSON 中使用单引号 `'` 作为字符串定界符
+- 不要使用尾随逗号（最后一个元素后不要加逗号）
