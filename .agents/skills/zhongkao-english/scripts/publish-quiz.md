@@ -5,8 +5,8 @@
 ## 仓库信息
 
 ```yaml
-repo_url: https://github.com/xingyun-New/Skills-XiaoSiMen.git
-pages_base: https://xingyun-new.github.io/Skills-XiaoSiMen
+repo_url: https://github.com/xingyun-New/Skills-English.git
+pages_base: https://xingyun-new.github.io/Skills-English
 branch: main
 quiz_dir: quiz-output
 ```
@@ -18,11 +18,11 @@ quiz_dir: quiz-output
 根据生成的 HTML 文件名构造在线链接：
 
 ```
-https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/{filename}
+https://xingyun-new.github.io/Skills-English/quiz-output/{filename}
 ```
 
 示例：
-- `geography-8-综合练习-20260225.html` → `https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习-20260225.html`
+- `english-9-定语从句-20260302.html` → `https://xingyun-new.github.io/Skills-English/quiz-output/english-9-定语从句-20260302.html`
 
 ### 2. 验证并修正文件名
 
@@ -40,14 +40,11 @@ https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/{filename}
 
 | 文件名前缀 | 中文科目 | Emoji |
 |-----------|---------|-------|
-| geography | 地理 | 🌍 |
-| history | 历史 | 📜 |
-| biology | 生物 | 🧬 |
-| ethics | 道法 | ⚖️ |
+| english | 英语 | 🔤 |
 
-年级映射：`7` → 七年级，`8` → 八年级
+年级映射：`7` → 七年级，`8` → 八年级，`9` → 九年级
 
-日期转换：`20260225` → `2026-02-25`
+日期转换：`20260302` → `2026-03-02`
 
 ### 4. 更新 README.md
 
@@ -62,7 +59,7 @@ https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/{filename}
 **示例**：
 
 ```markdown
-| 🌍 地理 | 八年级 | 综合练习 | 2026-02-25 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/geography-8-综合练习-20260225.html) |
+| 🔤 英语 | 九年级 | 定语从句 | 2026-03-02 | [开始练习](https://xingyun-new.github.io/Skills-English/quiz-output/english-9-定语从句-20260302.html) |
 ```
 
 **定位规则**：
@@ -76,14 +73,14 @@ https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/{filename}
 
 ```
 git add quiz-output/<filename> README.md
-git commit -m "quiz: <科目><年级> <内容>"
+git commit -m "quiz: 英语<年级> <内容>"
 git push origin main
 ```
 
 提交消息示例：
-- `quiz: 地理八年级 综合练习`
-- `quiz: 历史八年级 下册综合`
-- `quiz: 生物七年级 第三单元`
+- `quiz: 英语九年级 定语从句`
+- `quiz: 英语八年级 现在完成时`
+- `quiz: 英语七年级 一般过去时`
 
 ### 6. 反馈用户
 
@@ -92,7 +89,7 @@ git push origin main
 ```
 练习题已发布到 GitHub Pages！
 
-在线链接：https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/<filename>
+在线链接：https://xingyun-new.github.io/Skills-English/quiz-output/<filename>
 
 （可直接在浏览器中打开，也可分享给学生使用）
 ```
@@ -111,7 +108,7 @@ git push origin main
 如果 GitHub Pages 尚未启用，需要用户手动或通过 `gh` CLI 配置：
 
 ```shell
-gh api repos/xingyun-New/Skills-XiaoSiMen/pages -X POST -f source.branch=main -f source.path=/
+gh api repos/xingyun-New/Skills-English/pages -X POST -f source.branch=main -f source.path=/
 ```
 
 或在 GitHub 网页：**Settings → Pages → Source** 选择 `main` 分支、`/ (root)` 目录。
