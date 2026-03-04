@@ -1,0 +1,31 @@
+# Knowledge Indexer 配置文件示例
+# 将此文件复制到 knowledge-base/config.yaml 并根据实际组织结构修改
+
+organization:
+  departments:
+    - name: "Mass Market Sales Department I"
+      code: "MMS1"
+      sections:
+        - name: "MAS12"
+          code: "MAS12"
+        - name: "MAS13"
+          code: "MAS13"
+    - name: "Mass Market Sales Department II"
+      code: "MMS2"
+      sections:
+        - name: "MAS21"
+          code: "MAS21"
+
+access_levels:
+  - public
+  - internal
+  - confidential
+
+output_dir: "knowledge-base"
+
+annotation_template:
+  fields:
+    - "文档用途和相关注释信息"
+    - "关键内容关联词汇"
+    - "适用场景"
+    - "适用人群"
