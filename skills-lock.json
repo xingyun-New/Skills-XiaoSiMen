@@ -7,9 +7,14 @@
       "computedHash": "25872a21881a950edc3db1f3329664d60405d539660ce05b3265db2de06a7dfd"
     },
     "math-teacher": {
-      "source": "jamesrochabrun/skills",
+      "source": "xingyun-New/Skills-XiaoSiMen",
       "sourceType": "github",
-      "computedHash": "b7f1c5c99abbbdd4468f0ce048e296fb19c97160501ff514d7a8fc89a1491891"
+      "computedHash": "d747fb15a8f076f5929704ea0fc568edbb07ea01c9c2796c33d4844812336182"
+    },
+    "zhongkao-xiaosimen": {
+      "source": "xingyun-New/Skills-XiaoSiMen",
+      "sourceType": "github",
+      "computedHash": "f6623100d35798fca99420aac7c6e9999d5bae755e3f1e7103dac2f7bd5af930"
     }
   }
 }

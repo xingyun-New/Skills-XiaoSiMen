@@ -885,7 +885,7 @@ function submitFill() {
   if (answered) return;
   var q = quizData.questions[currentIndex];
   var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
-  var correctAnswer = answers[0].split(/[;；]/);
+  var correctAnswer = answers[0].split(";");
   var numBlanks = correctAnswer.length;
   
   var isAllCorrect = true;
@@ -954,7 +954,7 @@ function showFeedback(isCorrect, q) {
   if (q.type === "fillblank" && q.fillBlankResult && q.fillBlankResult.total > 1) {
     var result = q.fillBlankResult;
     var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
-    var correctAnswer = answers[0].split(/[;；]/);
+    var correctAnswer = answers[0].split(";");
     
     fillBlankFeedback = '<div class="fillblank-detail">' +
       '<div class="kc-title" style="margin-bottom:12px;">📝 各空判分详情</div>' +
