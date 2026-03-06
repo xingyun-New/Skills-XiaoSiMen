@@ -10,6 +10,7 @@
 |-------|------|---------|
 | **math-teacher** | 交互式数学教学，生成可视化 playground 和游戏化挑战 | 小学 ~ 大学数学 |
 | **zhongkao-xiaosimen** | 初中小四门练习题与知识点系统 | 七/八年级 地理、历史、生物、道法 |
+| **zhongkao-physics** | 初中物理练习题与知识点系统 | 八/九年级 物理 |
 
 ## 安装
 
@@ -72,7 +73,9 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 ### 🧬 生物
 
-> 暂无生物练习，输入"请生成八年级生物练习题"立即创建！
+| 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|---------|
+| 八年级 | 传染病和免疫（错题强化） | 2026-03-05 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/biology-8-传染病和免疫-20260305.html) |
 
 ### 📝 语文
 

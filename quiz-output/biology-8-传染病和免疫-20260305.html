@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生物八年级 · 传染病和免疫 错题强化</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #667eea; transform: scale(1.02); }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "🧬 八年级生物 · 传染病和免疫 错题强化",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "人体的第一道防线是：",
+      "options": ["皮肤和黏膜", "体液中的杀菌物质和吞噬细胞", "免疫器官和免疫细胞", "抗体和抗原"],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查人体三道防线的组成",
+        "📖 关键知识：三道防线依次为：皮肤和黏膜→体液中杀菌物质和吞噬细胞→免疫器官和免疫细胞",
+        "🎯 解题思路：第一道防线是最外层的物理和化学屏障，即皮肤和黏膜"
+      ],
+      "knowledgeCard": {
+        "topic": "人体三道防线",
+        "source": "人教版八年级下册 传染病和免疫",
+        "keyMemory": "第一道防线：皮肤和黏膜（阻挡、杀菌、清扫）；第二道防线：体液中的杀菌物质（如溶菌酶）和吞噬细胞；第三道防线：免疫器官和免疫细胞",
+        "commonMistake": "吞噬细胞属于第二道防线而非第三道防线，容易和免疫细胞混淆",
+        "relatedTopics": "非特异性免疫、特异性免疫"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列属于特异性免疫的是：",
+      "options": ["皮肤的屏障作用", "白细胞吞噬病菌", "接种卡介苗预防结核病", "溶菌酶杀灭病菌"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查特异性免疫与非特异性免疫的区分",
+        "📖 关键知识：特异性免疫是针对某一特定病原体的免疫，由第三道防线产生",
+        "🎯 解题思路：接种疫苗产生抗体是针对特定病原体的，属于特异性免疫；其余三项对多种病原体都有效，属于非特异性免疫"
+      ],
+      "knowledgeCard": {
+        "topic": "特异性免疫与非特异性免疫",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "特异性免疫=针对「特定」病原体（如接种疫苗）；非特异性免疫=对「多种」病原体都有效（如皮肤屏障、吞噬细胞、溶菌酶）",
+        "commonMistake": "白细胞吞噬病菌是非特异性免疫（第二道防线），不是特异性免疫！很多同学误以为吞噬细胞也属于特异性免疫",
+        "relatedTopics": "三道防线、抗原与抗体、计划免疫"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于抗体和抗原的说法，正确的是：",
+      "options": ["抗体是由病原体产生的", "一种抗体能消灭多种抗原", "抗原是引起人体产生抗体的物质", "抗体就是免疫器官"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查抗原和抗体的概念",
+        "📖 关键知识：抗原是引起人体产生抗体的物质（通常是外来的病原体等）；抗体是由淋巴细胞产生的对抗抗原的特殊蛋白质",
+        "🎯 解题思路：抗体由人体自身的淋巴细胞产生（排除A），一种抗体只能对付一种抗原（排除B），抗体是蛋白质不是器官（排除D）"
+      ],
+      "knowledgeCard": {
+        "topic": "抗原与抗体",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "抗原→刺激→淋巴细胞→产生→抗体（特殊蛋白质）。一种抗体只能消灭对应的一种抗原，具有专一性",
+        "commonMistake": "容易把抗体和抗原搞反：抗原是「入侵者」（如病原体），抗体是人体「防御武器」（蛋白质）",
+        "relatedTopics": "特异性免疫、疫苗原理、淋巴细胞"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "接种疫苗能预防传染病的原理是：",
+      "options": ["疫苗能直接杀死体内的病原体", "疫苗能增强皮肤的屏障功能", "疫苗能刺激人体产生相应的抗体", "疫苗就是抗体，注入后直接起防御作用"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查疫苗的作用原理",
+        "📖 关键知识：疫苗是用减毒或灭活的病原体制成的，相当于抗原",
+        "🎯 解题思路：疫苗=抗原（减毒/灭活的病原体）→注入人体→刺激淋巴细胞→产生抗体→获得免疫力"
+      ],
+      "knowledgeCard": {
+        "topic": "疫苗的原理",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "疫苗的本质是「抗原」（减毒/灭活的病原体），不是抗体！它通过刺激人体免疫系统产生抗体来达到预防效果",
+        "commonMistake": "最常见错误：认为疫苗=抗体。记住：疫苗是抗原，抗体是人体自己产生的",
+        "relatedTopics": "抗原抗体、计划免疫、特异性免疫"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "传染病流行必须同时具备的三个基本环节是：",
+      "options": ["传染源、传播途径、易感人群", "病原体、传播途径、传染源", "病原体、易感人群、传播途径", "传染源、病原体、易感人群"],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查传染病流行的三个环节",
+        "📖 关键知识：传染病流行需要三个环节缺一不可：传染源、传播途径、易感人群",
+        "🎯 解题思路：注意「病原体」不是三个环节之一，病原体是引起传染病的微生物，而传染源是能散播病原体的人或动物"
+      ],
+      "knowledgeCard": {
+        "topic": "传染病流行的三个环节",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "三个环节：传染源（能散播病原体的人或动物）→传播途径（病原体离开传染源到达健康人的途径）→易感人群（对该传染病缺乏免疫力的人群）",
+        "commonMistake": "「病原体」≠「传染源」！病原体是微生物（细菌、病毒等），传染源是携带并能散播病原体的人或动物",
+        "relatedTopics": "传染病的预防措施、病原体的种类"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "新冠肺炎流行期间，学校要求师生佩戴口罩。从预防传染病的角度分析，佩戴口罩属于：",
+      "options": ["控制传染源", "切断传播途径", "保护易感人群", "消灭病原体"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查传染病的预防措施分类",
+        "📖 关键知识：预防传染病的三种措施：控制传染源、切断传播途径、保护易感人群",
+        "🎯 解题思路：口罩的作用是阻断飞沫传播，属于切断传播途径"
+      ],
+      "knowledgeCard": {
+        "topic": "传染病的预防措施",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "控制传染源=隔离患者、治疗病人；切断传播途径=消毒、戴口罩、通风；保护易感人群=接种疫苗、锻炼身体",
+        "commonMistake": "戴口罩不是「保护易感人群」！戴口罩是阻断飞沫传播路径，属于「切断传播途径」。接种疫苗才是保护易感人群",
+        "relatedTopics": "传染病的三个环节、各类传播途径"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于艾滋病（AIDS）的说法，错误的是：",
+      "options": ["艾滋病的病原体是HIV（人类免疫缺陷病毒）", "与艾滋病患者握手、共同进餐会感染艾滋病", "HIV主要通过血液传播、性传播和母婴传播", "HIV能攻击人体免疫系统，使人丧失免疫功能"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查艾滋病的传播途径",
+        "📖 关键知识：HIV的传播途径只有三种：血液传播、性传播、母婴传播",
+        "🎯 解题思路：日常接触（握手、共餐、拥抱等）不会传播HIV，B选项说法错误"
+      ],
+      "knowledgeCard": {
+        "topic": "艾滋病的传播与预防",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "HIV传播只有三条路：血液、性接触、母婴。日常生活接触（握手、拥抱、共餐、蚊虫叮咬）不会传播",
+        "commonMistake": "很多同学误以为蚊虫叮咬或共用餐具会传播HIV，这是错误的。HIV非常脆弱，离开人体很快失活",
+        "relatedTopics": "病原体与传染源、传播途径分类"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列疾病中，属于传染病的是：",
+      "options": ["近视眼", "糖尿病", "流行性感冒", "高血压"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查传染病和非传染病的区分",
+        "📖 关键知识：传染病是由病原体引起的、能在人与人或人与动物之间传播的疾病",
+        "🎯 解题思路：流行性感冒由流感病毒引起，能在人群中传播，具有传染性和流行性"
+      ],
+      "knowledgeCard": {
+        "topic": "传染病的特征",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "传染病特征：①由病原体引起 ②具有传染性 ③具有流行性。近视、糖尿病、高血压等都不是由病原体引起的，不是传染病",
+        "commonMistake": "不是所有常见病都是传染病！判断关键：是否由病原体引起 + 是否能传染",
+        "relatedTopics": "病原体种类（细菌、病毒、寄生虫）、传染病分类"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下图为白细胞吞噬病菌的示意图。白细胞吞噬病菌的过程属于：",
+      "options": ["第一道防线", "第二道防线，属于非特异性免疫", "第三道防线，属于特异性免疫", "既属于非特异性免疫，也属于特异性免疫"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查吞噬细胞的防线归属和免疫类型",
+        "📖 关键知识：吞噬细胞属于第二道防线，是非特异性免疫",
+        "🎯 解题思路：吞噬细胞能吞噬多种病菌（不针对特定病原体），因此是非特异性免疫，属于第二道防线"
+      ],
+      "knowledgeCard": {
+        "topic": "吞噬细胞与第二道防线",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "吞噬细胞=第二道防线=非特异性免疫。它对「多种」病菌都有吞噬作用，不具有专一性",
+        "commonMistake": "这是高频易错点！吞噬细胞虽然是「细胞」，但不属于第三道防线。第三道防线的免疫细胞主要是淋巴细胞（产生抗体）",
+        "relatedTopics": "三道防线对比、淋巴细胞与吞噬细胞的区别"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "某地发生甲型流感疫情后，卫生部门采取了多项措施。下列措施中属于「保护易感人群」的是：",
+      "options": ["对患者进行隔离治疗", "对患者居住的房间进行消毒", "给健康人群注射流感疫苗", "加强饮用水的消毒处理"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查传染病三种预防措施的分类",
+        "📖 关键知识：控制传染源=隔离患者；切断传播途径=消毒；保护易感人群=接种疫苗",
+        "🎯 解题思路：注射疫苗使健康人获得免疫力，这是对易感人群的保护"
+      ],
+      "knowledgeCard": {
+        "topic": "传染病预防措施的分类",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "口诀记忆：「隔离控源，消毒断途，疫苗护群」——隔离=控制传染源，消毒=切断传播途径，接种疫苗=保护易感人群",
+        "commonMistake": "消毒房间≠保护易感人群，消毒属于切断传播途径。锻炼身体增强体质也属于保护易感人群",
+        "relatedTopics": "疫苗原理、三个环节与三种措施的对应"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "患过麻疹的人体内会产生抵抗麻疹病毒的抗体，以后不会再患麻疹。但还可能患流感。这说明：",
+      "options": ["抗体能抵抗所有的抗原", "抗体的作用是非特异性的", "免疫具有特异性，一种抗体只能对付相应的一种抗原", "患过一次传染病后就不会再患任何传染病"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查抗体的专一性",
+        "📖 关键知识：一种抗体只能消灭一种抗原，这就是特异性免疫的「特异性」所在",
+        "🎯 解题思路：患麻疹后产生的抗体只能对付麻疹病毒，对流感病毒无效，说明抗体具有专一性"
+      ],
+      "knowledgeCard": {
+        "topic": "抗体的专一性",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "一把钥匙开一把锁：一种抗体只能消灭对应的一种抗原。这就是为什么打了流感疫苗还可能得其他传染病",
+        "commonMistake": "不要认为免疫力是万能的！抗体具有专一性，麻疹抗体不能对付流感病毒",
+        "relatedTopics": "特异性免疫的含义、疫苗为什么要针对性接种"
+      }
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列各项中，属于传染源的是：",
+      "options": ["流感患者打出的喷嚏", "携带新冠病毒的感染者", "被污染的饮用水", "不清洁的食物"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查传染源的概念",
+        "📖 关键知识：传染源是能散播病原体的人或动物（不是物品！）",
+        "🎯 解题思路：喷嚏、水、食物都是传播媒介/途径，不是传染源。携带病毒的人才是传染源"
+      ],
+      "knowledgeCard": {
+        "topic": "传染源的辨别",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "传染源必须是「人或动物」（能散播病原体的活体）。被污染的水、空气、食物等是传播途径/媒介，不是传染源",
+        "commonMistake": "「喷嚏」是传播途径（飞沫传播），不是传染源！传染源是打喷嚏的那个患者",
+        "relatedTopics": "传播途径的分类、病原体与传染源的区别"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于免疫的说法，不正确的是：",
+      "options": ["免疫是人体的一种保护性生理功能", "免疫功能越强越好", "免疫有防御、自我稳定和免疫监视三大功能", "免疫功能异常可能导致过敏反应"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查免疫的功能和异常",
+        "📖 关键知识：免疫功能并非越强越好，过强会导致过敏反应或自身免疫病",
+        "🎯 解题思路：免疫过强→过敏反应/自身免疫病；免疫过弱→容易感染。所以B选项错误"
+      ],
+      "knowledgeCard": {
+        "topic": "免疫的功能与异常",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "免疫三大功能：①防御（抵抗病原体）②自我稳定（清除衰老细胞）③免疫监视（识别和清除异常细胞）。免疫并非越强越好！",
+        "commonMistake": "过敏反应就是免疫功能「过强」的表现。花粉过敏、食物过敏等都是免疫系统反应过度导致的",
+        "relatedTopics": "过敏反应、自身免疫病、免疫缺陷病"
+      }
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "某同学注射了乙肝疫苗后，体内发生的免疫反应过程正确的是：",
+      "options": ["乙肝疫苗（抗体）→刺激淋巴细胞→产生抗原", "乙肝疫苗（抗原）→刺激淋巴细胞→产生抗体", "乙肝疫苗（抗体）→刺激吞噬细胞→产生抗原", "乙肝疫苗（抗原）→刺激吞噬细胞→产生抗体"],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查疫苗的本质和免疫反应过程",
+        "📖 关键知识：疫苗=抗原（减毒/灭活病原体），注入后刺激淋巴细胞产生抗体",
+        "🎯 解题思路：疫苗是抗原（排除AC），产生抗体的是淋巴细胞不是吞噬细胞（排除D），答案为B"
+      ],
+      "knowledgeCard": {
+        "topic": "疫苗接种的免疫反应",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "完整链条：疫苗（抗原）→注入人体→刺激淋巴细胞→产生抗体→抗体与抗原结合→获得免疫力",
+        "commonMistake": "三个常见错误：①把疫苗当成抗体 ②认为吞噬细胞产生抗体 ③把反应顺序搞反。记住：只有淋巴细胞才能产生抗体",
+        "relatedTopics": "淋巴细胞与吞噬细胞的功能区别、第三道防线"
+      }
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列做法中，属于「控制传染源」的是：",
+      "options": ["对教室进行通风换气", "给家禽注射禽流感疫苗", "将禽流感患者进行隔离治疗", "饭前便后洗手"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查传染病预防措施的分类",
+        "📖 关键知识：控制传染源=隔离、治疗传染病患者或处理患病动物",
+        "🎯 解题思路：隔离患者=控制传染源；通风和洗手=切断传播途径；注射疫苗=保护易感人群"
+      ],
+      "knowledgeCard": {
+        "topic": "控制传染源",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "控制传染源的常见做法：隔离患者、治疗病人、捕杀患病动物、禁止患者献血等",
+        "commonMistake": "给家禽注射疫苗是「保护易感人群」（家禽是易感者），不是控制传染源",
+        "relatedTopics": "三种预防措施的具体实例"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "某人注射乙肝疫苗后，过一段时间抽血化验发现血液中有乙肝抗体。以下分析正确的是：",
+      "options": ["此人一定患过乙肝", "此人的乙肝抗体能抵抗所有类型的肝炎病毒", "此人体内产生的乙肝抗体属于特异性免疫", "注射的疫苗是乙肝抗体"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题综合考查疫苗、抗体、特异性免疫",
+        "📖 关键知识：接种疫苗→产生抗体属于特异性免疫；疫苗是抗原不是抗体；抗体具有专一性",
+        "🎯 解题思路：打疫苗也能产生抗体（不一定患过病排除A）；抗体有专一性不能抵抗所有肝炎（排除B）；疫苗是抗原不是抗体（排除D）"
+      ],
+      "knowledgeCard": {
+        "topic": "疫苗与特异性免疫综合",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "产生抗体有两种途径：①患病后自然产生 ②接种疫苗后人工产生。两种方式都属于特异性免疫",
+        "commonMistake": "血液中有抗体≠一定患过病！接种疫苗也能产生抗体。另外，乙肝抗体只能对付乙肝病毒，不能对付甲肝、丙肝等",
+        "relatedTopics": "抗体的专一性、自然免疫和人工免疫"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "引起传染病的细菌、病毒和寄生虫等生物，统称为：",
+      "options": ["传染源", "抗原", "病原体", "抗体"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查病原体的概念",
+        "📖 关键知识：病原体=引起传染病的细菌、病毒、寄生虫等微生物",
+        "🎯 解题思路：传染源是人或动物，抗原是更广泛的概念，抗体是蛋白质。引起传染病的微生物叫病原体"
+      ],
+      "knowledgeCard": {
+        "topic": "病原体的概念",
+        "source": "人教版八年级下册 传染病及其预防",
+        "keyMemory": "病原体=引起传染病的「微生物」（细菌、病毒、寄生虫等）。传染源=携带病原体的「人或动物」",
+        "commonMistake": "病原体≠传染源！病原体是微生物，传染源是活体（人或动物）。病原体可以作为抗原，但抗原的范围比病原体更广",
+        "relatedTopics": "传染源与病原体的区别、抗原的定义"
+      }
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "人被狗咬伤后，需要及时注射狂犬病疫苗。注射的疫苗和产生的免疫分别属于：",
+      "options": ["抗原、非特异性免疫", "抗体、特异性免疫", "抗原、特异性免疫", "抗体、非特异性免疫"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题综合考查疫苗的本质和免疫类型",
+        "📖 关键知识：疫苗=抗原；接种疫苗后产生的免疫=特异性免疫",
+        "🎯 解题思路：疫苗是减毒/灭活的病原体=抗原（排除BD）；产生的抗体针对特定病原体=特异性免疫（排除A）"
+      ],
+      "knowledgeCard": {
+        "topic": "疫苗的本质与免疫类型",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "万能公式：疫苗=抗原，接种疫苗=特异性免疫。无论什么疫苗都适用此规律",
+        "commonMistake": "「疫苗是抗原还是抗体」是中考超高频考点。死记：疫苗永远是抗原！",
+        "relatedTopics": "狂犬病的预防、计划免疫"
+      }
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于人体免疫的叙述，正确的是：",
+      "options": ["人体的三道防线都属于非特异性免疫", "免疫对人体总是有益的", "皮肤能分泌杀菌物质属于第一道防线的功能", "抗体是由吞噬细胞产生的一种特殊蛋白质"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题综合考查免疫系统的知识",
+        "📖 关键知识：第一道防线（皮肤和黏膜）和第二道防线（杀菌物质+吞噬细胞）=非特异性免疫；第三道防线=特异性免疫",
+        "🎯 解题思路：A错-第三道防线是特异性免疫；B错-免疫过强会导致过敏；D错-抗体由淋巴细胞产生；C对-皮肤分泌杀菌物质（如汗液中的溶菌酶）属于第一道防线"
+      ],
+      "knowledgeCard": {
+        "topic": "免疫系统综合辨析",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "皮肤的两大功能：①物理屏障（阻挡病原体）②化学防御（分泌杀菌物质如溶菌酶）。两者都属于第一道防线",
+        "commonMistake": "溶菌酶出现在第一道防线（皮肤黏膜分泌）和第二道防线（体液中的杀菌物质）中都有。注意区分：皮肤黏膜上的溶菌酶=第一道防线；血液等体液中的溶菌酶=第二道防线",
+        "relatedTopics": "三道防线对比表、免疫的两面性"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "如图所示为人体注射某疫苗后体内产生抗体的变化曲线。据图分析，下列说法错误的是：（注：第一次注射后抗体缓慢上升，第二次注射后抗体快速大量上升）",
+      "options": ["第一次注射疫苗后，人体免疫系统受到刺激开始产生抗体", "第二次注射同种疫苗后，体内抗体产生更快且含量更高", "该疫苗产生的抗体能抵抗所有的传染病", "注射疫苗获得的免疫属于特异性免疫"],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查疫苗注射后抗体变化曲线的解读",
+        "📖 关键知识：免疫具有记忆性——第二次遇到相同抗原时，抗体产生更快更多；但抗体具有专一性",
+        "🎯 解题思路：ABD都正确。C错误——抗体具有专一性，该疫苗产生的抗体只能对抗对应的一种传染病"
+      ],
+      "knowledgeCard": {
+        "topic": "免疫记忆与抗体变化曲线",
+        "source": "人教版八年级下册 免疫与计划免疫",
+        "keyMemory": "第一次接触抗原→产生抗体较慢较少；第二次接触同种抗原→记忆细胞快速响应→抗体产生更快更多。这就是为什么有些疫苗需要多次接种",
+        "commonMistake": "看到抗体曲线升高不要误以为免疫力变成了「万能的」。抗体始终只针对特定的抗原，专一性是核心特征",
+        "relatedTopics": "免疫记忆、加强针的原理、抗体专一性"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+    return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+      '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+  }).join("") + "</div>";
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！传染病和免疫掌握得很扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习传染病和免疫章节";
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
