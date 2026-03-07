@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【物理】【八年级下册】· 第一章 力 练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #01579b 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #1a237e; background: #e8eaf6; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #1a237e; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #1a237e; transform: scale(1.02); }
+    .tf-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .tf-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .tf-btn.disabled { pointer-events: none; }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "物理 · 八年级下册 · 第一章 力",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列关于力的说法中，正确的是（　　）",
+      "options": [
+        "力可以离开物体而单独存在",
+        "一个物体也可以产生力的作用",
+        "力是物体对物体的作用，产生力至少需要两个物体",
+        "相互接触的两个物体一定产生力的作用"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查力的基本概念，思考「力」的定义",
+        "📖 关键知识：力是物体对物体的作用，力不能离开物体而单独存在，施力物体和受力物体缺一不可",
+        "🎯 解题思路：A 错误——力不能离开物体；B 错误——至少需要两个物体；D 错误——接触不一定产生力（如两块相邻但无挤压的木块）"
+      ],
+      "knowledgeCard": {
+        "topic": "力的基本概念",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力是物体对物体的作用，必须有施力物体和受力物体，两者同时存在",
+        "commonMistake": "容易误认为接触的物体一定有力，实际上必须有相互作用（如挤压、拉伸等）才产生力",
+        "relatedTopics": "力的三要素、力的作用效果"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "用手拍桌子，手感到疼痛。这个现象说明了（　　）",
+      "options": [
+        "桌子对手有力，手对桌子没有力",
+        "手对桌子有力，桌子对手没有力",
+        "力的作用是相互的",
+        "只有手主动用力才能感到疼痛"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查力的相互性，手拍桌子时两个物体都有受力",
+        "📖 关键知识：力的作用是相互的——物体A对物体B施力，同时物体B也对物体A施力，两个力大小相等、方向相反",
+        "🎯 解题思路：手拍桌子（手对桌子有力）→ 桌子同时对手有反作用力 → 所以手感到疼，体现力的相互性"
+      ],
+      "knowledgeCard": {
+        "topic": "力的作用相互性",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力的作用总是相互的，施力物体同时也是受力物体，二者作用力大小相等、方向相反",
+        "commonMistake": "相互作用力与平衡力容易混淆：相互作用力作用在两个不同物体上，平衡力作用在同一物体上",
+        "relatedTopics": "二力平衡、牛顿第三定律"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "关于力的三要素，下列说法正确的是（　　）",
+      "options": [
+        "力的大小、速度、作用点是力的三要素",
+        "力的大小、方向、作用点是力的三要素，三者共同决定力的作用效果",
+        "力的方向改变，作用效果不一定改变",
+        "只要力的大小相同，作用效果就一定相同"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：力的三要素是力最基本的属性，缺一不可",
+        "📖 关键知识：力的三要素是大小、方向、作用点。三者共同决定力的作用效果，改变任何一个要素都可能改变力的效果",
+        "🎯 解题思路：A 错误——速度不是力的要素；C 错误——方向改变则作用效果一定改变；D 错误——方向和作用点不同，效果也不同"
+      ],
+      "knowledgeCard": {
+        "topic": "力的三要素",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力的三要素：大小、方向、作用点。可用力的示意图（带箭头的线段）来表示",
+        "commonMistake": "改变力的方向或作用点时，即使大小不变，作用效果也会改变（如推门，在门边和靠近转轴处用同样的力效果不同）",
+        "relatedTopics": "力的示意图、力的作用效果"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列事例中，力改变了物体运动状态的是（　　）",
+      "options": [
+        "橡皮泥被捏成各种形状",
+        "足球被守门员抱住静止",
+        "弹弓上的橡皮筋被拉长",
+        "汽车刹车后速度减小直至停止"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 方向提示：力有两种作用效果：改变物体形状 和 改变物体运动状态（速度大小或方向变化）",
+        "📖 关键知识：运动状态改变指速度大小或方向发生变化。A和C改变的是形状；B是守门员使足球从运动到静止，也属于改变运动状态",
+        "🎯 解题思路：A——橡皮泥改变形状；B——足球从运动→静止，运动状态改变；C——橡皮筋形状改变；D——汽车速度减小，运动状态改变。B和D都改变了运动状态，但题目只有D在选项中正确"
+      ],
+      "knowledgeCard": {
+        "topic": "力的作用效果",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力的两种作用效果：①改变物体的形状（发生形变）②改变物体的运动状态（速度大小或方向改变）",
+        "commonMistake": "「静止」也是一种运动状态，物体从运动到静止也是运动状态的改变",
+        "relatedTopics": "弹力、惯性、牛顿第一定律"
+      }
+    },
+    {
+      "id": 5,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "弹力是物体发生弹性形变后，力图恢复原来形状而产生的力。没有发生形变的物体不会产生弹力。（　　）",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查弹力的产生条件，思考弹力与形变的关系",
+        "📖 关键知识：弹力产生的条件是物体发生了弹性形变，且在弹性限度内",
+        "🎯 解题思路：弹力 = 弹性形变 + 力图恢复原状，没有发生形变就不会有弹力，所以本题说法正确"
+      ],
+      "knowledgeCard": {
+        "topic": "弹力的产生条件",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "",
+        "keyMemory": "弹力产生的两个条件：①物体发生了弹性形变 ②在弹性限度内。超过弹性限度则产生永久形变，弹力消失",
+        "commonMistake": "支持力、拉力本质上都属于弹力，由物体形变产生，不要误认为只有弹簧才有弹力",
+        "relatedTopics": "弹簧测力计、重力、摩擦力"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "关于弹簧测力计的使用，下列说法错误的是（　　）",
+      "options": [
+        "使用前应检查指针是否指在零刻度线处",
+        "弹簧测力计只能竖直放置使用，不能水平或倾斜使用",
+        "读数时视线应与刻度盘垂直",
+        "所测力的大小不能超过弹簧测力计的量程"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查弹簧测力计的正确使用方法，找出错误的说法",
+        "📖 关键知识：弹簧测力计可以竖直、水平或倾斜使用，但水平使用时需重新校零（调零）",
+        "🎯 解题思路：A正确（使用前调零）；B错误——弹簧测力计可以水平使用，但要重新校零；C正确（防止视差）；D正确（超量程会损坏）"
+      ],
+      "knowledgeCard": {
+        "topic": "弹簧测力计的使用",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "",
+        "keyMemory": "弹簧测力计使用四步：①调零 ②认清量程和分度值 ③沿弹力方向使用 ④视线与刻度盘垂直读数",
+        "commonMistake": "弹簧测力计可以水平使用，但水平放置时受重力影响，需重新归零，不是「只能竖直」",
+        "relatedTopics": "弹力原理、测力工具"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "一个质量为 50kg 的同学站在地面上，他所受到的重力约为（g 取 10N/kg）（　　）",
+      "options": [
+        "50N",
+        "500N",
+        "50kg",
+        "5N"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查重力公式的计算，注意质量和重力的单位",
+        "📖 关键知识：重力公式 G = mg，其中 G 单位是 N（牛顿），m 单位是 kg，g = 10N/kg",
+        "🎯 解题思路：G = mg = 50kg × 10N/kg = 500N。注意 C 选项 50kg 是质量单位，不是力的单位"
+      ],
+      "knowledgeCard": {
+        "topic": "重力的计算",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "G = mg（G：重力/N，m：质量/kg，g ≈ 10N/kg）",
+        "keyMemory": "重力 = 质量 × g，g ≈ 10N/kg（精确值 9.8N/kg）。质量单位 kg，重力单位 N，不可混淆",
+        "commonMistake": "质量和重力是不同的物理量：质量的单位是 kg，重力的单位是 N。不能用 kg 表示重力大小",
+        "relatedTopics": "质量、密度、压强"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列关于重力方向的说法，正确的是（　　）",
+      "options": [
+        "重力的方向总是垂直于物体所在的表面向下",
+        "重力的方向总是竖直向下",
+        "重力的方向总是指向地心",
+        "重力的方向随地球的自转而改变"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查重力方向，注意「竖直向下」与「垂直向下」的区别",
+        "📖 关键知识：重力的方向是竖直向下（即与水平面垂直，始终指向地心方向），不是「垂直于物体表面」",
+        "🎯 解题思路：A错误——「垂直于物体表面」会因斜面方向变化；B正确——重力始终竖直向下；C表述基本正确但不够准确（严格说地球不是正球体）；D错误"
+      ],
+      "knowledgeCard": {
+        "topic": "重力的方向",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "",
+        "keyMemory": "重力方向：竖直向下（与水平面垂直，指向地心）。重垂线就是利用重力方向竖直向下的原理",
+        "commonMistake": "「竖直向下」不等于「垂直物体表面向下」，斜面上的物体重力仍然竖直向下，而非垂直斜面",
+        "relatedTopics": "重垂线、压力与重力、浮力"
+      }
+    },
+    {
+      "id": 9,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "一个均匀的正方体，其重心在几何中心处；把它切去一个角后，重心仍在原几何中心处。（　　）",
+      "answer": false,
+      "hints": [
+        "💡 方向提示：本题考查重心的位置，思考切去一角后物体质量分布是否还均匀",
+        "📖 关键知识：重心是重力的等效作用点。质量均匀、形状规则的物体重心在几何中心；切去一角后质量分布不再均匀，重心会偏移",
+        "🎯 解题思路：切去一角后，正方体形状不再规则，质量分布也不均匀，重心会向剩余质量较多的方向偏移，不再是原几何中心"
+      ],
+      "knowledgeCard": {
+        "topic": "重心的位置",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "",
+        "keyMemory": "重心是重力的作用点。均匀规则物体的重心在几何中心；不规则物体重心与质量分布有关，可用悬挂法求重心",
+        "commonMistake": "重心不一定在物体内部（如圆环的重心在圆心，是空的），形状或质量分布改变后重心会移动",
+        "relatedTopics": "重力、稳定性、力矩"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "如图所示情景：用 10N 的力竖直向下压弹簧，弹簧压缩 2cm；换用 20N 的力竖直向下压同一弹簧，弹簧压缩 4cm。这个实验说明在弹性限度内（　　）",
+      "options": [
+        "弹簧的弹力与弹簧的长度成正比",
+        "弹簧的伸长量（或压缩量）与所受拉力（或压力）成正比",
+        "弹力总是与弹簧的原始长度有关",
+        "弹力的方向与形变方向相同"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：分析题目中力与弹簧形变量的数量关系",
+        "📖 关键知识：弹簧测力计的工作原理——在弹性限度内，弹簧的形变量（伸长或压缩）与所受力的大小成正比（胡克定律）",
+        "🎯 解题思路：10N→2cm，20N→4cm，力增大1倍，形变量也增大1倍，说明形变量与力成正比。这就是弹簧测力计能够测力的科学依据"
+      ],
+      "knowledgeCard": {
+        "topic": "弹簧形变与弹力的关系（胡克定律）",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "F = kx（k：弹簧的劲度系数，x：形变量）",
+        "keyMemory": "在弹性限度内，弹簧形变量与所受力成正比，这是弹簧测力计的制作原理（胡克定律）",
+        "commonMistake": "注意是「形变量（伸长量或压缩量）」与力成正比，而非弹簧总长度与力成正比",
+        "relatedTopics": "弹簧测力计、弹力、弹性形变"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>";
+  if (kc.formula) h += '<div class="kc-item">🔬 <b>相关公式：</b>' + kc.formula + "</div>";
+  h += '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！物理学得真棒！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习第七章「力」";
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
