@@ -78,6 +78,12 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 |------|------|------|---------|
 | 八年级 | 传染病和免疫（错题强化） | 2026-03-05 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/biology-8-传染病和免疫-20260305.html) |
 
+### ⚡ 物理
+
+| 年级 | 内容 | 日期 | 在线练习 |
+|------|------|------|---------|
+| 八年级 | 下册第一章 力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-下册第一章力-20260307.html) |
+
 ### 📝 语文
 
 | 年级 | 内容 | 日期 | 在线练习 |
