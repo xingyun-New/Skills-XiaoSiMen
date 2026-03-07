@@ -64,6 +64,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中华人民共和国的成立和巩固-20260226.html) |
 | 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-社会主义制度建立与建设探索-20260227.html) |
 | 八年级 | 中国特色社会主义道路 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-中国特色社会主义道路-20260228.html) |
+| 八年级 | 第二单元近代化探索（洋务运动·甲午战争·戊戌变法·八国联军） | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-第二单元近代化探索-20260307.html) |
 
 ### 🌍 地理
 
