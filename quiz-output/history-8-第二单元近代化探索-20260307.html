@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史 八年级 · 第二单元 近代化的早期探索与民族危机的加剧</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #667eea; transform: scale(1.02); }
+    .tf-btn.correct { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32; }
+    .tf-btn.wrong { border-color: #f44336; background: #FFEBEE; color: #c62828; }
+    .tf-btn.disabled { pointer-events: none; }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "📜 历史 八年级 · 第二单元 近代化的早期探索与民族危机的加剧",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "洋务运动中，洋务派提出的口号是？",
+      "options": [
+        "自强、求富",
+        "民主、科学",
+        "变法图强",
+        "扶清灭洋"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查洋务运动的指导思想，属于第二单元第一节内容。",
+        "📖 关键知识：洋务运动以「中学为体，西学为用」为指导，分两个阶段——前期创办军事工业，后期创办民用工业。",
+        "🎯 解题思路：前期军事工业对应「自强」，后期民用工业对应「求富」，两个口号合在一起即答案 A。"
+      ],
+      "knowledgeCard": {
+        "topic": "洋务运动的口号与目的",
+        "source": "人教版八年级上册 第二单元 第4课",
+        "keyMemory": "前期「自强」办军工，后期「求富」办民用；根本目的是维护清朝统治。",
+        "commonMistake": "易将「民主、科学」与洋务运动混淆——那是新文化运动的口号（第四单元）。",
+        "relatedTopics": "中学为体、西学为用；江南制造总局；轮船招商局"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列人物中，不属于洋务运动代表人物的是？",
+      "options": [
+        "曾国藩",
+        "李鸿章",
+        "孙中山",
+        "左宗棠"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查洋务运动的代表人物，注意排除与洋务运动无关的历史人物。",
+        "📖 关键知识：洋务运动的代表人物主要有曾国藩、李鸿章、左宗棠、张之洞等，他们是清朝重臣。",
+        "🎯 解题思路：孙中山是资产阶级革命派领袖，领导辛亥革命，与洋务运动无关，故选 C。"
+      ],
+      "knowledgeCard": {
+        "topic": "洋务运动的代表人物",
+        "source": "人教版八年级上册 第二单元 第4课",
+        "keyMemory": "口诀：「曾李左张」——曾国藩、李鸿章、左宗棠、张之洞是洋务运动四大代表。",
+        "commonMistake": "注意区分洋务派（维新清政府）与革命派（推翻清政府）的代表人物。",
+        "relatedTopics": "北洋舰队（李鸿章）；汉阳铁厂（张之洞）；福州船政局（左宗棠）"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "1895年签订的《马关条约》中，清政府被迫割让给日本的领土包括？",
+      "options": [
+        "辽东半岛、台湾全岛及澎湖列岛",
+        "香港岛",
+        "九龙半岛南端",
+        "旅顺、大连"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 方向提示：本题考查《马关条约》的内容，属于甲午中日战争战后条约知识点。",
+        "📖 关键知识：《马关条约》1895年签订，主要内容：割地（辽东半岛、台湾、澎湖）、赔款（2亿两白银）、开放商埠、允许日本在华设厂。",
+        "🎯 解题思路：香港岛是《南京条约》割让的，九龙半岛是《北京条约》割让的，旅顺大连是后来俄国租借的，故答案为 A。"
+      ],
+      "knowledgeCard": {
+        "topic": "《马关条约》的主要内容",
+        "source": "人教版八年级上册 第二单元 第5课",
+        "keyMemory": "记忆口诀：「割辽台澎、赔二亿两、开四口岸、允许设厂」。三国干涉还辽后，辽东半岛被赎回，台湾和澎湖列岛永久割让。",
+        "commonMistake": "香港岛→《南京条约》（1842），九龙→《北京条约》（1860），不要混淆。",
+        "relatedTopics": "甲午中日战争；三国干涉还辽（俄、德、法）；台湾人民的抗日斗争"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "甲午中日战争中，北洋舰队全军覆没于哪次战役？",
+      "options": [
+        "马尾海战",
+        "黄海海战",
+        "威海卫战役",
+        "旅顺战役"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查甲午战争中北洋舰队的最终命运，注意区分「重创」和「全军覆没」。",
+        "📖 关键知识：黄海海战中北洋舰队损失惨重但主力尚存；威海卫战役中，日本陆海军夹击，北洋舰队全军覆没，丁汝昌自杀殉国。",
+        "🎯 解题思路：马尾海战是中法战争（1884），黄海海战北洋舰队受重创但未覆没，威海卫才是全军覆没之地，故选 C。"
+      ],
+      "knowledgeCard": {
+        "topic": "甲午中日战争的主要战役",
+        "source": "人教版八年级上册 第二单元 第5课",
+        "keyMemory": "黄海海战→邓世昌「致远舰」壮烈牺牲；威海卫战役→北洋舰队全军覆没，丁汝昌殉国。",
+        "commonMistake": "马尾海战是中法战争中的战役，不是甲午战争，注意时间和背景的区别。",
+        "relatedTopics": "邓世昌；丁汝昌；北洋水师；《马关条约》"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "戊戌变法的领导人物是？",
+      "options": [
+        "李鸿章、曾国藩",
+        "康有为、梁启超",
+        "孙中山、黄兴",
+        "陈独秀、李大钊"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 方向提示：本题考查戊戌变法的领导人物，属于资产阶级改良运动范畴。",
+        "📖 关键知识：戊戌变法（1898年）是资产阶级改良运动，以康有为、梁启超为代表，依靠光绪皇帝推行变法，历时103天失败。",
+        "🎯 解题思路：A组是洋务派，C组是革命派，D组是新文化运动代表，只有B组康梁是改良派领袖，故选 B。"
+      ],
+      "knowledgeCard": {
+        "topic": "戊戌变法的代表人物与性质",
+        "source": "人教版八年级上册 第二单元 第6课",
+        "keyMemory": "「公车上书」→「百日维新」→「戊戌政变」，康有为是思想领袖，梁启超是宣传骨干，光绪帝是支持者。",
+        "commonMistake": "注意：戊戌变法是「改良」（不推翻清王朝），辛亥革命是「革命」（推翻清王朝），两者性质不同。",
+        "relatedTopics": "公车上书；百日维新；戊戌六君子（谭嗣同）；光绪帝"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "戊戌变法共持续了多少天，因此又称「百日维新」？",
+      "options": [
+        "60天",
+        "90天",
+        "103天",
+        "180天"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查戊戌变法的历史概况，「百日维新」中的「百日」实为具体天数。",
+        "📖 关键知识：1898年6月11日，光绪帝颁布「明定国是」诏书，宣布变法；9月21日，慈禧太后发动戊戌政变，历时103天。",
+        "🎯 解题思路：「百日」是约数，实际为103天，故选 C。"
+      ],
+      "knowledgeCard": {
+        "topic": "戊戌变法的时间与经过",
+        "source": "人教版八年级上册 第二单元 第6课",
+        "keyMemory": "1898年6月→9月，历时103天，「百日维新」是对这段历史的形象称呼。",
+        "commonMistake": "「百日」只是约数，实际是103天，考试中若出现具体天数选项要选103天。",
+        "relatedTopics": "明定国是诏书；慈禧太后发动政变；戊戌六君子"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "《辛丑条约》中，最能体现清政府沦为列强「工具」的条款是？",
+      "options": [
+        "赔款白银4.5亿两",
+        "划定北京东交民巷为「使馆界」",
+        "严禁中国人民参加反帝活动",
+        "允许各国在京津铁路沿线驻兵"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 方向提示：本题考查《辛丑条约》中最具政治性的条款，思考哪一条直接约束了中国人民的行动自由。",
+        "📖 关键知识：《辛丑条约》（1901年）主要内容：赔款4.5亿两（庚子赔款）、划使馆界、拆除炮台、严禁人民反帝、允许驻兵。",
+        "🎯 解题思路：「严禁中国人民参加反帝活动」说明清政府必须替列强镇压本国人民的反抗，这最能说明清政府成为列强统治中国的工具，故选 C。"
+      ],
+      "knowledgeCard": {
+        "topic": "《辛丑条约》的主要内容与影响",
+        "source": "人教版八年级上册 第二单元 第7课",
+        "keyMemory": "「辛丑条约」标志中国完全沦为半殖民地半封建社会；赔款4.5亿两以关税、盐税担保，实际连本带息超9亿两。",
+        "commonMistake": "赔款数额是「最多」的，但体现清政府成为「工具」的核心是「严禁反帝」这一政治条款，而非赔款数额。",
+        "relatedTopics": "义和团运动；八国联军侵华；庚子赔款；半殖民地半封建社会"
+      }
+    },
+    {
+      "id": 8,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "判断：洋务运动的根本目的是推翻清王朝的封建统治，实现中国的近代化。",
+      "answer": false,
+      "hints": [
+        "💡 方向提示：本题考查洋务运动的目的，注意「根本目的」与「客观效果」的区别。",
+        "📖 关键知识：洋务运动的根本目的是「维护」清朝的封建统治，利用西方先进技术来镇压农民起义、抵御外国侵略，并非推翻清政府。",
+        "🎯 解题思路：推翻清政府是革命派（孙中山）的目标，洋务运动的「中学为体」就是要保留封建制度，故本题说法错误。"
+      ],
+      "knowledgeCard": {
+        "topic": "洋务运动的目的与性质",
+        "source": "人教版八年级上册 第二单元 第4课",
+        "keyMemory": "洋务运动：「师夷长技以自强」，目的是「维护」而非「推翻」清政府，其失败根本原因是不触动封建制度。",
+        "commonMistake": "洋务运动虽然推动了中国近代化进程（客观效果），但主观目的是维护封建统治，两者不可混淆。",
+        "relatedTopics": "甲午战争中北洋舰队覆没→洋务运动最终失败；中学为体西学为用"
+      }
+    },
+    {
+      "id": 9,
+      "type": "truefalse",
+      "difficulty": 2,
+      "question": "判断：八国联军侵华战争爆发的直接原因是镇压义和团运动。",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查八国联军侵华战争的直接原因，注意区分「直接原因」和「根本原因」。",
+        "📖 关键知识：1900年，义和团运动兴起，提出「扶清灭洋」口号，八国以镇压义和团为名联合出兵侵华。根本原因是列强要进一步侵略瓜分中国。",
+        "🎯 解题思路：直接原因确实是借口镇压义和团，题目说法正确。"
+      ],
+      "knowledgeCard": {
+        "topic": "八国联军侵华战争的原因",
+        "source": "人教版八年级上册 第二单元 第7课",
+        "keyMemory": "直接原因：镇压义和团；根本原因：列强企图进一步瓜分中国。注意二者区别。",
+        "commonMistake": "有些同学误认为根本原因是镇压义和团——错，列强镇压义和团只是借口，根本目的是扩大在华利益。",
+        "relatedTopics": "义和团运动；《辛丑条约》；慈禧太后出逃；中国完全沦为半殖民地半封建社会"
+      }
+    },
+    {
+      "id": 10,
+      "type": "truefalse",
+      "difficulty": 3,
+      "question": "判断：戊戌变法虽然失败了，但它在思想文化领域产生了深远影响，起到了思想启蒙的作用。",
+      "answer": true,
+      "hints": [
+        "💡 方向提示：本题考查戊戌变法的历史意义，注意从「失败」的具体内容和「意义」两个维度分析。",
+        "📖 关键知识：戊戌变法政治上失败（新法被废除、维新人士被杀），但在思想上传播了资产阶级政治学说和自然科学知识，具有启蒙作用。",
+        "🎯 解题思路：历史评价要一分为二——政治上失败，思想上有启蒙意义，题目判断正确。"
+      ],
+      "knowledgeCard": {
+        "topic": "戊戌变法的历史意义",
+        "source": "人教版八年级上册 第二单元 第6课",
+        "keyMemory": "戊戌变法是一次救亡图存的爱国运动，也是一次思想解放运动，促进了中国人民的觉醒。",
+        "commonMistake": "不要因为变法「失败」就否定其意义——它的思想启蒙作用是公认的历史事实，为后来的辛亥革命奠定了思想基础。",
+        "relatedTopics": "资产阶级改良运动；辛亥革命；新文化运动；思想启蒙"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习第二单元章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>
