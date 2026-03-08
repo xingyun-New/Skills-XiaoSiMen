@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>八年级物理下册 第一章 力学综合练习 图示增强版</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #00695c 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.9em;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .header p {
+      font-size: 0.98em;
+      opacity: 0.92;
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 1em;
+      color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      height: 12px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #66bb6a, #aed581);
+      border-radius: 12px;
+      transition: width 0.4s ease;
+    }
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+      margin-bottom: 20px;
+      animation: fadeIn 0.28s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .question-num { font-size: 0.95em; color: #78909c; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.14em;
+      line-height: 1.8;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+    .diagram-card {
+      background: linear-gradient(180deg, #f6f9ff, #eef4ff);
+      border: 1px solid #d6e3ff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .diagram-title {
+      font-weight: bold;
+      color: #1a237e;
+      margin-bottom: 10px;
+    }
+    .diagram-caption {
+      margin-top: 10px;
+      color: #546e7a;
+      font-size: 0.92em;
+      line-height: 1.6;
+    }
+    .diagram-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1.03em;
+      line-height: 1.6;
+      text-align: left;
+      gap: 14px;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #1a237e;
+      background: #e8eaf6;
+      transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1a237e;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.75; }
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      background: #fafafa;
+      cursor: pointer;
+      font-size: 1.15em;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #1a237e; transform: scale(1.02); }
+    .tf-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .tf-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .tf-btn.disabled { pointer-events: none; opacity: 0.75; }
+    .hint-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px;
+      border: 2px solid #FF9800;
+      border-radius: 20px;
+      background: #FFF8E1;
+      color: #E65100;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used {
+      opacity: 0.5;
+      pointer-events: none;
+      border-color: #ccc;
+      color: #999;
+      background: #f5f5f5;
+    }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area-stack { display: grid; gap: 10px; margin-bottom: 14px; }
+    .hint-box {
+      background: #FFFDE7;
+      border-left: 4px solid #FFB300;
+      padding: 12px 16px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.95em;
+      line-height: 1.7;
+    }
+    .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+    .knowledge-card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      line-height: 1.8;
+      font-size: 0.95em;
+      animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+    .next-btn, .restart-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em;
+      font-weight: bold;
+      background: linear-gradient(135deg, #1a237e, #00897b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left;
+      background: #FFF3E0;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+    .achievement-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333;
+      padding: 16px 24px;
+      border-radius: 16px;
+      font-weight: bold;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.45em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+      .tf-options { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <p>这版增加了更多受力图示，重点训练“看图判断受力”“区分平衡力与相互作用力”“重力方向与支持力方向”的理解。</p>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<script type="application/json" id="quiz-json">
+{
+  "title": "物理 · 八年级下册 · 第一章 力学综合练习（图示增强版 20题）",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列关于力的说法中，正确的是（　　）",
+      "options": [
+        "力可以离开物体而单独存在",
+        "力是物体对物体的作用",
+        "只要相互接触就一定有力",
+        "只有运动的物体才会受力"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 想一想：力的定义里是不是强调“物体对物体”这件事？",
+        "📖 关键知识：力是物体对物体的作用，至少涉及两个物体。",
+        "🎯 选项 B 最完整，其他选项都把受力条件说绝对了。"
+      ],
+      "knowledgeCard": {
+        "topic": "力的定义",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力不能脱离物体而存在，施力物体和受力物体总是同时出现。",
+        "commonMistake": "误认为接触就一定有力，或不接触就一定没力。",
+        "relatedTopics": "力的作用效果"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "用手拍桌子时，手会感到疼痛。这一现象说明（　　）",
+      "options": [
+        "桌子只受手的力",
+        "手对桌子的力比桌子对手的力大",
+        "力的作用是相互的",
+        "手感到疼只是错觉"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 是什么让手疼的？",
+        "📖 关键知识：物体间力的作用是相互的。",
+        "🎯 手拍桌子时，桌子也同时对手施力。"
+      ],
+      "knowledgeCard": {
+        "topic": "力的相互性",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "一个物体对另一个物体施力时，也同时受到对方的力。",
+        "commonMistake": "只看到主动施力的一方，忽略反作用的一方。",
+        "relatedTopics": "相互作用力"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列现象中，主要说明力能改变物体形状的是（　　）",
+      "options": [
+        "橡皮泥被捏扁",
+        "足球运动方向改变",
+        "电梯由慢变快",
+        "汽车由运动变静止"
+      ],
+      "answer": 0,
+      "hints": [
+        "💡 力的作用效果有两个：改变形状，改变运动状态。",
+        "📖 “形状变化”常见于拉长、压缩、弯曲、捏扁。",
+        "🎯 只有 A 主要体现了形状改变。"
+      ],
+      "knowledgeCard": {
+        "topic": "力的作用效果",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "力能改变物体形状，也能改变物体运动状态。",
+        "commonMistake": "把形状变化和运动状态变化混为一谈。",
+        "relatedTopics": "弹力"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，木块静止在水平桌面上。下列说法正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "木块静止在水平桌面上",
+        "caption": "图中箭头只表示方向，不表示大小。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "options": [
+        "木块只受一个重力",
+        "木块受到的支持力方向竖直向下",
+        "木块受到重力和支持力",
+        "木块受到的支持力就是木块对桌面的压力"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 静止在桌面上的物体通常要先分析上下方向受力。",
+        "📖 关键知识：木块受重力向下，桌面对木块有支持力向上。",
+        "🎯 支持力作用在木块上，压力作用在桌面上，它们不是同一个力。"
+      ],
+      "knowledgeCard": {
+        "topic": "水平面上的受力分析",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "",
+        "keyMemory": "静止在水平桌面上的物体，若无其他外力，通常受重力和支持力。",
+        "commonMistake": "混淆支持力和压力，或者把支持力方向画错。",
+        "relatedTopics": "平衡力、相互作用力"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，小球静止悬挂。下列判断正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "小球悬挂受力示意",
+        "caption": "绳子对小球的拉力沿绳方向向上。",
+        "scene": {
+          "bodyLabel": "小球",
+          "bodyShape": "circle",
+          "surface": "none",
+          "forces": [
+            { "direction": "up", "label": "F拉", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "options": [
+        "小球只受重力",
+        "小球受重力和绳子的拉力",
+        "小球受重力和支持力",
+        "小球所受拉力方向竖直向下"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 绳子会不会对小球施力？",
+        "📖 关键知识：悬挂的小球通常受重力和绳子的拉力。",
+        "🎯 拉力方向沿绳向上，不是向下。"
+      ],
+      "knowledgeCard": {
+        "topic": "悬挂物体受力分析",
+        "source": "人教版八年级下册 第七章第二节、第三节",
+        "formula": "",
+        "keyMemory": "悬挂物体常见两力：重力和拉力。",
+        "commonMistake": "把支持力和拉力混淆，或把拉力方向画错。",
+        "relatedTopics": "弹力、重力"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，木块在粗糙水平面上向右做匀速直线运动。下列说法正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "木块向右匀速运动",
+        "caption": "木块受拉力向右，摩擦力向左。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "F拉", "color": "#ab47bc" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "options": [
+        "木块不受摩擦力",
+        "木块只受两个力",
+        "木块受拉力和摩擦力方向相同",
+        "木块受到摩擦力，方向向左"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 匀速运动时，不代表不受力，而是合力可能为 0。",
+        "📖 关键知识：摩擦力方向与相对运动趋势方向相反。",
+        "🎯 木块向右运动，摩擦力应向左。"
+      ],
+      "knowledgeCard": {
+        "topic": "摩擦力方向与受力分析",
+        "source": "人教版八年级下册 第八章第三节",
+        "formula": "",
+        "keyMemory": "摩擦力方向总与相对运动或相对运动趋势方向相反。",
+        "commonMistake": "误以为物体运动时摩擦力一定与运动方向相同。",
+        "relatedTopics": "二力平衡、受力分析"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，小球被斜向上的细线拉住并静止。图中最能表示细线拉力方向的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "斜拉小球示意",
+        "caption": "拉力方向应沿绳方向。",
+        "scene": {
+          "bodyLabel": "小球",
+          "bodyShape": "circle",
+          "surface": "none",
+          "forces": [
+            { "direction": "up-right", "label": "?", "color": "#ab47bc" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "options": [
+        "竖直向上",
+        "沿细线斜向上",
+        "水平向右",
+        "竖直向下"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 绳子的拉力一定沿着什么方向？",
+        "📖 关键知识：绳子的拉力方向总是沿绳方向。",
+        "🎯 只要绳子是斜的，拉力就不会竖直或水平。"
+      ],
+      "knowledgeCard": {
+        "topic": "拉力方向判断",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "",
+        "keyMemory": "拉力方向沿绳方向，支持力方向垂直接触面。",
+        "commonMistake": "把拉力习惯性地画成竖直方向。",
+        "relatedTopics": "弹力、支持力"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "一个质量为 0.6kg 的物体，取 g = 10N/kg，则它受到的重力是（　　）",
+      "options": [
+        "0.6N",
+        "6N",
+        "10N",
+        "60N"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 想起重力公式。",
+        "📖 关键知识：G = mg。",
+        "🎯 0.6 × 10 = 6。"
+      ],
+      "knowledgeCard": {
+        "topic": "重力计算",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "G = mg",
+        "keyMemory": "在地面附近，常取 g = 10N/kg。",
+        "commonMistake": "把质量单位 kg 和力单位 N 混淆。",
+        "relatedTopics": "重力方向"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，木块静止在斜面上。关于重力方向，下列说法正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "斜面上的木块",
+        "caption": "判断重力方向时，不要沿斜面画。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "none",
+          "forces": [
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "options": [
+        "沿斜面向下",
+        "垂直斜面向下",
+        "竖直向下",
+        "沿木块下滑方向"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 重力方向和接触面方向有没有关系？",
+        "📖 关键知识：重力方向始终竖直向下。",
+        "🎯 即使在斜面上，重力也不沿斜面。"
+      ],
+      "knowledgeCard": {
+        "topic": "重力方向",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "",
+        "keyMemory": "重力方向永远竖直向下。",
+        "commonMistake": "把重力方向画成沿斜面或垂直斜面。",
+        "relatedTopics": "重垂线、斜面受力"
+      }
+    },
+    {
+      "id": 10,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "支持力、拉力本质上都属于弹力。（　　）",
+      "answer": true,
+      "hints": [
+        "💡 这些力是不是都和物体发生弹性形变有关？",
+        "📖 关键知识：弹力是物体发生弹性形变后产生的力。",
+        "🎯 支持力和拉力都可看作弹力的具体形式。"
+      ],
+      "knowledgeCard": {
+        "topic": "弹力的具体形式",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "",
+        "keyMemory": "支持力、压力、拉力都与物体形变有关。",
+        "commonMistake": "误以为只有弹簧才会产生弹力。",
+        "relatedTopics": "支持力、拉力"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列关于弹簧测力计的使用，说法错误的是（　　）",
+      "options": [
+        "使用前要观察量程和分度值",
+        "指针没有指零时应先调零",
+        "所测力不能超过量程",
+        "读数时视线可以斜着看，只要大致看清即可"
+      ],
+      "answer": 3,
+      "hints": [
+        "💡 测量工具读数最怕什么？",
+        "📖 关键知识：读数时视线应正对刻度面，避免视差。",
+        "🎯 斜着看会造成读数偏差。"
+      ],
+      "knowledgeCard": {
+        "topic": "弹簧测力计使用规范",
+        "source": "人教版八年级下册 第七章第二节",
+        "formula": "",
+        "keyMemory": "调零、看量程、认分度值、正对刻度读数。",
+        "commonMistake": "忽视视差对读数的影响。",
+        "relatedTopics": "测量误差"
+      }
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，物体静止悬挂在弹簧下端。下列说法正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "弹簧下端悬挂物体",
+        "caption": "分析弹簧对物体的力和物体所受重力。",
+        "scene": {
+          "bodyLabel": "物体",
+          "bodyShape": "circle",
+          "surface": "none",
+          "forces": [
+            { "direction": "up", "label": "F弹", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "options": [
+        "物体只受弹簧的弹力",
+        "物体只受重力",
+        "物体受重力和弹簧对它的弹力",
+        "弹簧对物体的弹力方向竖直向下"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 物体为什么能静止悬挂？",
+        "📖 关键知识：悬挂物体一般受重力和弹簧对它的弹力。",
+        "🎯 弹簧拉住物体，弹力方向应向上。"
+      ],
+      "knowledgeCard": {
+        "topic": "弹簧与重力共同受力",
+        "source": "人教版八年级下册 第七章第二节、第三节",
+        "formula": "",
+        "keyMemory": "悬挂在弹簧下端的物体通常受两个力：重力和弹力。",
+        "commonMistake": "把弹力方向画反，或漏掉重力。",
+        "relatedTopics": "二力平衡"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，木块放在桌面上，手向下压木块。此时木块受到的力中一定有（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "手向下压木块",
+        "caption": "图中只考虑竖直方向上的主要受力。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "down", "label": "F压", "color": "#ab47bc" }
+          ]
+        }
+      },
+      "options": [
+        "只受重力",
+        "受重力、桌面的支持力、手对它的压力",
+        "只受手的压力和桌面的支持力",
+        "一定受摩擦力"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 手和木块接触并向下压，会不会额外产生一个向下的力？",
+        "📖 关键知识：手对木块的压力、木块所受重力、桌面对木块的支持力都可能存在。",
+        "🎯 若题目只说向下压，没有涉及水平运动，就不能一定说有摩擦力。"
+      ],
+      "knowledgeCard": {
+        "topic": "多力情形下的受力分析",
+        "source": "人教版八年级下册 第七章第一节、第二节、第三节",
+        "formula": "",
+        "keyMemory": "做受力分析时，要按接触情况和力的来源逐个判断。",
+        "commonMistake": "漏掉手施加的压力，或随意补上摩擦力。",
+        "relatedTopics": "压力、支持力"
+      }
+    },
+    {
+      "id": 14,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "静止在桌面上的书受到的支持力和重力是一对平衡力。（　　）",
+      "answer": true,
+      "hints": [
+        "💡 先看这两个力是不是都作用在同一本书上。",
+        "📖 关键知识：平衡力作用在同一物体上，大小相等、方向相反。",
+        "🎯 静止状态下，书的重力和支持力正好互相平衡。"
+      ],
+      "knowledgeCard": {
+        "topic": "平衡力",
+        "source": "人教版八年级下册 第八章第二节",
+        "formula": "",
+        "keyMemory": "平衡力作用在同一物体上，相互作用力作用在不同物体上。",
+        "commonMistake": "把平衡力和相互作用力混淆。",
+        "relatedTopics": "二力平衡、相互作用力"
+      }
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "下列各组力中，属于相互作用力的是（　　）",
+      "options": [
+        "桌面对书的支持力和书受到的重力",
+        "书对桌面的压力和桌面对书的支持力",
+        "木块受到的拉力和木块受到的摩擦力",
+        "小球受到的重力和绳子对球的拉力"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 相互作用力要看是否分别作用在两个不同物体上。",
+        "📖 关键知识：相互作用力成对出现，作用在不同物体上。",
+        "🎯 “书对桌面”“桌面对书”正好对应两个物体。"
+      ],
+      "knowledgeCard": {
+        "topic": "相互作用力判断",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "相互作用力一定是“甲对乙”和“乙对甲”。",
+        "commonMistake": "看见大小相等、方向相反就误判，忘记检查作用对象。",
+        "relatedTopics": "平衡力"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "托起两个鸡蛋所用的力大约为（　　）",
+      "options": [
+        "0.1N",
+        "1N",
+        "10N",
+        "100N"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 这是教材里常见的力大小生活参照。",
+        "📖 两个鸡蛋约 1N。",
+        "🎯 用它可以帮助判断力的数量级是否合理。"
+      ],
+      "knowledgeCard": {
+        "topic": "力的单位估测",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "托起两个鸡蛋约需要 1N 的力。",
+        "commonMistake": "对牛顿这个单位缺乏生活直观感受。",
+        "relatedTopics": "力的大小"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，木块在水平面上受到水平向右的拉力但保持静止。下列判断正确的是（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "木块受拉但静止",
+        "caption": "静止意味着在水平方向上拉力与摩擦力平衡。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "F拉", "color": "#ab47bc" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "options": [
+        "木块一定不受摩擦力",
+        "木块只受重力和支持力",
+        "木块受拉力，也可能受到向左的摩擦力",
+        "木块受到的拉力方向向左"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 物体静止，水平方向上的力可能怎样？",
+        "📖 关键知识：静止时，若有向右拉力，可能有向左静摩擦力与之平衡。",
+        "🎯 静止不代表没摩擦，关键要看有无相对运动趋势。"
+      ],
+      "knowledgeCard": {
+        "topic": "静摩擦力与平衡",
+        "source": "人教版八年级下册 第八章第三节",
+        "formula": "",
+        "keyMemory": "物体有相对运动趋势时，也可能受到静摩擦力。",
+        "commonMistake": "认为“静止”就一定“没有摩擦力”。",
+        "relatedTopics": "摩擦力、二力平衡"
+      }
+    },
+    {
+      "id": 18,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "重力的方向始终竖直向下，与物体是否运动无关。（　　）",
+      "answer": true,
+      "hints": [
+        "💡 上升的小球和下落的小球，重力方向会变吗？",
+        "📖 关键知识：重力方向始终竖直向下。",
+        "🎯 运动状态改变不影响重力方向。"
+      ],
+      "knowledgeCard": {
+        "topic": "重力方向稳定性",
+        "source": "人教版八年级下册 第七章第三节",
+        "formula": "",
+        "keyMemory": "重力方向只与地球引力有关，不随物体运动变化。",
+        "commonMistake": "把运动方向误画成受力方向。",
+        "relatedTopics": "受力分析"
+      }
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "推门时，在离门轴较远处推更容易把门推开，这主要说明力的作用效果与（　　）有关",
+      "options": [
+        "力的大小",
+        "力的作用点",
+        "受力物体颜色",
+        "施力时间长短"
+      ],
+      "answer": 1,
+      "hints": [
+        "💡 两次推门时，最明显变化的是施力位置。",
+        "📖 关键知识：力的大小、方向、作用点都会影响作用效果。",
+        "🎯 离门轴远近不同，本质就是作用点不同。"
+      ],
+      "knowledgeCard": {
+        "topic": "力的作用点",
+        "source": "人教版八年级下册 第七章第一节",
+        "formula": "",
+        "keyMemory": "作用点不同，力的效果可能明显不同。",
+        "commonMistake": "只关注力的大小，忽略作用点。",
+        "relatedTopics": "力的三要素"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "如图所示，下列哪一幅最符合“物体静止在水平面上并受到水平向右拉力”的受力情况（　　）",
+      "diagram": {
+        "type": "force",
+        "title": "判断完整受力情况",
+        "caption": "静止意味着竖直和水平方向都应满足平衡。",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "F拉", "color": "#ab47bc" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "options": [
+        "只有 G 和 F支",
+        "只有 G 和 F拉",
+        "有 G、F支、F拉、f",
+        "有 G、F支、F拉，且没有 f"
+      ],
+      "answer": 2,
+      "hints": [
+        "💡 先看竖直方向，再看水平方向。",
+        "📖 关键知识：静止时，受力可能在竖直方向和水平方向都平衡。",
+        "🎯 有向右拉力但物体静止，常常需要向左的摩擦力来平衡。"
+      ],
+      "knowledgeCard": {
+        "topic": "完整受力图判断",
+        "source": "人教版八年级下册 第七章、第八章相关内容",
+        "formula": "",
+        "keyMemory": "画受力图时要按受力来源逐个分析，不能漏力。",
+        "commonMistake": "只看到拉力，忘了静摩擦力和支持力。",
+        "relatedTopics": "受力分析、静摩擦力、二力平衡"
+      }
+    }
+  ]
+}
+</script>
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    }[ch];
+  });
+}
+
+function getDirectionVector(direction) {
+  var map = {
+    "up": [0, -1],
+    "down": [0, 1],
+    "left": [-1, 0],
+    "right": [1, 0],
+    "up-left": [-0.72, -0.72],
+    "up-right": [0.72, -0.72],
+    "down-left": [-0.72, 0.72],
+    "down-right": [0.72, 0.72]
+  };
+  return map[direction] || [0, -1];
+}
+
+function renderDiagram(diagram) {
+  if (!diagram || diagram.type !== "force") return "";
+  var scene = diagram.scene || {};
+  var forces = scene.forces || [];
+  var centerX = 180, centerY = 112;
+  var bodyShape = scene.bodyShape || "rect";
+  var surface = scene.surface || "rough";
+  var bodyLabel = escapeHtml(scene.bodyLabel || "物体");
+  var bodySvg = bodyShape === "circle"
+    ? '<circle cx="' + centerX + '" cy="' + centerY + '" r="30" fill="#90caf9" stroke="#1565c0" stroke-width="2"></circle>'
+    : '<rect x="132" y="78" width="96" height="68" rx="12" fill="#90caf9" stroke="#1565c0" stroke-width="2"></rect>';
+  var groundSvg = "";
+  if (surface !== "none") {
+    groundSvg = '<line x1="78" y1="166" x2="282" y2="166" stroke="#6d4c41" stroke-width="4"></line>';
+    if (surface === "rough") {
+      for (var i = 84; i <= 276; i += 18) {
+        groundSvg += '<line x1="' + i + '" y1="166" x2="' + (i - 6) + '" y2="175" stroke="#8d6e63" stroke-width="2"></line>';
+      }
+    }
+  }
+  var arrows = forces.map(function(force) {
+    var v = getDirectionVector(force.direction);
+    var ex = centerX + v[0] * 70;
+    var ey = centerY + v[1] * 70;
+    var lx = centerX + v[0] * 92;
+    var ly = centerY + v[1] * 92;
+    var color = force.color || "#ef5350";
+    return '<line x1="' + centerX + '" y1="' + centerY + '" x2="' + ex + '" y2="' + ey +
+      '" stroke="' + color + '" stroke-width="4" marker-end="url(#arrowHead)"></line>' +
+      '<text x="' + lx + '" y="' + ly + '" fill="' + color + '" font-size="14" font-weight="bold" text-anchor="middle">' +
+      escapeHtml(force.label || "F") + '</text>';
+  }).join("");
+  return '<div class="diagram-card">' +
+    (diagram.title ? '<div class="diagram-title">🖼 ' + escapeHtml(diagram.title) + '</div>' : "") +
+    '<div class="diagram-wrap"><svg viewBox="0 0 360 220" aria-label="受力图">' +
+    '<defs><marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">' +
+    '<path d="M0,0 L10,5 L0,10 z" fill="#546e7a"></path></marker></defs>' +
+    groundSvg + bodySvg +
+    '<text x="' + centerX + '" y="' + (centerY + 5) + '" fill="#0d47a1" font-size="16" font-weight="bold" text-anchor="middle">' +
+    bodyLabel + '</text>' +
+    arrows + '</svg></div>' +
+    (diagram.caption ? '<div class="diagram-caption">' + escapeHtml(diagram.caption) + '</div>' : "") +
+    '</div>';
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea" class="hint-area-stack"></div>';
+  }
+
+  var diagramHtml = renderDiagram(q.diagram);
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    diagramHtml + hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-box"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(idx === q.answer);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer);
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  if (val !== q.answer) (q.answer ? f : t).classList.add("wrong");
+}
+
+function processAnswer(isCorrect) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>";
+  if (kc.formula) h += '<div class="kc-item">🔬 <b>相关公式：</b>' + kc.formula + "</div>";
+  h += '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！受力图看得很稳！"
+    : pct >= 70 ? "👍 良好！图示理解已经不错了"
+    : pct >= 60 ? "✓ 及格，建议继续巩固受力分析"
+    : "💪 加油！建议重新练习受力图相关题目";
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>

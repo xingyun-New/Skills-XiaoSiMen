@@ -83,6 +83,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|---------|
 | 八年级 | 下册第一章 力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-下册第一章力-20260307.html) |
+| 八年级 | 下册第二章 力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-运动和力综合-20260308.html) |
 
 ### 📝 语文
 

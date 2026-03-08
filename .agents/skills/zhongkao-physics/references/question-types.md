@@ -70,6 +70,34 @@ D. 物体没有受到摩擦力说明桌面是光滑的
 - 🔗 关联知识：牛顿第三定律、二力平衡条件
 ```
 
+### 图示增强字段（HTML 交互专用）
+
+涉及受力分析、电路识别、光路判断、实验装置观察的题目，建议补充 `diagram` 字段。字段规范详见 [diagram-guide.md](diagram-guide.md)。
+
+```json
+{
+  "type": "choice",
+  "difficulty": 2,
+  "question": "如图所示，木块在水平面上做匀速直线运动，下列说法正确的是：",
+  "options": ["木块只受两个力", "木块不受摩擦力", "拉力与摩擦力大小相等", "支持力小于重力"],
+  "answer": 2,
+  "diagram": {
+    "type": "force",
+    "title": "木块受力示意图",
+    "scene": {
+      "bodyLabel": "木块",
+      "surface": "rough",
+      "forces": [
+        { "direction": "up", "label": "F支", "color": "#42a5f5" },
+        { "direction": "down", "label": "G", "color": "#ef5350" },
+        { "direction": "right", "label": "F拉", "color": "#ab47bc" },
+        { "direction": "left", "label": "f", "color": "#66bb6a" }
+      ]
+    }
+  }
+}
+```
+
 ## 二、判断题
 
 ### 格式要求
@@ -250,6 +278,22 @@ D. 物体没有受到摩擦力说明桌面是光滑的
     "📖 关键知识：ρ = m/V，F浮 = ρ液gV排，注意单位换算",
     "🎯 解题思路：第一问直接用密度公式；第二问浸没时 V排 = V物"
   ],
+  "diagram": {
+    "type": "experiment",
+    "title": "铁块浸没示意图",
+    "scene": {
+      "items": [
+        { "kind": "beaker", "label": "水" },
+        { "kind": "block", "label": "铁块" },
+        { "kind": "spring-scale", "label": "测力装置" }
+      ],
+      "arrows": [
+        { "from": 2, "to": 1, "label": "悬挂" },
+        { "from": 1, "to": 0, "label": "浸没" }
+      ],
+      "note": "用于分析浮力与排开液体体积的关系"
+    }
+  },
   "knowledgeCard": {
     "topic": "密度计算与浮力",
     "source": "人教版八年级上册第六章 + 下册第十章",
@@ -336,6 +380,23 @@ D. 物体没有受到摩擦力说明桌面是光滑的
     "📖 关键知识：滑动摩擦力与压力大小和接触面粗糙程度有关",
     "🎯 解题思路：匀速拉动是为了利用二力平衡测摩擦力；①②对比的是压力的影响；①③对比的是粗糙程度的影响"
   ],
+  "diagram": {
+    "type": "experiment",
+    "title": "探究滑动摩擦力实验装置",
+    "scene": {
+      "items": [
+        { "kind": "spring-scale", "label": "弹簧测力计" },
+        { "kind": "block", "label": "木块" },
+        { "kind": "surface", "label": "长木板" },
+        { "kind": "weight", "label": "砝码" }
+      ],
+      "arrows": [
+        { "from": 0, "to": 1, "label": "水平拉动" },
+        { "from": 1, "to": 2, "label": "接触面" }
+      ],
+      "note": "比较不同条件下测力计示数的变化"
+    }
+  },
   "knowledgeCard": {
     "topic": "探究影响滑动摩擦力大小的因素",
     "source": "人教版八年级下册 第八章 运动和力",
