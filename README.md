@@ -43,8 +43,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 内容 | 类型 | 在线练习 |
 |------|------|---------|
-| Auto Sync Test | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/auto-sync-test.html) |
-| Test Readme Update | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/test-readme-update.html) |
+| 一次函数探索器 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-explorer.html) |
 | 一次函数练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-quiz.html) |
 | 一次函数中等难度挑战 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-medium-quiz.html) |
 | 平行四边形专项练习 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/parallelogram-quiz.html) |
