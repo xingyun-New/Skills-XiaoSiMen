@@ -43,6 +43,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 内容 | 类型 | 在线练习 |
 |------|------|---------|
+| Inverse Function | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/inverse-function.html) |
 | Inverse Function Practice | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/inverse-function-practice.html) |
 | Inverse Function Explorer | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/inverse-function-explorer.html) |
 | 一次函数探索器 | Playground | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/linear-function-explorer.html) |
