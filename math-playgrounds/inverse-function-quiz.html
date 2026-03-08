@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>反比例函数练习 - 九年级数学</title>
+  <title>反比例函数专项练习 - 九年级数学</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -100,6 +100,15 @@
       font-family: 'Cambria Math', 'Times New Roman', serif;
       font-style: italic;
       color: #93c5fd;
+    }
+
+    .canvas-area {
+      width: 100%;
+      height: 320px;
+      background: rgba(13,17,23,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      margin: 15px 0;
     }
 
     .options-grid {
@@ -205,6 +214,8 @@
     }
     .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
     .nav-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+    .nav-btn.hint-btn { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .nav-btn.hint-btn:hover { box-shadow: 0 8px 25px rgba(245,158,11,0.4); }
 
     .result-card {
       display: none;
@@ -247,6 +258,23 @@
       pointer-events: none;
       z-index: 9999;
     }
+
+    .achievement-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1a1a2e;
+      padding: 18px 28px;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 1.1em;
+      box-shadow: 0 10px 40px rgba(245,158,11,0.4);
+      transform: translateX(400px);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1000;
+    }
+    .achievement-popup.show { transform: translateX(0); }
   </style>
 </head>
 <body>
@@ -255,7 +283,7 @@
   <div class="container">
     <div class="header">
       <h1>📊 反比例函数专项练习</h1>
-      <p>10 道精选题 | 配套知识点卡片 | 即时反馈</p>
+      <p>10 道精选题 | 互动图像 | 知识点学习 | 即时反馈</p>
     </div>
 
     <div class="stats-bar">
@@ -303,6 +331,108 @@
   </div>
 
   <script>
+    // ===== 反比例函数图像绘制函数 =====
+    function drawInverseGraph(ctx, w, h, k, color, dashed) {
+      var cx = w / 2, cy = h / 2;
+      var scale = Math.min(w, h) / 14;
+
+      // 绘制网格
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.lineWidth = 1;
+      for (var i = -7; i <= 7; i++) {
+        ctx.beginPath();
+        ctx.moveTo(cx + i * scale, 0);
+        ctx.lineTo(cx + i * scale, h);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, cy + i * scale);
+        ctx.lineTo(w, cy + i * scale);
+        ctx.stroke();
+      }
+
+      // 绘制坐标轴
+      ctx.strokeStyle = "rgba(255,255,255,0.4)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+
+      // 坐标轴标签
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("x", w - 15, cy + 18);
+      ctx.fillText("y", cx + 12, 18);
+      ctx.fillText("O", cx - 12, cy + 16);
+
+      // 绘制反比例函数图像（双曲线）
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      if (dashed) ctx.setLineDash([5, 5]);
+      else ctx.setLineDash([]);
+
+      // 第一、三象限或第二、四象限
+      ctx.beginPath();
+      for (var px = 1; px <= 7; px += 0.1) {
+        var x = px;
+        var y = k / x;
+        if (Math.abs(y) <= 7) {
+          var plotX = cx + x * scale;
+          var plotY = cy - y * scale;
+          if (px === 1) ctx.moveTo(plotX, plotY);
+          else ctx.lineTo(plotX, plotY);
+        }
+      }
+      ctx.stroke();
+
+      ctx.beginPath();
+      for (var px = -1; px >= -7; px -= 0.1) {
+        var x = px;
+        var y = k / x;
+        if (Math.abs(y) <= 7) {
+          var plotX = cx + x * scale;
+          var plotY = cy - y * scale;
+          if (px === -1) ctx.moveTo(plotX, plotY);
+          else ctx.lineTo(plotX, plotY);
+        }
+      }
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+    }
+
+    function drawPoint(ctx, w, h, x, y, label, color) {
+      var cx = w / 2, cy = h / 2;
+      var scale = Math.min(w, h) / 14;
+      var px = cx + x * scale;
+      var py = cy - y * scale;
+
+      ctx.fillStyle = color || "#f59e0b";
+      ctx.beginPath();
+      ctx.arc(px, py, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (label) {
+        ctx.fillStyle = "#fbbf24";
+        ctx.font = "bold 13px sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(label, px + 10, py - 10);
+      }
+    }
+
+    function drawRectangle(ctx, w, h, points, color) {
+      var cx = w / 2, cy = h / 2;
+      var scale = Math.min(w, h) / 14;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(cx + points[0][0] * scale, cy - points[0][1] * scale);
+      for (var i = 1; i < points.length; i++) {
+        ctx.lineTo(cx + points[i][0] * scale, cy - points[i][1] * scale);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // ===== 题目数据 =====
     const questions = [
       {
         id: 1,
@@ -310,10 +440,12 @@
         type: "概念辨析",
         options: ["y = 2x", "y = x²", "y = 3/x", "y = x + 1"],
         correct: 2,
+        hint: "反比例函数的一般形式是 y = k/x（k 为常数，k ≠ 0）",
         knowledge: {
           title: "反比例函数的定义",
           content: "反比例函数的一般形式为 <span class='math'>y = k/x</span>（k 为常数，k ≠ 0）。其中 k 称为比例系数。也可以写成 <span class='math'>xy = k</span> 或 <span class='math'>y = kx⁻¹</span> 的形式。"
-        }
+        },
+        showGraph: false
       },
       {
         id: 2,
@@ -321,9 +453,16 @@
         type: "计算应用",
         options: ["-2", "2", "-3", "3"],
         correct: 0,
+        hint: "将 x = -3 直接代入函数解析式计算即可",
         knowledge: {
           title: "反比例函数的点坐标关系",
           content: "对于反比例函数 <span class='math'>y = k/x</span>，图像上任意一点 (x, y) 都满足 <span class='math'>xy = k</span>。已知 k = 6，当 x = -3 时，<span class='math'>y = 6/(-3) = -2</span>。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 6, "#93c5fd", false);
+          drawPoint(ctx, w, h, 2, 3, "(2,3)", "#f59e0b");
+          drawPoint(ctx, w, h, -3, -2, "(-3,-2)", "#f59e0b");
         }
       },
       {
@@ -332,9 +471,14 @@
         type: "图像性质",
         options: ["第一、三象限", "第二、四象限", "第一、二象限", "第三、四象限"],
         correct: 1,
+        hint: "当 k < 0 时，图像在第二、四象限",
         knowledge: {
           title: "反比例函数图像的位置",
           content: "当 <span class='math'>k > 0</span> 时，图像位于<strong>第一、三象限</strong>；当 <span class='math'>k < 0</span> 时，图像位于<strong>第二、四象限</strong>。本题 k = -4 < 0，所以在第二、四象限。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, -4, "#f9a8d4", false);
         }
       },
       {
@@ -343,9 +487,15 @@
         type: "参数求解",
         options: ["8", "-8", "2", "-2"],
         correct: 1,
+        hint: "将点坐标代入，k = x × y",
         knowledge: {
           title: "求反比例函数的比例系数",
           content: "将已知点坐标代入：<span class='math'>4 = k/(-2)</span>，解得 <span class='math'>k = -8</span>。也可以直接用 <span class='math'>k = xy = (-2) × 4 = -8</span>。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, -8, "#93c5fd", false);
+          drawPoint(ctx, w, h, -2, 4, "A(-2,4)", "#f59e0b");
         }
       },
       {
@@ -354,9 +504,17 @@
         type: "增减性",
         options: ["增大", "减小", "不变", "先增大后减小"],
         correct: 1,
+        hint: "k > 0 时，在每个象限内 y 随 x 增大而减小",
         knowledge: {
           title: "反比例函数的增减性",
           content: "当 <span class='math'>k > 0</span> 时，在<strong>每个象限内</strong>，y 随 x 的增大而减小；当 <span class='math'>k < 0</span> 时，在每个象限内，y 随 x 的增大而增大。本题 k = 2 > 0，在第一象限内 y 随 x 增大而减小。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 2, "#93c5fd", false);
+          drawPoint(ctx, w, h, 1, 2, "(1,2)", "#f59e0b");
+          drawPoint(ctx, w, h, 2, 1, "(2,1)", "#f59e0b");
+          drawPoint(ctx, w, h, 4, 0.5, "(4,0.5)", "#f59e0b");
         }
       },
       {
@@ -365,31 +523,75 @@
         type: "函数交点",
         options: ["(2, 4)", "(4, 8)", "(2, 4) 和 (-2, -4)", "(4, 8) 和 (-4, -8)"],
         correct: 2,
+        hint: "联立方程 2x = 8/x，解出 x 后求 y",
         knowledge: {
           title: "正比例与反比例函数的交点",
           content: "联立方程：<span class='math'>2x = 8/x</span>，得 <span class='math'>2x² = 8</span>，<span class='math'>x² = 4</span>，<span class='math'>x = ±2</span>。当 x = 2 时，y = 4；当 x = -2 时，y = -4。交点为 <strong>(2, 4) 和 (-2, -4)</strong>，关于原点对称。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          // 绘制正比例函数
+          var cx = w / 2, cy = h / 2;
+          var scale = Math.min(w, h) / 14;
+          ctx.strokeStyle = "#f9a8d4";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(0, cy);
+          ctx.lineTo(w, cy - 14 * scale);
+          ctx.stroke();
+          
+          drawInverseGraph(ctx, w, h, 8, "#93c5fd", false);
+          drawPoint(ctx, w, h, 2, 4, "(2,4)", "#f59e0b");
+          drawPoint(ctx, w, h, -2, -4, "(-2,-4)", "#f59e0b");
         }
       },
       {
         id: 7,
-        question: "反比例函数 <span class='math'>y = k/x</span> 与一次函数 <span class='math'>y = x + 1</span> 的图像没有交点，则 k 的取值范围是（  ）",
-        type: "综合应用",
-        options: ["k > -1/4", "k < -1/4", "k > 1/4", "k < 1/4"],
-        correct: 1,
-        knowledge: {
-          title: "函数图像交点与方程根的关系",
-          content: "联立得：<span class='math'>k/x = x + 1</span>，整理得 <span class='math'>x² + x - k = 0</span>。无交点即方程无实根，判别式 <span class='math'>Δ = 1 + 4k < 0</span>，解得 <strong>k < -1/4</strong>。"
-        }
-      },
-      {
-        id: 8,
         question: "已知点 A(x₁, y₁)、B(x₂, y₂) 在反比例函数 <span class='math'>y = 3/x</span> 的图像上，若 <span class='math'>x₁ < x₂ < 0</span>，则（  ）",
         type: "性质应用",
         options: ["y₁ < y₂", "y₁ > y₂", "y₁ = y₂", "无法确定"],
         correct: 0,
+        hint: "两点都在第三象限，k > 0 时第三象限内 y 随 x 增大而减小",
         knowledge: {
           title: "反比例函数的单调性（同象限）",
           content: "k = 3 > 0，图像在第一、三象限。当 x < 0 时，两点都在第三象限。在第三象限内，y 随 x 的增大而减小。因为 <span class='math'>x₁ < x₂</span>，所以 <strong>y₁ < y₂</strong>。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 3, "#93c5fd", false);
+          drawPoint(ctx, w, h, -3, -1, "A", "#f59e0b");
+          drawPoint(ctx, w, h, -1, -3, "B", "#f59e0b");
+        }
+      },
+      {
+        id: 8,
+        question: "如图，点 P 在反比例函数 <span class='math'>y = k/x</span> 的图像上，过 P 作 x 轴、y 轴的垂线，垂足分别为 M、N。若矩形 PMON 的面积为 6，则 k 的值为（  ）",
+        type: "几何应用",
+        options: ["3", "6", "12", "无法确定"],
+        correct: 1,
+        hint: "矩形面积 = |x| × |y| = |xy| = |k|",
+        knowledge: {
+          title: "反比例函数的几何意义",
+          content: "对于反比例函数 <span class='math'>y = k/x</span> 图像上任意一点 P(x, y)，过 P 作 x 轴、y 轴的垂线，所得矩形面积为 <span class='math'>|x| × |y| = |xy| = |k|</span>。本题面积为 6，所以 <span class='math'>|k| = 6</span>。由图像在第一、三象限可知 k > 0，因此 k = 6。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 6, "#93c5fd", false);
+          var cx = w / 2, cy = h / 2;
+          var scale = Math.min(w, h) / 14;
+          var px = cx + 3 * scale;
+          var py = cy - 2 * scale;
+          ctx.fillStyle = "rgba(147,197,253,0.15)";
+          ctx.fillRect(cx, py, 3 * scale, -2 * scale);
+          ctx.strokeStyle = "rgba(147,197,253,0.5)";
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(cx, py, 3 * scale, -2 * scale);
+          drawPoint(ctx, w, h, 3, 2, "P(3,2)", "#f59e0b");
+          ctx.fillStyle = "#93c5fd";
+          ctx.font = "12px sans-serif";
+          ctx.fillText("M", cx + 3 * scale, cy + 16);
+          ctx.fillText("N", cx - 25, cy - 2 * scale);
+          ctx.fillText("O", cx - 12, cy + 16);
         }
       },
       {
@@ -398,9 +600,17 @@
         type: "实际应用",
         options: ["y = 12x", "y = x/12", "y = 12/x", "y = 12 - x"],
         correct: 2,
+        hint: "矩形面积 = 长 × 宽 = xy",
         knowledge: {
           title: "反比例函数的实际应用",
           content: "矩形面积 = 长 × 宽，即 <span class='math'>xy = 12</span>，所以 <span class='math'>y = 12/x</span>。这是典型的反比例关系：当面积一定时，一边长与另一边长成反比例。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 12, "#93c5fd", false);
+          drawPoint(ctx, w, h, 3, 4, "(3,4)", "#f59e0b");
+          drawPoint(ctx, w, h, 4, 3, "(4,3)", "#f59e0b");
+          drawPoint(ctx, w, h, 6, 2, "(6,2)", "#f59e0b");
         }
       },
       {
@@ -409,9 +619,16 @@
         type: "对称性",
         options: ["x 轴", "y 轴", "原点", "直线 y = x"],
         correct: 2,
+        hint: "反比例函数是奇函数，满足 f(-x) = -f(x)",
         knowledge: {
           title: "反比例函数的对称性",
           content: "反比例函数是<strong>奇函数</strong>，满足 <span class='math'>f(-x) = -f(x)</span>，图像关于<strong>原点中心对称</strong>。同时也关于直线 y = x 和 y = -x 对称。"
+        },
+        showGraph: true,
+        graphFn: function(ctx, w, h) {
+          drawInverseGraph(ctx, w, h, 4, "#93c5fd", false);
+          drawPoint(ctx, w, h, 2, 2, "A(2,2)", "#f59e0b");
+          drawPoint(ctx, w, h, -2, -2, "A'(-2,-2)", "#f9a8d4");
         }
       }
     ];
@@ -437,6 +654,7 @@
           <div class="question-number">第 ${index + 1} 题</div>
           <span class="question-type">${q.type}</span>
           <div class="question-text">${q.question}</div>
+          ${q.showGraph ? `<canvas class="canvas-area" id="canvas-${index}"></canvas>` : ''}
           <div class="options-grid">
             ${q.options.map((opt, i) => `
               <button class="option-btn" onclick="selectOption(${index}, ${i})">
@@ -451,14 +669,37 @@
             <p>${q.knowledge.content}</p>
           </div>
           <div class="nav-buttons">
-            <button class="nav-btn" onclick="prevQuestion()" ${index === 0 ? 'disabled' : ''}>← 上一题</button>
+            <button class="nav-btn hint-btn" onclick="showHint(${index})" ${answered ? 'disabled' : ''}>💡 提示</button>
             <button class="nav-btn" onclick="nextQuestion()" id="next-${index}" style="display: none;">
               ${index === questions.length - 1 ? '查看结果' : '下一题 →'}
             </button>
           </div>
         `;
         container.appendChild(card);
+        
+        // 绘制图像
+        if (q.showGraph && q.graphFn) {
+          setTimeout(() => {
+            const canvas = document.getElementById(`canvas-${index}`);
+            if (canvas) {
+              canvas.width = canvas.offsetWidth;
+              canvas.height = canvas.offsetHeight;
+              const ctx = canvas.getContext('2d');
+              q.graphFn(ctx, canvas.width, canvas.height);
+            }
+          }, 100);
+        }
       });
+    }
+
+    function showHint(questionIndex) {
+      const q = questions[questionIndex];
+      const feedback = document.getElementById(`feedback-${questionIndex}`);
+      feedback.className = 'feedback-area show';
+      feedback.style.background = 'rgba(245,158,11,0.1)';
+      feedback.style.border = '1px solid rgba(245,158,11,0.3)';
+      feedback.style.color = '#fbbf24';
+      feedback.innerHTML = `💡 <strong>提示：</strong>${q.hint}`;
     }
 
     function selectOption(questionIndex, optionIndex) {
@@ -510,14 +751,6 @@
         answered = false;
       } else {
         showResult();
-      }
-    }
-
-    function prevQuestion() {
-      if (currentQuestion > 0) {
-        document.getElementById(`question-${currentQuestion}`).style.display = 'none';
-        currentQuestion--;
-        document.getElementById(`question-${currentQuestion}`).style.display = 'block';
       }
     }
 
@@ -580,21 +813,10 @@
 
     function showAchievement(text) {
       const achievement = document.createElement('div');
-      achievement.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: #1a1a2e;
-        padding: 18px 28px;
-        border-radius: 14px;
-        font-weight: bold;
-        font-size: 1.1em;
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-      `;
+      achievement.className = 'achievement-popup';
       achievement.textContent = text;
       document.body.appendChild(achievement);
+      setTimeout(() => achievement.classList.add('show'), 10);
       setTimeout(() => achievement.remove(), 3000);
     }
 
