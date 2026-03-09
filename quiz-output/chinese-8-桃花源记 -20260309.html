@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃花源记 - 八年级语文练习</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .progress-bar { background: #f0f0f0; height: 8px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); width: 0%; transition: width 0.3s; }
+        .stats { display: flex; justify-content: space-around; padding: 15px; background: #f8f9fa; border-bottom: 1px solid #eee; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 12px; color: #666; }
+        .question-area { padding: 30px; }
+        .question-type { display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
+        .question-text { font-size: 18px; line-height: 1.8; margin-bottom: 25px; color: #333; }
+        .options { display: grid; gap: 12px; }
+        .option { padding: 15px 20px; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.3s; font-size: 16px; }
+        .option:hover { border-color: #667eea; background: #f8f9ff; }
+        .option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .option.correct { border-color: #4caf50; background: #4caf50; color: white; }
+        .option.wrong { border-color: #f44336; background: #f44336; color: white; }
+        .feedback { padding: 25px; background: #f8f9fa; border-top: 2px solid #e0e0e0; display: none; }
+        .feedback.show { display: block; }
+        .feedback-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+        .feedback-title.correct { color: #4caf50; }
+        .feedback-title.wrong { color: #f44336; }
+        .knowledge-card { background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; margin-top: 15px; }
+        .knowledge-card h4 { color: #667eea; margin-bottom: 10px; }
+        .knowledge-card p { line-height: 1.6; color: #555; margin-bottom: 8px; }
+        .btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; transition: all 0.3s; margin: 5px; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-container { text-align: center; margin-top: 20px; }
+        .hints { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 10px; display: none; }
+        .hints.show { display: block; }
+        .hint-item { padding: 8px 0; border-bottom: 1px dashed #ddd; font-size: 14px; }
+        .hint-item:last-child { border-bottom: none; }
+        .hint-btn { background: #ffc107; color: #333; padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-size: 13px; margin-top: 10px; }
+        .score-panel { text-align: center; padding: 40px; display: none; }
+        .score-panel.show { display: block; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; margin: 0 auto 20px; }
+        .score-detail { margin: 20px 0; }
+        .score-detail p { margin: 10px 0; font-size: 16px; }
+        .wrong-review { text-align: left; max-height: 300px; overflow-y: auto; margin-top: 20px; }
+        .wrong-item { padding: 15px; background: #fff5f5; border-left: 3px solid #f44336; margin-bottom: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📜 桃花源记</h1>
+            <p>八年级下册 · 文言文阅读专项练习</p>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        <div class="stats">
+            <div class="stat"><div class="stat-value" id="current">1</div><div class="stat-label">当前题</div></div>
+            <div class="stat"><div class="stat-value" id="correct">0</div><div class="stat-label">正确数</div></div>
+            <div class="stat"><div class="stat-value" id="score">0</div><div class="stat-label">得分</div></div>
+            <div class="stat"><div class="stat-value" id="streak">0</div><div class="stat-label">连击</div></div>
+        </div>
+        <div class="question-area" id="questionArea">
+            <div class="question-type" id="qType">选择题</div>
+            <div class="question-text" id="qText"></div>
+            <div class="options" id="options"></div>
+            <div class="hints" id="hints"></div>
+            <div class="btn-container">
+                <button class="btn btn-secondary" id="hintBtn">💡 看提示 (-10 分)</button>
+                <button class="btn btn-primary" id="nextBtn" style="display:none;">下一题 →</button>
+            </div>
+        </div>
+        <div class="feedback" id="feedback">
+            <div class="feedback-title" id="fbTitle"></div>
+            <div class="knowledge-card" id="kbCard"></div>
+        </div>
+        <div class="score-panel" id="scorePanel">
+            <div class="score-circle" id="finalScore">0</div>
+            <h2>练习完成！🎉</h2>
+            <div class="score-detail" id="scoreDetail"></div>
+            <div class="wrong-review" id="wrongReview"></div>
+            <button class="btn btn-primary" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+
+    <script type="application/json" id="quiz-json">
+    {
+        "questions": [
+            {
+                "id": 1,
+                "type": "choice",
+                "text": "《桃花源记》的作者是？",
+                "options": ["A. 李白", "B. 杜甫", "C. 陶渊明", "D. 白居易"],
+                "answer": "C",
+                "hints": ["他是东晋时期的诗人", "他以田园诗著称", "他曾写过「采菊东篱下」"],
+                "knowledge": {
+                    "title": "陶渊明简介",
+                    "content": "陶渊明（约 365-427），名潜，字元亮，东晋末期南朝宋初期诗人、文学家。他是中国第一位田园诗人，被称为「古今隐逸诗人之宗"。代表作有《归园田居》《饮酒》《桃花源记》等。"
+                }
+            },
+            {
+                "id": 2,
+                "type": "choice",
+                "text": "「芳草鲜美，落英缤纷」中「落英」的意思是？",
+                "options": ["A. 掉落的花瓣", "B. 英雄陨落", "C. 落叶", "D. 刚开的花"],
+                "answer": "A",
+                "hints": ["联系上下文描写的是桃花林景色", "「英」在古文中可指花", "这句话描写春景"],
+                "knowledge": {
+                    "title": "落英释义",
+                    "content": "「落英」指掉落的花瓣。「英」在古汉语中有「花」的意思，如「落英缤纷」形容花瓣纷纷飘落的美丽景象。这是桃花源入口处的景色描写，营造出神秘美好的氛围。"
+                }
+            },
+            {
+                "id": 3,
+                "type": "choice",
+                "text": "桃花源中的人「不知有汉，无论魏晋」说明了什么？",
+                "options": ["A. 他们不关心政治", "B. 他们与世隔绝很久", "C. 他们文化水平低", "D. 他们故意装作不知道"],
+                "answer": "B",
+                "hints": ["从时间角度思考", "他们的祖先何时来到此地？", "这说明他们与外界没有联系"],
+                "knowledge": {
+                    "title": "与世隔绝的主题",
+                    "content": "桃花源中人自秦朝避难来此，与外界隔绝了数百年，所以不知道汉朝，更不用说魏晋了。这句话突出了桃花源与世隔绝的特点，也暗含作者对现实社会动荡的不满。"
+                }
+            },
+            {
+                "id": 4,
+                "type": "choice",
+                "text": "下列加点词解释错误的一项是？",
+                "options": ["A. 欲穷其林（穷：走到尽头）", "B. 悉如外人（悉：全，都）", "C. 便要还家（要：要求）", "D. 处处志之（志：做标记）"],
+                "answer": "C",
+                "hints": ["「要」是通假字", "它通哪个字？", "表示邀请的意思"],
+                "knowledge": {
+                    "title": "文言实词与通假字",
+                    "content": "「要」通「邀」，意思是邀请。这是文言文中的通假字现象。其他选项：穷—走到尽头；悉—全、都；志—做标记（名词作动词）。掌握通假字是文言文阅读的重要基础。"
+                }
+            },
+            {
+                "id": 5,
+                "type": "choice",
+                "text": "「黄发垂髫，并怡然自乐」中「黄发」「垂髫」分别指？",
+                "options": ["A. 青年和中年", "B. 男人和女人", "C. 老人和小孩", "D. 富人和穷人"],
+                "answer": "C",
+                "hints": ["从外貌特征思考", "老人头发有什么特点？", "小孩的发型呢？"],
+                "knowledge": {
+                    "title": "借代修辞",
+                    "content": "「黄发」指老人（老人头发由白转黄），「垂髫」指小孩（古时小孩不戴冠，头发下垂）。这里用借代手法，以特征代人，表现桃花源中老幼皆安乐的和谐景象。"
+                }
+            },
+            {
+                "id": 6,
+                "type": "choice",
+                "text": "渔人离开桃花源时，桃源人嘱咐他「不足为外人道也」的原因是？",
+                "options": ["A. 怕外人来打扰他们的生活", "B. 他们害羞", "C. 怕渔人迷路", "D. 他们没有好东西招待外人"],
+                "answer": "A",
+                "hints": ["从桃源人的角度思考", "他们喜欢现在的生活吗？", "外人来了会怎样？"],
+                "knowledge": {
+                    "title": "桃花源人的心理",
+                    "content": "桃源人嘱咐渔人不要对外人说，是因为他们珍惜与世隔绝的安宁生活，不希望被外界打扰。这反映了他们对和平生活的珍视，也暗示了外界社会的动荡不安。"
+                }
+            },
+            {
+                "id": 7,
+                "type": "choice",
+                "text": "下列对文章主旨理解最准确的是？",
+                "options": ["A. 描写一个美丽的世外桃源", "B. 表达对理想社会的向往和对现实的不满", "C. 讲述一个神奇的故事", "D. 批判渔人的贪婪"],
+                "answer": "B",
+                "hints": ["结合写作背景", "作者生活在什么时代？", "桃花源与现实形成什么关系？"],
+                "knowledge": {
+                    "title": "文章主旨",
+                    "content": "本文通过虚构桃花源这一理想社会，表达了作者对和平、安宁、平等生活的向往，同时暗含对东晋末年社会动荡、战乱频繁的现实的不满。桃花源是作者心中的理想世界。"
+                }
+            },
+            {
+                "id": 8,
+                "type": "choice",
+                "text": "「乃不知有汉，无论魏晋」中「无论」的意思是？",
+                "options": ["A. 不管", "B. 不必说", "C. 无论如何", "D. 没有讨论"],
+                "answer": "B",
+                "hints": ["这是古今异义词", "古义和今义不同", "联系上下文理解"],
+                "knowledge": {
+                    "title": "古今异义",
+                    "content": "「无论」在古文中是「不要说，更不必说」的意思，是古今异义词。现代汉语中「无论」表示条件关系。类似的古今异义词还有「妻子」（古：妻子和儿女；今：男子的配偶）。"
+                }
+            },
+            {
+                "id": 9,
+                "type": "choice",
+                "text": "文章最后写刘子骥「规往」「未果」「寻病终」的作用是？",
+                "options": ["A. 增加故事的真实性", "B. 说明桃花源不存在", "C. 增添神秘色彩，暗示理想难以实现", "D. 批判刘子骥身体不好"],
+                "answer": "C",
+                "hints": ["从写作手法思考", "这样结尾给人什么感觉？", "作者想表达什么深层含义？"],
+                "knowledge": {
+                    "title": "结尾的深意",
+                    "content": "这样结尾增添了桃花源的神秘色彩，暗示这个理想世界在现实中是找不到的。作者借此表达：美好的理想社会虽然令人向往，但在当时的社会条件下难以实现，带有淡淡的遗憾和无奈。"
+                }
+            },
+            {
+                "id": 10,
+                "type": "choice",
+                "text": "下列句子翻译正确的一项是？",
+                "options": ["A. 「阡陌交通」：田间小路交错相通", "B. 「率妻子邑人」：率领妻子和同乡人", "C. 「来此绝境」：来到这个绝望的地方", "D. 「不足为外人道也」：不值得对外人说"],
+                "answer": "A",
+                "hints": ["注意古今异义词", "「妻子」古义是什么？", "「绝境」古义是什么？"],
+                "knowledge": {
+                    "title": "句子翻译要点",
+                    "content": "A 正确。B 错：「妻子」古义是妻子和儿女；C 错：「绝境」古义是与世隔绝的地方，非绝望；D 错：「不足」是不值得，「道」是说，应译为「不值得对外面的人说」。翻译文言文要注意古今异义。"
+                }
+            }
+        ]
+    }
+    </script>
+
+    <script>
+    const quizData = JSON.parse(document.getElementById('quiz-json').textContent);
+    let currentIdx = 0, score = 0, correct = 0, streak = 0, hintCount = 0, wrongList = [];
+    
+    function renderQuestion() {
+        const q = quizData.questions[currentIdx];
+        document.getElementById('qType').textContent = q.type === 'choice' ? '选择题' : '填空题';
+        document.getElementById('qText').textContent = q.text;
+        const optsDiv = document.getElementById('options');
+        optsDiv.innerHTML = '';
+        if (q.type === 'choice') {
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = opt;
+                div.onclick = () => checkAnswer(opt[0]);
+                optsDiv.appendChild(div);
+            });
+        }
+        document.getElementById('hints').innerHTML = '';
+        document.getElementById('hints').classList.remove('show');
+        document.getElementById('feedback').classList.remove('show');
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('hintBtn').style.display = 'inline-block';
+        updateStats();
+    }
+    
+    function checkAnswer(selected) {
+        const q = quizData.questions[currentIdx];
+        const opts = document.querySelectorAll('.option');
+        opts.forEach((opt, i) => {
+            opt.style.pointerEvents = 'none';
+            if (opt.textContent[0] === q.answer) opt.classList.add('correct');
+            else if (opt.textContent[0] === selected && selected !== q.answer) opt.classList.add('wrong');
+        });
+        const isCorrect = selected === q.answer;
+        if (isCorrect) {
+            correct++;
+            streak++;
+            const points = Math.max(5, 10 - hintCount * 3);
+            score += points;
+            document.getElementById('fbTitle').innerHTML = '✅ 回答正确！+' + points + '分';
+            document.getElementById('fbTitle').className = 'feedback-title correct';
+        } else {
+            streak = 0;
+            wrongList.push({q: q.text, a: q.options.find(o => o[0] === q.answer)});
+            document.getElementById('fbTitle').innerHTML = '❌ 回答错误';
+            document.getElementById('fbTitle').className = 'feedback-title wrong';
+        }
+        document.getElementById('kbCard').innerHTML = '<h4>📚 知识点卡片</h4><p>' + q.knowledge.content + '</p>';
+        document.getElementById('feedback').classList.add('show');
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('hintBtn').style.display = 'none';
+        updateStats();
+    }
+    
+    document.getElementById('nextBtn').onclick = () => {
+        currentIdx++;
+        hintCount = 0;
+        if (currentIdx >= quizData.questions.length) showResult();
+        else renderQuestion();
+    };
+    
+    document.getElementById('hintBtn').onclick = () => {
+        const q = quizData.questions[currentIdx];
+        const hintsDiv = document.getElementById('hints');
+        if (hintCount < q.hints.length) {
+            hintsDiv.innerHTML += '<div class="hint-item">💡 ' + q.hints[hintCount] + '</div>';
+            hintsDiv.classList.add('show');
+            hintCount++;
+            score = Math.max(0, score - 10);
+            updateStats();
+        }
+    };
+    
+    function updateStats() {
+        document.getElementById('current').textContent = currentIdx + 1;
+        document.getElementById('correct').textContent = correct;
+        document.getElementById('score').textContent = score;
+        document.getElementById('streak').textContent = streak;
+        document.getElementById('progress').style.width = ((currentIdx) / quizData.questions.length * 100) + '%';
+    }
+    
+    function showResult() {
+        document.getElementById('questionArea').style.display = 'none';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('scorePanel').classList.add('show');
+        document.getElementById('finalScore').textContent = score;
+        const total = quizData.questions.length * 10;
+        const rate = Math.round(correct / quizData.questions.length * 100);
+        document.getElementById('scoreDetail').innerHTML = '<p>正确率：<strong>' + rate + '%</strong> (' + correct + '/' + quizData.questions.length + ')</p><p>最高连击：<strong>' + streak + '</strong></p>';
+        if (wrongList.length > 0) {
+            let html = '<h3>错题回顾</h3>';
+            wrongList.forEach(w => {
+                html += '<div class="wrong-item"><strong>题目：</strong>' + w.q + '<br><strong>答案：</strong>' + w.a + '</div>';
+            });
+            document.getElementById('wrongReview').innerHTML = html;
+        }
+    }
+    
+    renderQuestion();
+    </script>
+</body>
+</html>
