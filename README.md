@@ -109,6 +109,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 八年级 | 《诗经》二首（关雎·蒹葭） | 2026-03-02 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/chinese-8-%E8%AF%97%E7%BB%8F%E4%BA%8C%E9%A6%96-20260302.html) |
 | 八年级 | 《诗经》二首综合练习（20 题） | 2026-03-04 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/chinese-8-%E8%AF%97%E7%BB%8F%E4%BA%8C%E9%A6%96-20260304.html) |
 | 八年级 | 桃花源记综合练习（10 题） | 2026-03-09 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/chinese-8-%E6%A1%83%E8%8A%B1%E6%BA%90%E8%AE%B0%20-20260309.html) |
+| 八年级 | 小石潭记综合练习（10 题） | 2026-03-09 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/chinese-8-%E5%B0%8F%E7%9F%B3%E6%BD%AD%E8%AE%B0-20260309.html) |
 
 ---
 
