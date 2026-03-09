@@ -3,320 +3,1206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>桃花源记 - 八年级语文练习</title>
+    <title>桃花源记 - 综合练习题</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; }
-        .header h1 { font-size: 28px; margin-bottom: 10px; }
-        .header p { opacity: 0.9; }
-        .progress-bar { background: #f0f0f0; height: 8px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); width: 0%; transition: width 0.3s; }
-        .stats { display: flex; justify-content: space-around; padding: 15px; background: #f8f9fa; border-bottom: 1px solid #eee; }
-        .stat { text-align: center; }
-        .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
-        .stat-label { font-size: 12px; color: #666; }
-        .question-area { padding: 30px; }
-        .question-type { display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
-        .question-text { font-size: 18px; line-height: 1.8; margin-bottom: 25px; color: #333; }
-        .options { display: grid; gap: 12px; }
-        .option { padding: 15px 20px; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.3s; font-size: 16px; }
-        .option:hover { border-color: #667eea; background: #f8f9ff; }
-        .option.selected { border-color: #667eea; background: #667eea; color: white; }
-        .option.correct { border-color: #4caf50; background: #4caf50; color: white; }
-        .option.wrong { border-color: #f44336; background: #f44336; color: white; }
-        .feedback { padding: 25px; background: #f8f9fa; border-top: 2px solid #e0e0e0; display: none; }
-        .feedback.show { display: block; }
-        .feedback-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
-        .feedback-title.correct { color: #4caf50; }
-        .feedback-title.wrong { color: #f44336; }
-        .knowledge-card { background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; margin-top: 15px; }
-        .knowledge-card h4 { color: #667eea; margin-bottom: 10px; }
-        .knowledge-card p { line-height: 1.6; color: #555; margin-bottom: 8px; }
-        .btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; transition: all 0.3s; margin: 5px; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
-        .btn-secondary { background: #f0f0f0; color: #333; }
-        .btn-container { text-align: center; margin-top: 20px; }
-        .hints { margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 10px; display: none; }
-        .hints.show { display: block; }
-        .hint-item { padding: 8px 0; border-bottom: 1px dashed #ddd; font-size: 14px; }
-        .hint-item:last-child { border-bottom: none; }
-        .hint-btn { background: #ffc107; color: #333; padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-size: 13px; margin-top: 10px; }
-        .score-panel { text-align: center; padding: 40px; display: none; }
-        .score-panel.show { display: block; }
-        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; margin: 0 auto 20px; }
-        .score-detail { margin: 20px 0; }
-        .score-detail p { margin: 10px 0; font-size: 16px; }
-        .wrong-review { text-align: left; max-height: 300px; overflow-y: auto; margin-top: 20px; }
-        .wrong-item { padding: 15px; background: #fff5f5; border-left: 3px solid #f44336; margin-bottom: 10px; border-radius: 8px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        .progress-bar {
+            background: #f0f0f0;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .progress-info {
+            flex: 1;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .progress-track {
+            background: #e0e0e0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-left: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .question-container {
+            padding: 40px 30px;
+            min-height: 400px;
+        }
+        
+        .question {
+            display: none;
+        }
+        
+        .question.active {
+            display: block;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .question-type {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .question-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .stars {
+            color: #ffc107;
+            font-size: 18px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 18px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            background: #e8e9ea;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+        
+        .option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+        
+        .feedback {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            display: block;
+        }
+        
+        .feedback-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feedback-title.correct {
+            color: #2e7d32;
+        }
+        
+        .feedback-title.incorrect {
+            color: #c62828;
+        }
+        
+        .knowledge-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .knowledge-item {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .knowledge-item strong {
+            color: #667eea;
+        }
+        
+        .hint-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .hint-section.show {
+            display: block;
+        }
+        
+        .hint-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .hint-content {
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .hint-btn {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-btn:hover {
+            background: #ffca2c;
+            transform: translateY(-2px);
+        }
+        
+        .hint-btn:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .next-btn:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-screen {
+            display: none;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .result-screen.show {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .result-stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .result-stat-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result-stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .weakness-section {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .weakness-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .weakness-list {
+            list-style: none;
+        }
+        
+        .weakness-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            color: #856404;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .celebration.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .stat-item {
+                min-width: 60px;
+                padding: 8px 12px;
+            }
+            
+            .question-text {
+                font-size: 16px;
+            }
+            
+            .option {
+                padding: 14px 16px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📜 桃花源记</h1>
-            <p>八年级下册 · 文言文阅读专项练习</p>
+            <h1>🌸 桃花源记</h1>
+            <p>八年级下册 · 文言文综合练习</p>
         </div>
-        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-        <div class="stats">
-            <div class="stat"><div class="stat-value" id="current">1</div><div class="stat-label">当前题</div></div>
-            <div class="stat"><div class="stat-value" id="correct">0</div><div class="stat-label">正确数</div></div>
-            <div class="stat"><div class="stat-value" id="score">0</div><div class="stat-label">得分</div></div>
-            <div class="stat"><div class="stat-value" id="streak">0</div><div class="stat-label">连击</div></div>
-        </div>
-        <div class="question-area" id="questionArea">
-            <div class="question-type" id="qType">选择题</div>
-            <div class="question-text" id="qText"></div>
-            <div class="options" id="options"></div>
-            <div class="hints" id="hints"></div>
-            <div class="btn-container">
-                <button class="btn btn-secondary" id="hintBtn">💡 看提示 (-10 分)</button>
-                <button class="btn btn-primary" id="nextBtn" style="display:none;">下一题 →</button>
+        
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-info">
+                <div class="progress-text">
+                    <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreValue">0</div>
+                    <div class="stat-label">得分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="correctValue">0</div>
+                    <div class="stat-label">正确</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="streakValue">0</div>
+                    <div class="stat-label">连击</div>
+                </div>
             </div>
         </div>
-        <div class="feedback" id="feedback">
-            <div class="feedback-title" id="fbTitle"></div>
-            <div class="knowledge-card" id="kbCard"></div>
+        
+        <div class="question-container" id="questionContainer">
+            <!-- Questions will be injected here by JavaScript -->
         </div>
-        <div class="score-panel" id="scorePanel">
-            <div class="score-circle" id="finalScore">0</div>
-            <h2>练习完成！🎉</h2>
-            <div class="score-detail" id="scoreDetail"></div>
-            <div class="wrong-review" id="wrongReview"></div>
-            <button class="btn btn-primary" onclick="location.reload()">重新练习</button>
+        
+        <div class="result-screen" id="resultScreen">
+            <h2 class="result-title">🎉 练习完成！</h2>
+            <div class="result-stats">
+                <div class="result-stat">
+                    <div class="result-stat-value" id="finalScore">0</div>
+                    <div class="result-stat-label">总得分</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="finalCorrect">0/10</div>
+                    <div class="result-stat-label">答对题数</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="finalAccuracy">0%</div>
+                    <div class="result-stat-label">正确率</div>
+                </div>
+            </div>
+            
+            <div class="weakness-section" id="weaknessSection">
+                <h3 class="weakness-title">📚 薄弱知识点</h3>
+                <ul class="weakness-list" id="weaknessList">
+                </ul>
+            </div>
+            
+            <button class="restart-btn" onclick="restartQuiz()">重新练习</button>
         </div>
     </div>
-
+    
+    <div class="celebration" id="celebration"></div>
+    
     <script type="application/json" id="quiz-json">
+{
+  "questions": [
     {
-        "questions": [
-            {
-                "id": 1,
-                "type": "choice",
-                "text": "《桃花源记》的作者是？",
-                "options": ["A. 李白", "B. 杜甫", "C. 陶渊明", "D. 白居易"],
-                "answer": "C",
-                "hints": ["他是东晋时期的诗人", "他以田园诗著称", "他曾写过「采菊东篱下」"],
-                "knowledge": {
-                    "title": "陶渊明简介",
-                    "content": "陶渊明（约 365-427），名潜，字元亮，东晋末期南朝宋初期诗人、文学家。他是中国第一位田园诗人，被称为「古今隐逸诗人之宗"。代表作有《归园田居》《饮酒》《桃花源记》等。"
-                }
-            },
-            {
-                "id": 2,
-                "type": "choice",
-                "text": "「芳草鲜美，落英缤纷」中「落英」的意思是？",
-                "options": ["A. 掉落的花瓣", "B. 英雄陨落", "C. 落叶", "D. 刚开的花"],
-                "answer": "A",
-                "hints": ["联系上下文描写的是桃花林景色", "「英」在古文中可指花", "这句话描写春景"],
-                "knowledge": {
-                    "title": "落英释义",
-                    "content": "「落英」指掉落的花瓣。「英」在古汉语中有「花」的意思，如「落英缤纷」形容花瓣纷纷飘落的美丽景象。这是桃花源入口处的景色描写，营造出神秘美好的氛围。"
-                }
-            },
-            {
-                "id": 3,
-                "type": "choice",
-                "text": "桃花源中的人「不知有汉，无论魏晋」说明了什么？",
-                "options": ["A. 他们不关心政治", "B. 他们与世隔绝很久", "C. 他们文化水平低", "D. 他们故意装作不知道"],
-                "answer": "B",
-                "hints": ["从时间角度思考", "他们的祖先何时来到此地？", "这说明他们与外界没有联系"],
-                "knowledge": {
-                    "title": "与世隔绝的主题",
-                    "content": "桃花源中人自秦朝避难来此，与外界隔绝了数百年，所以不知道汉朝，更不用说魏晋了。这句话突出了桃花源与世隔绝的特点，也暗含作者对现实社会动荡的不满。"
-                }
-            },
-            {
-                "id": 4,
-                "type": "choice",
-                "text": "下列加点词解释错误的一项是？",
-                "options": ["A. 欲穷其林（穷：走到尽头）", "B. 悉如外人（悉：全，都）", "C. 便要还家（要：要求）", "D. 处处志之（志：做标记）"],
-                "answer": "C",
-                "hints": ["「要」是通假字", "它通哪个字？", "表示邀请的意思"],
-                "knowledge": {
-                    "title": "文言实词与通假字",
-                    "content": "「要」通「邀」，意思是邀请。这是文言文中的通假字现象。其他选项：穷—走到尽头；悉—全、都；志—做标记（名词作动词）。掌握通假字是文言文阅读的重要基础。"
-                }
-            },
-            {
-                "id": 5,
-                "type": "choice",
-                "text": "「黄发垂髫，并怡然自乐」中「黄发」「垂髫」分别指？",
-                "options": ["A. 青年和中年", "B. 男人和女人", "C. 老人和小孩", "D. 富人和穷人"],
-                "answer": "C",
-                "hints": ["从外貌特征思考", "老人头发有什么特点？", "小孩的发型呢？"],
-                "knowledge": {
-                    "title": "借代修辞",
-                    "content": "「黄发」指老人（老人头发由白转黄），「垂髫」指小孩（古时小孩不戴冠，头发下垂）。这里用借代手法，以特征代人，表现桃花源中老幼皆安乐的和谐景象。"
-                }
-            },
-            {
-                "id": 6,
-                "type": "choice",
-                "text": "渔人离开桃花源时，桃源人嘱咐他「不足为外人道也」的原因是？",
-                "options": ["A. 怕外人来打扰他们的生活", "B. 他们害羞", "C. 怕渔人迷路", "D. 他们没有好东西招待外人"],
-                "answer": "A",
-                "hints": ["从桃源人的角度思考", "他们喜欢现在的生活吗？", "外人来了会怎样？"],
-                "knowledge": {
-                    "title": "桃花源人的心理",
-                    "content": "桃源人嘱咐渔人不要对外人说，是因为他们珍惜与世隔绝的安宁生活，不希望被外界打扰。这反映了他们对和平生活的珍视，也暗示了外界社会的动荡不安。"
-                }
-            },
-            {
-                "id": 7,
-                "type": "choice",
-                "text": "下列对文章主旨理解最准确的是？",
-                "options": ["A. 描写一个美丽的世外桃源", "B. 表达对理想社会的向往和对现实的不满", "C. 讲述一个神奇的故事", "D. 批判渔人的贪婪"],
-                "answer": "B",
-                "hints": ["结合写作背景", "作者生活在什么时代？", "桃花源与现实形成什么关系？"],
-                "knowledge": {
-                    "title": "文章主旨",
-                    "content": "本文通过虚构桃花源这一理想社会，表达了作者对和平、安宁、平等生活的向往，同时暗含对东晋末年社会动荡、战乱频繁的现实的不满。桃花源是作者心中的理想世界。"
-                }
-            },
-            {
-                "id": 8,
-                "type": "choice",
-                "text": "「乃不知有汉，无论魏晋」中「无论」的意思是？",
-                "options": ["A. 不管", "B. 不必说", "C. 无论如何", "D. 没有讨论"],
-                "answer": "B",
-                "hints": ["这是古今异义词", "古义和今义不同", "联系上下文理解"],
-                "knowledge": {
-                    "title": "古今异义",
-                    "content": "「无论」在古文中是「不要说，更不必说」的意思，是古今异义词。现代汉语中「无论」表示条件关系。类似的古今异义词还有「妻子」（古：妻子和儿女；今：男子的配偶）。"
-                }
-            },
-            {
-                "id": 9,
-                "type": "choice",
-                "text": "文章最后写刘子骥「规往」「未果」「寻病终」的作用是？",
-                "options": ["A. 增加故事的真实性", "B. 说明桃花源不存在", "C. 增添神秘色彩，暗示理想难以实现", "D. 批判刘子骥身体不好"],
-                "answer": "C",
-                "hints": ["从写作手法思考", "这样结尾给人什么感觉？", "作者想表达什么深层含义？"],
-                "knowledge": {
-                    "title": "结尾的深意",
-                    "content": "这样结尾增添了桃花源的神秘色彩，暗示这个理想世界在现实中是找不到的。作者借此表达：美好的理想社会虽然令人向往，但在当时的社会条件下难以实现，带有淡淡的遗憾和无奈。"
-                }
-            },
-            {
-                "id": 10,
-                "type": "choice",
-                "text": "下列句子翻译正确的一项是？",
-                "options": ["A. 「阡陌交通」：田间小路交错相通", "B. 「率妻子邑人」：率领妻子和同乡人", "C. 「来此绝境」：来到这个绝望的地方", "D. 「不足为外人道也」：不值得对外人说"],
-                "answer": "A",
-                "hints": ["注意古今异义词", "「妻子」古义是什么？", "「绝境」古义是什么？"],
-                "knowledge": {
-                    "title": "句子翻译要点",
-                    "content": "A 正确。B 错：「妻子」古义是妻子和儿女；C 错：「绝境」古义是与世隔绝的地方，非绝望；D 错：「不足」是不值得，「道」是说，应译为「不值得对外面的人说」。翻译文言文要注意古今异义。"
-                }
-            }
-        ]
+      "id": 1,
+      "type": "选择题",
+      "difficulty": 2,
+      "text": "下列加点字注音完全正确的一项是（ ）",
+      "options": [
+        "A. 豁（huò）然开朗  屋舍（shè）俨然",
+        "B. 阡陌（mò）交通  黄发垂髫（tiáo）",
+        "C. 便要（yào）还家  诣（yì）太守",
+        "D. 刘子骥（jì）  问津（jīng）"
+      ],
+      "answer": "B",
+      "explanation": "A 项「舍」应读 shě；C 项「要」应读 yāo（通「邀」）；D 项「津」应读 jīn。B 项注音全部正确。",
+      "knowledge": {
+        "考点": "字音辨析",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "「要」通「邀」，读 yāo；「舍」作动词读 shě，作名词读 shè",
+        "易错提醒": "多音字和通假字的读音是考查重点",
+        "关联知识": "文言文中的通假字读音规则"
+      },
+      "hints": [
+        "注意多音字和通假字的特殊读音",
+        "「要」是通假字，通「邀请」的「邀」",
+        "逐项检查：A 项『舍』、C 项『要』、D 项『津』的读音"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "选择题",
+      "difficulty": 2,
+      "text": "下列句子中加点词的解释不正确的一项是（ ）",
+      "options": [
+        "A. 缘溪行（缘：沿着）",
+        "B. 芳草鲜美（鲜美：新鲜美味）",
+        "C. 屋舍俨然（俨然：整齐的样子）",
+        "D. 阡陌交通（交通：交错相通）"
+      ],
+      "answer": "B",
+      "explanation": "B 项「鲜美」在文中是「鲜艳美丽」的意思，不是现代汉语的「新鲜美味」。这是古今异义词。",
+      "knowledge": {
+        "考点": "文言实词解释（古今异义）",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "鲜美（古：鲜艳美丽；今：食物新鲜美味）",
+        "易错提醒": "用现代汉语的意思理解文言词是常见错误",
+        "关联知识": "古今异义词：妻子、绝境、交通、无论"
+      },
+      "hints": [
+        "注意古今异义词，古代的意思和现代可能不同",
+        "「鲜美」形容的是「芳草」，不是食物",
+        "思考：花草可以用「新鲜美味」形容吗？"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "填空题",
+      "difficulty": 2,
+      "text": "默写填空：忽逢桃花林，夹岸数百步，中无杂树，____________，____________。",
+      "answer": "芳草鲜美，落英缤纷",
+      "explanation": "这是描写桃花林美景的名句，注意「鲜美」「落英」「缤纷」的书写。",
+      "knowledge": {
+        "考点": "古诗文默写",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "芳草鲜美，落英缤纷",
+        "易错提醒": "「缤」字容易写错，注意右边是「宾」",
+        "关联知识": "必背全文，重点记忆写景名句"
+      },
+      "hints": [
+        "这是描写桃花林美景的经典句子",
+        "前一句写草，后一句写花瓣飘落",
+        "记住：芳草 + 鲜美，落英 + 缤纷"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "选择题",
+      "difficulty": 3,
+      "text": "下列句子中「之」的用法与其他三项不同的一项是（ ）",
+      "options": [
+        "A. 忘路之远近",
+        "B. 渔人甚异之",
+        "C. 闻之，欣然规往",
+        "D. 处处志之"
+      ],
+      "answer": "A",
+      "explanation": "A 项「之」是结构助词「的」；B、C、D 三项的「之」都是代词，分别代指桃花林的美景、这件事、做的标记。",
+      "knowledge": {
+        "考点": "文言虚词「之」的用法",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "「之」作助词表领属（的），作代词代人、事、物",
+        "易错提醒": "区分「之」作助词和代词的用法",
+        "关联知识": "常见文言虚词：之、其、而、以、于"
+      },
+      "hints": [
+        "「之」在文言文中有多种用法：助词、代词、动词等",
+        "A 项的「之」连接「路」和「远近」，表示领属关系",
+        "B、C、D 三项的「之」都代人、事或物，是代词"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "选择题",
+      "difficulty": 2,
+      "text": "下列对文章内容的理解不正确的一项是（ ）",
+      "options": [
+        "A. 桃花源中人的生活与外界并无太大区别，一样是种田、居住",
+        "B. 桃花源中人热情好客，对渔人的到来感到惊奇并邀请他做客",
+        "C. 渔人离开时桃花源中人嘱咐「不足为外人道也」，表明他们不想被打扰",
+        "D. 文章最后写刘子骥「未果，寻病终」，说明桃花源是真实存在的地方"
+      ],
+      "answer": "D",
+      "explanation": "D 项错误。文章写刘子骥寻找桃花源未果，暗示桃花源是虚构的理想世界，并非真实存在。这正是作者的巧妙构思。",
+      "knowledge": {
+        "考点": "文章内容理解与主旨把握",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "桃花源是虚构的理想社会，寄托作者对美好生活的向往",
+        "易错提醒": "不要将虚构的理想世界当作真实存在",
+        "关联知识": "陶渊明的社会理想：没有战乱、自给自足、民风淳朴"
+      },
+      "hints": [
+        "思考：作者写刘子骥找不到桃花源的用意是什么？",
+        "如果桃花源真实存在，为什么后来没有人能找到？",
+        "理解：桃花源是作者虚构的理想世界，寄托美好愿望"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "材料分析题",
+      "difficulty": 3,
+      "text": "阅读下面的文言文片段，回答问题：\n\n「见渔人，乃大惊，问所从来。具答之。便要还家，设酒杀鸡作食。村中闻有此人，咸来问讯。」\n\n（1）解释加点词语：要（ ）咸（ ）\n（2）翻译句子：「便要还家，设酒杀鸡作食。」\n（3）从这段文字可以看出桃花源中人怎样的特点？",
+      "subQuestions": [
+        {
+          "id": "6-1",
+          "text": "解释加点词语：要（ ）",
+          "answer": "通「邀」，邀请",
+          "explanation": "「要」是通假字，通「邀」，意思是邀请。"
+        },
+        {
+          "id": "6-2",
+          "text": "解释加点词语：咸（ ）",
+          "answer": "全，都",
+          "explanation": "「咸」是文言副词，意思是「全、都」。"
+        },
+        {
+          "id": "6-3",
+          "text": "翻译句子：「便要还家，设酒杀鸡作食。」",
+          "answer": "（桃花源中人）便邀请（渔人）到自己家里去，摆酒杀鸡做饭（来款待他）。",
+          "explanation": "翻译要点：①补充省略的主语「桃花源中人」和宾语「渔人」；②「要」通「邀」；③「设」是摆设、准备。"
+        },
+        {
+          "id": "6-4",
+          "text": "从这段文字可以看出桃花源中人怎样的特点？",
+          "answer": "热情好客、淳朴善良、民风淳朴",
+          "explanation": "从「大惊」「具答之」「便要还家」「设酒杀鸡作食」「咸来问讯」等描写可以看出桃花源中人热情好客、淳朴善良的特点。"
+        }
+      ],
+      "knowledge": {
+        "考点": "文言文阅读综合（词语解释、句子翻译、内容分析）",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "通假字「要」=「邀」；文言副词「咸」=「全、都」",
+        "易错提醒": "翻译时要补充省略成分，注意通假字",
+        "关联知识": "桃花源中人的性格特点：热情、淳朴、善良"
+      },
+      "hints": [
+        "第（1）问：「要」是通假字，「咸」是常见文言副词",
+        "第（2）问：翻译要补充省略的主语和宾语，注意「要」的意思",
+        "第（3）问：从他们的行为（邀请、款待、询问）分析性格特点"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "选择题",
+      "difficulty": 2,
+      "text": "下列句子中不含通假字的一项是（ ）",
+      "options": [
+        "A. 便要还家",
+        "B. 具答之",
+        "C. 土地平旷，屋舍俨然",
+        "D. 为天下唱，宜多应者"
+      ],
+      "answer": "C",
+      "explanation": "A 项「要」通「邀」；B 项「具」通「俱」，详细、全部；D 项「唱」通「倡」，倡导、发起。C 项没有通假字。",
+      "knowledge": {
+        "考点": "通假字识别",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "要=邀（邀请），具=俱（详细），唱=倡（倡导）",
+        "易错提醒": "通假字是文言文中常见的语言现象，要熟记课文中的通假字",
+        "关联知识": "《桃花源记》通假字：要→邀、具→俱"
+      },
+      "hints": [
+        "通假字是用读音相同或相近的字代替本字",
+        "A 项「要」通「邀」，B 项「具」通「俱」",
+        "D 项出自《陈涉世家》，「唱」通「倡」"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "选择题",
+      "difficulty": 2,
+      "text": "下列文学常识表述不正确的一项是（ ）",
+      "options": [
+        "A. 陶渊明，名潜，字元亮，东晋著名诗人",
+        "B. 《桃花源记》是陶渊明的代表作之一，选自《陶渊明集》",
+        "C. 陶渊明被称为「五柳先生」，是我国第一位山水诗人",
+        "D. 「世外桃源」这个成语出自《桃花源记》，比喻理想中的美好世界"
+      ],
+      "answer": "C",
+      "explanation": "C 项错误。陶渊明是我国第一位田园诗人，不是山水诗人。山水诗人的代表是谢灵运。",
+      "knowledge": {
+        "考点": "文学常识",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "陶渊明：东晋、田园诗人、五柳先生、《归园田居》《饮酒》",
+        "易错提醒": "区分「田园诗人」和「山水诗人」",
+        "关联知识": "陶渊明其他作品：《归园田居》《饮酒》《归去来兮辞》"
+      },
+      "hints": [
+        "陶渊明以描写田园生活著称",
+        "「山水诗人」的代表人物是南朝的谢灵运",
+        "陶渊明被称为「古今隐逸诗人之宗」「田园诗人之祖」"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "填空题",
+      "difficulty": 3,
+      "text": "理解性默写：\n（1）《桃花源记》中描写桃花源中老人和小孩都生活得自由自在的句子是：____________，____________。\n（2）《桃花源记》中表现桃花源中人热情好客的句子是：____________，____________。",
+      "answer": "（1）黄发垂髫，并怡然自乐\n（2）便要还家，设酒杀鸡作食",
+      "explanation": "（1）「黄发」指老人，「垂髫」指小孩，「怡然自乐」表现安适愉快。（2）「要」通「邀」，「设酒杀鸡作食」体现热情款待。",
+      "knowledge": {
+        "考点": "古诗文理解性默写",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "黄发垂髫，并怡然自乐；便要还家，设酒杀鸡作食",
+        "易错提醒": "「髫」字容易写错，注意上面是「髟」，下面是「召」",
+        "关联知识": "必背全文，重点记忆主旨句和描写句"
+      },
+      "hints": [
+        "第（1）问：注意「老人和小孩」的文言表达，「怡然自乐」是关键词",
+        "第（2）问：找描写桃花源中人招待渔人的句子",
+        "默写时注意通假字和易错字的书写"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "选择题",
+      "difficulty": 3,
+      "text": "下列对文章写作特色的分析不正确的一项是（ ）",
+      "options": [
+        "A. 文章以渔人的行踪为线索，层层设疑，引人入胜",
+        "B. 文章虚实结合，既写了桃花源的实景，又写了作者的想象",
+        "C. 文章语言简洁生动，如「豁然开朗」「怡然自乐」「无人问津」等成语流传至今",
+        "D. 文章采用对比手法，将桃花源的安宁和乐与外界的战乱动荡形成对比"
+      ],
+      "answer": "B",
+      "explanation": "B 项错误。桃花源是作者虚构的理想世界，并非「实景」。文章通过虚构的故事寄托社会理想，是浪漫主义手法的体现。",
+      "knowledge": {
+        "考点": "写作特色分析",
+        "出处": "人教版八年级下册 第三单元 第 9 课",
+        "关键记忆": "线索清晰（渔人行踪）、虚实相生、语言凝练、对比鲜明",
+        "易错提醒": "桃花源是虚构的，不是真实存在的实景",
+        "关联知识": "出自本文的成语：世外桃源、豁然开朗、怡然自乐、无人问津、落英缤纷"
+      },
+      "hints": [
+        "思考：桃花源在现实中存在吗？",
+        "作者写桃花源的目的是什么？",
+        "理解：桃花源是虚构的理想世界，寄托作者对美好生活的向往"
+      ]
     }
+  ]
+}
     </script>
-
+    
     <script>
-    const quizData = JSON.parse(document.getElementById('quiz-json').textContent);
-    let currentIdx = 0, score = 0, correct = 0, streak = 0, hintCount = 0, wrongList = [];
-    
-    function renderQuestion() {
-        const q = quizData.questions[currentIdx];
-        document.getElementById('qType').textContent = q.type === 'choice' ? '选择题' : '填空题';
-        document.getElementById('qText').textContent = q.text;
-        const optsDiv = document.getElementById('options');
-        optsDiv.innerHTML = '';
-        if (q.type === 'choice') {
-            q.options.forEach((opt, i) => {
-                const div = document.createElement('div');
-                div.className = 'option';
-                div.textContent = opt;
-                div.onclick = () => checkAnswer(opt[0]);
-                optsDiv.appendChild(div);
+        let quizData = JSON.parse(document.getElementById('quiz-json').textContent);
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctCount = 0;
+        let streak = 0;
+        let wrongQuestions = [];
+        let knowledgePoints = {};
+        
+        function initQuiz() {
+            const container = document.getElementById('questionContainer');
+            container.innerHTML = '';
+            
+            quizData.questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question ${index === 0 ? 'active' : ''}`;
+                questionDiv.id = `question-${index}`;
+                
+                let difficultyStars = '';
+                for (let i = 0; i < 5; i++) {
+                    difficultyStars += i < q.difficulty ? '★' : '☆';
+                }
+                
+                let optionsHtml = '';
+                if (q.type === '选择题' || q.type === '判断题') {
+                    optionsHtml = '<div class="options">';
+                    q.options.forEach((opt, optIndex) => {
+                        const optionLabel = String.fromCharCode(65 + optIndex);
+                        optionsHtml += `<div class="option" data-option="${optionLabel}" onclick="selectOption(this, '${optionLabel}')">${optionLabel}. ${opt}</div>`;
+                    });
+                    optionsHtml += '</div>';
+                } else if (q.type === '填空题') {
+                    optionsHtml = `
+                        <div style="margin-bottom: 20px;">
+                            <input type="text" id="fill-input-${index}" placeholder="请输入答案" 
+                                style="width: 100%; padding: 15px; font-size: 16px; border: 2px solid #e0e0e0; border-radius: 8px;" />
+                        </div>
+                        <button onclick="submitFillAnswer()" class="next-btn" style="width: 100%;">提交答案</button>
+                    `;
+                } else if (q.type === '材料分析题') {
+                    optionsHtml = '<div class="options">';
+                    q.subQuestions.forEach((subQ, subIndex) => {
+                        optionsHtml += `
+                            <div style="margin-bottom: 20px;">
+                                <p style="font-weight: bold; margin-bottom: 10px; color: #667eea;">第${subIndex + 1}小问：${subQ.text}</p>
+                                <input type="text" id="material-input-${index}-${subIndex}" placeholder="请输入答案" 
+                                    style="width: 100%; padding: 12px; font-size: 15px; border: 2px solid #e0e0e0; border-radius: 8px;" />
+                            </div>
+                        `;
+                    });
+                    optionsHtml += '</div>';
+                    optionsHtml += `<button onclick="submitMaterialAnswer(${q.subQuestions.length})" class="next-btn" style="width: 100%;">提交答案</button>`;
+                }
+                
+                questionDiv.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-type">${q.type}</span>
+                        <div class="question-difficulty">
+                            <span>难度：</span>
+                            <span class="stars">${difficultyStars}</span>
+                        </div>
+                    </div>
+                    <div class="question-text">${q.text}</div>
+                    ${optionsHtml}
+                    <div class="feedback" id="feedback-${index}">
+                        <div class="feedback-title" id="feedback-title-${index}"></div>
+                        <div class="knowledge-card">
+                            <div class="knowledge-item"><strong>📚 考点：</strong>${q.knowledge.考点}</div>
+                            <div class="knowledge-item"><strong>📖 出处：</strong>${q.knowledge.出处}</div>
+                            <div class="knowledge-item"><strong>💡 关键记忆：</strong>${q.knowledge.关键记忆}</div>
+                            <div class="knowledge-item"><strong>⚠️ 易错提醒：</strong>${q.knowledge.易错提醒}</div>
+                            <div class="knowledge-item"><strong>🔗 关联知识：</strong>${q.knowledge.关联知识}</div>
+                        </div>
+                    </div>
+                    <div class="hint-section" id="hint-${index}">
+                        <div class="hint-title">💡 提示（将扣除部分分数）：</div>
+                        <div class="hint-content" id="hint-content-${index}"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="hint-btn" onclick="showHint(${index})" id="hint-btn-${index}">💡 使用提示</button>
+                        <button class="next-btn" onclick="nextQuestion()" id="next-btn-${index}" disabled>下一题</button>
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
             });
+            
+            updateProgress();
         }
-        document.getElementById('hints').innerHTML = '';
-        document.getElementById('hints').classList.remove('show');
-        document.getElementById('feedback').classList.remove('show');
-        document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('hintBtn').style.display = 'inline-block';
-        updateStats();
-    }
-    
-    function checkAnswer(selected) {
-        const q = quizData.questions[currentIdx];
-        const opts = document.querySelectorAll('.option');
-        opts.forEach((opt, i) => {
-            opt.style.pointerEvents = 'none';
-            if (opt.textContent[0] === q.answer) opt.classList.add('correct');
-            else if (opt.textContent[0] === selected && selected !== q.answer) opt.classList.add('wrong');
-        });
-        const isCorrect = selected === q.answer;
-        if (isCorrect) {
-            correct++;
-            streak++;
-            const points = Math.max(5, 10 - hintCount * 3);
-            score += points;
-            document.getElementById('fbTitle').innerHTML = '✅ 回答正确！+' + points + '分';
-            document.getElementById('fbTitle').className = 'feedback-title correct';
-        } else {
-            streak = 0;
-            wrongList.push({q: q.text, a: q.options.find(o => o[0] === q.answer)});
-            document.getElementById('fbTitle').innerHTML = '❌ 回答错误';
-            document.getElementById('fbTitle').className = 'feedback-title wrong';
-        }
-        document.getElementById('kbCard').innerHTML = '<h4>📚 知识点卡片</h4><p>' + q.knowledge.content + '</p>';
-        document.getElementById('feedback').classList.add('show');
-        document.getElementById('nextBtn').style.display = 'inline-block';
-        document.getElementById('hintBtn').style.display = 'none';
-        updateStats();
-    }
-    
-    document.getElementById('nextBtn').onclick = () => {
-        currentIdx++;
-        hintCount = 0;
-        if (currentIdx >= quizData.questions.length) showResult();
-        else renderQuestion();
-    };
-    
-    document.getElementById('hintBtn').onclick = () => {
-        const q = quizData.questions[currentIdx];
-        const hintsDiv = document.getElementById('hints');
-        if (hintCount < q.hints.length) {
-            hintsDiv.innerHTML += '<div class="hint-item">💡 ' + q.hints[hintCount] + '</div>';
-            hintsDiv.classList.add('show');
-            hintCount++;
-            score = Math.max(0, score - 10);
+        
+        function selectOption(element, option) {
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const feedback = document.getElementById(`feedback-${currentQuestionIndex}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${currentQuestionIndex}`);
+            const nextBtn = document.getElementById(`next-btn-${currentQuestionIndex}`);
+            
+            if (option === currentQuestion.answer) {
+                element.classList.add('correct');
+                feedback.className = 'feedback correct';
+                feedbackTitle.className = 'feedback-title correct';
+                feedbackTitle.innerHTML = '✅ 回答正确！';
+                
+                let hintCount = parseInt(element.dataset.hints || '0');
+                let pointsEarned = 10 - hintCount * 3;
+                if (pointsEarned < 1) pointsEarned = 1;
+                
+                score += pointsEarned;
+                correctCount++;
+                streak++;
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, true);
+                
+                if (streak >= 3) {
+                    showCelebration();
+                }
+            } else {
+                element.classList.add('incorrect');
+                options.forEach(opt => {
+                    if (opt.dataset.option === currentQuestion.answer) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.className = 'feedback incorrect';
+                feedbackTitle.className = 'feedback-title incorrect';
+                feedbackTitle.innerHTML = '❌ 回答错误';
+                
+                streak = 0;
+                wrongQuestions.push(currentQuestionIndex + 1);
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, false);
+            }
+            
+            nextBtn.disabled = false;
             updateStats();
         }
-    };
-    
-    function updateStats() {
-        document.getElementById('current').textContent = currentIdx + 1;
-        document.getElementById('correct').textContent = correct;
-        document.getElementById('score').textContent = score;
-        document.getElementById('streak').textContent = streak;
-        document.getElementById('progress').style.width = ((currentIdx) / quizData.questions.length * 100) + '%';
-    }
-    
-    function showResult() {
-        document.getElementById('questionArea').style.display = 'none';
-        document.getElementById('feedback').style.display = 'none';
-        document.getElementById('scorePanel').classList.add('show');
-        document.getElementById('finalScore').textContent = score;
-        const total = quizData.questions.length * 10;
-        const rate = Math.round(correct / quizData.questions.length * 100);
-        document.getElementById('scoreDetail').innerHTML = '<p>正确率：<strong>' + rate + '%</strong> (' + correct + '/' + quizData.questions.length + ')</p><p>最高连击：<strong>' + streak + '</strong></p>';
-        if (wrongList.length > 0) {
-            let html = '<h3>错题回顾</h3>';
-            wrongList.forEach(w => {
-                html += '<div class="wrong-item"><strong>题目：</strong>' + w.q + '<br><strong>答案：</strong>' + w.a + '</div>';
-            });
-            document.getElementById('wrongReview').innerHTML = html;
+        
+        function submitFillAnswer() {
+            const input = document.getElementById(`fill-input-${currentQuestionIndex}`);
+            const userAnswer = input.value.trim();
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            const nextBtn = document.getElementById(`next-btn-${currentQuestionIndex}`);
+            const feedback = document.getElementById(`feedback-${currentQuestionIndex}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${currentQuestionIndex}`);
+            
+            if (!userAnswer) {
+                alert('请先填写答案！');
+                return;
+            }
+            
+            input.disabled = true;
+            
+            if (userAnswer === currentQuestion.answer) {
+                feedback.className = 'feedback correct';
+                feedbackTitle.className = 'feedback-title correct';
+                feedbackTitle.innerHTML = '✅ 回答正确！';
+                
+                let hintCount = parseInt(input.dataset.hints || '0');
+                let pointsEarned = 10 - hintCount * 3;
+                if (pointsEarned < 1) pointsEarned = 1;
+                
+                score += pointsEarned;
+                correctCount++;
+                streak++;
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, true);
+                
+                if (streak >= 3) {
+                    showCelebration();
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackTitle.className = 'feedback-title incorrect';
+                feedbackTitle.innerHTML = '❌ 回答错误';
+                
+                streak = 0;
+                wrongQuestions.push(currentQuestionIndex + 1);
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, false);
+            }
+            
+            nextBtn.disabled = false;
+            updateStats();
         }
-    }
-    
-    renderQuestion();
+        
+        function submitMaterialAnswer(subCount) {
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            const feedback = document.getElementById(`feedback-${currentQuestionIndex}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${currentQuestionIndex}`);
+            const nextBtn = document.getElementById(`next-btn-${currentQuestionIndex}`);
+            
+            let allCorrect = true;
+            let correctSubCount = 0;
+            
+            for (let i = 0; i < subCount; i++) {
+                const input = document.getElementById(`material-input-${currentQuestionIndex}-${i}`);
+                const userAnswer = input.value.trim();
+                const subQuestion = currentQuestion.subQuestions[i];
+                
+                input.disabled = true;
+                
+                if (userAnswer === subQuestion.answer) {
+                    correctSubCount++;
+                } else {
+                    allCorrect = false;
+                }
+            }
+            
+            if (allCorrect) {
+                feedback.className = 'feedback correct';
+                feedbackTitle.className = 'feedback-title correct';
+                feedbackTitle.innerHTML = '✅ 全部正确！';
+                
+                score += 10;
+                correctCount++;
+                streak++;
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, true);
+                
+                if (streak >= 3) {
+                    showCelebration();
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackTitle.className = 'feedback-title incorrect';
+                feedbackTitle.innerHTML = `⚠️ 答对${correctSubCount}/${subCount}小问`;
+                
+                streak = 0;
+                wrongQuestions.push(currentQuestionIndex + 1);
+                
+                trackKnowledgePoint(currentQuestion.knowledge.考点, false);
+            }
+            
+            nextBtn.disabled = false;
+            updateStats();
+        }
+        
+        function showHint(questionIndex) {
+            const question = quizData.questions[questionIndex];
+            const hintSection = document.getElementById(`hint-${questionIndex}`);
+            const hintContent = document.getElementById(`hint-content-${questionIndex}`);
+            const hintBtn = document.getElementById(`hint-btn-${questionIndex}`);
+            const currentElement = document.querySelector(`#question-${questionIndex} .option.selected, #fill-input-${questionIndex}, #material-input-${questionIndex}-0`);
+            
+            if (!question.hints || question.hints.length === 0) {
+                alert('本题没有提示哦~');
+                return;
+            }
+            
+            let currentHintIndex = parseInt(hintSection.dataset.currentHint || '0');
+            
+            if (currentHintIndex < question.hints.length) {
+                hintSection.classList.add('show');
+                hintContent.textContent = question.hints[currentHintIndex];
+                hintSection.dataset.currentHint = currentHintIndex + 1;
+                
+                if (currentElement) {
+                    currentElement.dataset.hints = currentHintIndex + 1;
+                }
+                
+                if (currentHintIndex + 1 >= question.hints.length) {
+                    hintBtn.disabled = true;
+                    hintBtn.textContent = '提示已用完';
+                }
+            }
+        }
+        
+        function nextQuestion() {
+            const currentQuestionEl = document.getElementById(`question-${currentQuestionIndex}`);
+            currentQuestionEl.classList.remove('active');
+            
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizData.questions.length) {
+                const nextQuestionEl = document.getElementById(`question-${currentQuestionIndex}`);
+                nextQuestionEl.classList.add('active');
+                updateProgress();
+            } else {
+                showResult();
+            }
+        }
+        
+        function updateProgress() {
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+        
+        function updateStats() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('correctValue').textContent = correctCount;
+            document.getElementById('streakValue').textContent = streak;
+        }
+        
+        function trackKnowledgePoint(point, isCorrect) {
+            if (!knowledgePoints[point]) {
+                knowledgePoints[point] = { correct: 0, wrong: 0 };
+            }
+            if (isCorrect) {
+                knowledgePoints[point].correct++;
+            } else {
+                knowledgePoints[point].wrong++;
+            }
+        }
+        
+        function showCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.classList.add('show');
+            
+            const colors = ['#f093fb', '#f5576c', '#667eea', '#764ba2', '#4facfe', '#43e97b'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 10 + 5}px;
+                    height: ${Math.random() * 10 + 5}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    left: ${Math.random() * 100}%;
+                    top: -10px;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    animation: fall ${Math.random() * 3 + 2}s linear forwards;
+                    opacity: ${Math.random() * 0.5 + 0.5};
+                `;
+                celebration.appendChild(confetti);
+            }
+            
+            setTimeout(() => {
+                celebration.classList.remove('show');
+                celebration.innerHTML = '';
+            }, 3000);
+        }
+        
+        function showResult() {
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('questionContainer').style.display = 'none';
+            
+            const resultScreen = document.getElementById('resultScreen');
+            resultScreen.classList.add('show');
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalCorrect').textContent = `${correctCount}/${quizData.questions.length}`;
+            
+            const accuracy = Math.round((correctCount / quizData.questions.length) * 100);
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            
+            const weaknessList = document.getElementById('weaknessList');
+            weaknessList.innerHTML = '';
+            
+            const weakPoints = Object.entries(knowledgePoints)
+                .filter(([_, stats]) => stats.wrong > 0)
+                .sort((a, b) => b[1].wrong - a[1].wrong);
+            
+            if (weakPoints.length > 0) {
+                document.getElementById('weaknessSection').style.display = 'block';
+                weakPoints.forEach(([point, stats]) => {
+                    const li = document.createElement('li');
+                    li.textContent = `${point}（错误${stats.wrong}次）`;
+                    weaknessList.appendChild(li);
+                });
+            } else {
+                document.getElementById('weaknessSection').style.display = 'none';
+            }
+            
+            if (correctCount === quizData.questions.length) {
+                showCelebration();
+            }
+        }
+        
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            correctCount = 0;
+            streak = 0;
+            wrongQuestions = [];
+            knowledgePoints = {};
+            
+            document.getElementById('progressBar').style.display = 'flex';
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('resultScreen').classList.remove('show');
+            
+            initQuiz();
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= 'A' && e.key <= 'D') {
+                const currentQuestionEl = document.getElementById(`question-${currentQuestionIndex}`);
+                const option = currentQuestionEl.querySelector(`.option[data-option="${e.key}"]`);
+                if (option && !option.parentElement.querySelector('.correct, .incorrect')) {
+                    selectOption(option, e.key);
+                }
+            }
+            if (e.key === 'Enter') {
+                const nextBtn = document.getElementById(`next-btn-${currentQuestionIndex}`);
+                if (nextBtn && !nextBtn.disabled) {
+                    nextQuestion();
+                }
+            }
+        });
+        
+        initQuiz();
     </script>
+    
+    <style>
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
 </body>
 </html>
