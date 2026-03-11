@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理专项练习 - 弹簧与弹力</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        .progress-text {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .question-card.active {
+            display: block;
+        }
+        .question-number {
+            background: #667eea;
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .options {
+            list-style: none;
+        }
+        .option {
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            display: none;
+        }
+        .feedback.incorrect {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .feedback-text {
+            line-height: 1.6;
+            color: #333;
+        }
+        .btn {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+        .score-display {
+            font-size: 48px;
+            color: #667eea;
+            margin: 30px 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .stat-number {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .knowledge-point {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #ff9800;
+        }
+        .knowledge-title {
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 物理专项练习 - 弹簧与弹力</h1>
+        <p class="subtitle">针对薄弱点：图像读数 | 弹力方向 | 双弹簧模型</p>
+        
+        <div id="quiz-screen">
+            <div class="progress-text">第 <span id="current-q">1</span> 题 / 共 10 题</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            
+            <!-- 题目容器 -->
+            <div id="questions-container"></div>
+            
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+        </div>
+        
+        <div id="result-screen" class="result-screen">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-display">得分：<span id="final-score">0</span>/100</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="correct-count">0</div>
+                    <div class="stat-label">正确题数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">准确率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="time-taken">0</div>
+                    <div class="stat-label">用时 (秒)</div>
+                </div>
+            </div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 1,
+                text: "一根弹簧原长为10cm，当受到5N的拉力时，长度变为12cm。如果受到10N的拉力，弹簧的长度为多少？（在弹性限度内）",
+                options: ["14cm", "15cm", "20cm", "24cm"],
+                correct: 0,
+                feedback: "根据胡克定律F=kΔx，5N拉力伸长2cm，则10N拉力伸长4cm，总长度=10+4=14cm",
+                knowledge: "胡克定律：F=kΔx，伸长量与拉力成正比"
+            },
+            {
+                number: 2,
+                text: "关于弹簧的L-F图像（L为总长度，F为拉力），下列说法正确的是：",
+                options: ["图像过原点", "横轴截距表示弹簧原长", "纵轴截距表示弹簧原长", "图像斜率表示弹簧原长"],
+                correct: 1,
+                feedback: "L-F图像中，当F=0时L的值就是原长，即横轴截距（L轴截距）表示原长",
+                knowledge: "L-F图像解读：F=0时的L值为原长，斜率表示1/k"
+            },
+            {
+                number: 3,
+                text: "某弹簧的L-F图像如图所示，当F=0时L=8cm，当F=6N时L=14cm。则该弹簧的劲度系数k为：",
+                options: ["50N/m", "100N/m", "150N/m", "200N/m"],
+                correct: 1,
+                feedback: "Δx=14-8=6cm=0.06m，F=6N，k=F/Δx=6/0.06=100N/m",
+                knowledge: "劲度系数计算：k=F/Δx，注意单位换算（cm→m）"
+            },
+            {
+                number: 4,
+                text: "如图所示，弹簧一端固定在墙上，另一端受水平向右的拉力F。关于弹簧对墙的弹力方向，正确的是：",
+                options: ["水平向右", "水平向左", "竖直向上", "竖直向下"],
+                correct: 1,
+                feedback: "弹簧被拉伸时，弹力指向恢复原长的方向。弹簧对墙的弹力向左（拉墙）",
+                knowledge: "弹力方向：总是指向恢复原长的方向，拉伸时向内拉，压缩时向外推"
+            },
+            {
+                number: 5,
+                text: "一个弹簧振子在水平面上做简谐振动，O为平衡位置，A、B为最大位移处。小球从A运动到O的过程中，弹力：",
+                options: ["方向向右，大小变大", "方向向右，大小变小", "方向向左，大小变大", "方向向左，大小变小"],
+                correct: 1,
+                feedback: "从A到O，弹簧从压缩状态恢复，弹力向右（推小球），压缩量减小所以弹力变小",
+                knowledge: "弹簧振子：压缩时弹力向外推，伸长量/压缩量越大弹力越大"
+            },
+            {
+                number: 6,
+                text: "接上题，小球从O运动到B的过程中，弹力：",
+                options: ["方向向右，大小变大", "方向向右，大小变小", "方向向左，大小变大", "方向向左，大小变小"],
+                correct: 2,
+                feedback: "从O到B，弹簧被拉伸，弹力向左（拉小球回平衡位置），伸长量增大所以弹力变大",
+                knowledge: "弹簧振子：拉伸时弹力向内拉，指向平衡位置"
+            },
+            {
+                number: 7,
+                text: "如图所示，甲弹簧一端固定，另一端受拉力F；乙弹簧两端同时受拉力F。两弹簧完全相同，则：",
+                options: ["甲的伸长量是乙的2倍", "乙的伸长量是甲的2倍", "两弹簧伸长量相同", "无法比较"],
+                correct: 2,
+                feedback: "两种情况下弹簧内部受力都是F，所以伸长量相同。一端固定vs两端受力效果一样",
+                knowledge: "弹簧受力分析：一端固定另一端受F，与两端同时受F，弹簧受力都是F"
+            },
+            {
+                number: 8,
+                text: "某同学做弹簧实验，记录数据如下：F=0N时L=10cm，F=2N时L=11cm，F=4N时L=12cm。当L=13cm时，F应为：",
+                options: ["5N", "6N", "7N", "8N"],
+                correct: 1,
+                feedback: "每增加2N，伸长1cm。L=13cm时伸长3cm，所以F=6N",
+                knowledge: "弹簧数据规律：找出ΔF与Δx的比例关系，线性外推"
+            },
+            {
+                number: 9,
+                text: "双弹簧系统中，大弹簧k₁=10N/m，小弹簧k₂=20N/m。当压缩量Δl=0.1m时，只有大弹簧工作；当Δl=0.3m时，两弹簧都工作。此时总弹力为：",
+                options: ["3N", "5N", "7N", "9N"],
+                correct: 2,
+                feedback: "Δl=0.3m时，大弹簧弹力F₁=10×0.3=3N；小弹簧压缩量0.2m，F₂=20×0.2=4N；总弹力=3+4=7N",
+                knowledge: "双弹簧模型：分段分析，找临界点，总弹力=各弹簧弹力之和"
+            },
+            {
+                number: 10,
+                text: "某双弹簧的F-Δl图像在Δl=0.2m处斜率发生变化，之前斜率为10N/m，之后斜率为30N/m。则小弹簧的劲度系数为：",
+                options: ["10N/m", "20N/m", "30N/m", "40N/m"],
+                correct: 1,
+                feedback: "斜率变化说明小弹簧开始工作。k总=k₁+k₂，所以k₂=30-10=20N/m",
+                knowledge: "F-Δl图像斜率表示总劲度系数，双弹簧并联时k总=k₁+k₂"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let startTime = Date.now();
+
+        function renderQuestion() {
+            const container = document.getElementById('questions-container');
+            const q = questions[currentQuestion];
+            
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="question-number">第${q.number}题</div>
+                    <div class="question-text">${q.text}</div>
+                    <ul class="options">
+                        ${q.options.map((opt, i) => `
+                            <li class="option" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${opt}</li>
+                        `).join('')}
+                    </ul>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+            
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('progress-fill').style.width = `${(currentQuestion / questions.length) * 100}%`;
+            document.getElementById('next-btn').disabled = true;
+            selectedOption = null;
+        }
+
+        function selectOption(index) {
+            if (document.getElementById('feedback').style.display === 'block') return;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            
+            selectedOption = index;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const options = document.querySelectorAll('.option');
+            
+            // 显示反馈
+            options.forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                else if (i === selectedOption && i !== q.correct) opt.classList.add('incorrect');
+            });
+            
+            if (selectedOption === q.correct) {
+                score += 10;
+                feedback.className = 'feedback';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ 正确！</div>
+                    <div class="feedback-text">${q.feedback}</div>
+                    <div class="knowledge-point">
+                        <div class="knowledge-title">📌 知识点</div>
+                        ${q.knowledge}
+                    </div>
+                `;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `
+                    <div class="feedback-title">❌ 错误</div>
+                    <div class="feedback-text">${q.feedback}</div>
+                    <div class="knowledge-point">
+                        <div class="knowledge-title">📌 知识点</div>
+                        ${q.knowledge}
+                    </div>
+                `;
+            }
+            
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 3000);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+            const accuracy = (score / 100);
+            
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('correct-count').textContent = score / 10;
+            document.getElementById('accuracy').textContent = `${accuracy * 100}%`;
+            document.getElementById('time-taken').textContent = timeTaken;
+        }
+
+        // 初始化
+        renderQuestion();
+    </script>
+</body>
+</html>

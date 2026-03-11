@@ -100,6 +100,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|---------|
+| 八年级 | 弹簧与弹力专项（图像读数 + 弹力方向 + 双弹簧） | 2026-03-11 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/physics-spring-practice.html) |
 | 八年级 | 下册第一章：力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E4%B8%8B%E5%86%8C%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%8A%9B-20260307.html) |
 | 八年级 | 下册第二章：运动和力综合 | 2026-03-08 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E8%BF%90%E5%8A%A8%E5%92%8C%E5%8A%9B%E7%BB%BC%E5%90%88-20260308.html) |
 
