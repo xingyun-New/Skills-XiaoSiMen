@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次根式 & 绝对值 探索器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .score-board {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .score-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .canvas-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 300px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .control-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .value-display {
+            text-align: center;
+            font-size: 24px;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .explanation {
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .explanation h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .explanation p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .option-btn {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option-btn.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+        
+        .achievement-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .achievement-popup h2 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-popup p {
+            color: #555;
+            font-size: 18px;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f00;
+            animation: fall 3s linear forwards;
+            z-index: 999;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card h4 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .feature-card p {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .formula-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .tip-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔍 二次根式 & 绝对值 探索器</h1>
+            <div class="score-board">
+                <div class="score-item">得分：<span id="score">0</span></div>
+                <div class="score-item">连对：<span id="streak">0</span>🔥</div>
+                <div class="score-item">正确：<span id="correct">0</span>/10</div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Exploration -->
+            <div class="panel">
+                <h2>🎮 互动探索区</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('sqrt')">二次根式</button>
+                    <button class="tab-btn" onclick="switchTab('abs')">绝对值</button>
+                </div>
+                
+                <!-- 二次根式探索 -->
+                <div id="sqrt-tab" class="tab-content active">
+                    <div class="canvas-container">
+                        <canvas id="sqrtCanvas"></canvas>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>调整被开方数 a:</label>
+                            <input type="range" id="sqrtSlider" min="0" max="100" value="16" step="1">
+                            <div class="value-display">a = <span id="sqrtValue">16</span></div>
+                            <div class="value-display" style="font-size: 20px; color: #764ba2;">
+                                √<span id="sqrtValue2">16</span> = <span id="sqrtResult">4</span>
+                            </div>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h3>💡 二次根式的特点</h3>
+                            <p><strong>定义:</strong> 形如 √a (a≥0) 的式子叫做二次根式</p>
+                            <p><strong>特点:</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                <li>被开方数 a 必须是非负数 (a ≥ 0)</li>
+                                <li>结果也是非负数 (√a ≥ 0)</li>
+                                <li>√a 表示 a 的<strong>算术平方根</strong>(正的那个)</li>
+                            </ul>
+                            <div class="formula-box">
+                                √a × √a = a (a ≥ 0)
+                            </div>
+                            <div class="tip-box">
+                                💡 <strong>记忆技巧:</strong> 想象正方形的面积和边长关系！如果面积是 a，边长就是 √a
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 绝对值探索 -->
+                <div id="abs-tab" class="tab-content">
+                    <div class="canvas-container">
+                        <canvas id="absCanvas"></canvas>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>调整数值 x:</label>
+                            <input type="range" id="absSlider" min="-50" max="50" value="5" step="1">
+                            <div class="value-display">x = <span id="absValue">5</span></div>
+                            <div class="value-display" style="font-size: 20px; color: #764ba2;">
+                                |<span id="absValue2">5</span>| = <span id="absResult">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="explanation">
+                            <h3>💡 绝对值的定义</h3>
+                            <p><strong>几何意义:</strong> 数轴上一个数到原点的<strong>距离</strong></p>
+                            <p><strong>代数定义:</strong></p>
+                            <div class="formula-box" style="font-size: 16px;">
+                                |a| = { a (a≥0), -a (a<0) }
+                            </div>
+                            <p><strong>特点:</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                <li>绝对值<strong>永远是非负数</strong> (|a| ≥ 0)</li>
+                                <li>正数的绝对值是它本身</li>
+                                <li>负数的绝对值是它的相反数</li>
+                                <li>0 的绝对值是 0</li>
+                            </ul>
+                            <div class="tip-box">
+                                💡 <strong>记忆技巧:</strong> 绝对值就是"去掉符号"！不管正负，都变成正的！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Learning & Practice -->
+            <div class="panel">
+                <h2>📚 学习与练习</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchLearnTab('learn')">💡 学习</button>
+                    <button class="tab-btn" onclick="switchLearnTab('practice')">✏️ 练习</button>
+                    <button class="tab-btn" onclick="switchLearnTab('tips')">⭐ 技巧</button>
+                </div>
+                
+                <!-- 学习内容 -->
+                <div id="learn-tab" class="tab-content active">
+                    <div class="feature-card">
+                        <h4>📖 二次根式核心知识点</h4>
+                        <p>1. √a 中 a 必须 ≥ 0 (负数不能开平方)</p>
+                        <p>2. √a 的结果 ≥ 0 (算术平方根是正的)</p>
+                        <p>3. (√a)² = a (a ≥ 0)</p>
+                        <p>4. √(a²) = |a| (注意这个等于绝对值!)</p>
+                    </div>
+                    
+                    <div class="feature-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                        <h4>📖 绝对值核心知识点</h4>
+                        <p>1. |a| ≥ 0 (绝对值永远非负)</p>
+                        <p>2. |a| = a (当 a ≥ 0)</p>
+                        <p>3. |a| = -a (当 a < 0)</p>
+                        <p>4. |a| 表示 a 到原点的距离</p>
+                    </div>
+                    
+                    <div class="tip-box">
+                        🔗 <strong>重要联系:</strong> √(a²) = |a| <br>
+                        例如：√((-3)²) = √9 = 3 = |-3|
+                    </div>
+                </div>
+                
+                <!-- 练习题目 -->
+                <div id="practice-tab" class="tab-content">
+                    <div id="question-container">
+                        <!-- 题目会动态加载 -->
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="nav-btn" id="prevBtn" onclick="prevQuestion()" disabled>⬅️ 上一题</button>
+                        <button class="nav-btn" id="nextBtn" onclick="nextQuestion()">下一题 ➡️</button>
+                    </div>
+                </div>
+                
+                <!-- 技巧总结 -->
+                <div id="tips-tab" class="tab-content">
+                    <div class="feature-card">
+                        <h4>🎯 二次根式记忆口诀</h4>
+                        <p>"被开方数要非负，结果也是非负数"</p>
+                        <p>"平方再开方，绝对值来帮"</p>
+                    </div>
+                    
+                    <div class="feature-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                        <h4>🎯 绝对值记忆口诀</h4>
+                        <p>"正数不变，负数变号，零还是零"</p>
+                        <p>"距离永远正，符号都去掉"</p>
+                    </div>
+                    
+                    <div class="tip-box">
+                        ⚠️ <strong>易错点提醒:</strong><br>
+                        1. √a² ≠ a (应该等于 |a|)<br>
+                        2. √(-a) 无意义 (a>0 时)<br>
+                        3. |-5| = 5 (不是 -5!)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Achievement Popup -->
+    <div id="achievementPopup" class="achievement-popup">
+        <h2 id="achievementTitle">🎉 太棒了!</h2>
+        <p id="achievementMessage">你已经完成了所有练习!</p>
+    </div>
+    
+    <script>
+        // ==================== 游戏状态 ====================
+        let score = 0;
+        let streak = 0;
+        let correctCount = 0;
+        let currentQuestionIndex = 0;
+        let answeredQuestions = [];
+        
+        // ==================== 题目数据 ====================
+        const questions = [
+            {
+                question: "√16 的值是多少？",
+                options: ["A. 4", "B. -4", "C. ±4", "D. 8"],
+                correct: 0,
+                explanation: "√16 表示 16 的算术平方根，结果是正数 4。注意√只取正值!"
+            },
+            {
+                question: "|−5| 的值是多少？",
+                options: ["A. -5", "B. 5", "C. 0", "D. ±5"],
+                correct: 1,
+                explanation: "绝对值表示距离，|-5| = 5。负数的绝对值是它的相反数!"
+            },
+            {
+                question: "下列哪个式子有意义？",
+                options: ["A. √(-4)", "B. √0", "C. √(-1)", "D. √(-9)"],
+                correct: 1,
+                explanation: "二次根式的被开方数必须是非负数，只有√0 有意义，结果是 0。"
+            },
+            {
+                question: "√(3²) 等于多少？",
+                options: ["A. 3", "B. -3", "C. ±3", "D. 9"],
+                correct: 0,
+                explanation: "√(3²) = √9 = 3。一般地，√(a²) = |a|，当 a=3 时，|3|=3。"
+            },
+            {
+                question: "|−3.5| 等于多少？",
+                options: ["A. -3.5", "B. 3.5", "C. 0", "D. -7"],
+                correct: 1,
+                explanation: "负数的绝对值是它的相反数，|-3.5| = 3.5。"
+            },
+            {
+                question: "如果√x = 4，那么 x 等于多少？",
+                options: ["A. 2", "B. 8", "C. 16", "D. ±16"],
+                correct: 2,
+                explanation: "√x = 4，两边平方得 x = 4² = 16。"
+            },
+            {
+                question: "下列正确的是？",
+                options: ["A. √(-4) = -2", "B. |−3| = -3", "C. √9 = 3", "D. |0| = -1"],
+                correct: 2,
+                explanation: "只有 C 正确。A 无意义 (负数不能开平方)，B 应该是 3，D 应该是 0。"
+            },
+            {
+                question: "√((-5)²) 等于多少？",
+                options: ["A. -5", "B. 5", "C. ±5", "D. 25"],
+                correct: 1,
+                explanation: "√((-5)²) = √25 = 5。记住公式：√(a²) = |a|，所以结果是 |-5| = 5。"
+            },
+            {
+                question: "如果|a| = 7，那么 a 可能是？",
+                options: ["A. 只有 7", "B. 只有 -7", "C. 7 或 -7", "D. 0"],
+                correct: 2,
+                explanation: "|a| = 7 表示 a 到原点距离是 7，所以 a = 7 或 a = -7。"
+            },
+            {
+                question: "下列哪个结论正确？",
+                options: ["A. √a² = a", "B. √a² = |a|", "C. √a² = -a", "D. √a² = ±a"],
+                correct: 1,
+                explanation: "正确答案是 B。√a² = |a| 是重要公式！例如√((-3)²) = 3 = |-3|。"
+            }
+        ];
+        
+        // ==================== 画布初始化 ====================
+        let sqrtCanvas, sqrtCtx, absCanvas, absCtx;
+        
+        function initCanvases() {
+            sqrtCanvas = document.getElementById('sqrtCanvas');
+            sqrtCtx = sqrtCanvas.getContext('2d');
+            absCanvas = document.getElementById('absCanvas');
+            absCtx = absCanvas.getContext('2d');
+            
+            // 设置画布实际大小
+            sqrtCanvas.width = sqrtCanvas.offsetWidth;
+            sqrtCanvas.height = sqrtCanvas.offsetHeight;
+            absCanvas.width = absCanvas.offsetWidth;
+            absCanvas.height = absCanvas.offsetHeight;
+            
+            drawSqrtVisualization();
+            drawAbsVisualization();
+        }
+        
+        // ==================== 二次根式可视化 ====================
+        function drawSqrtVisualization() {
+            const a = parseInt(document.getElementById('sqrtSlider').value);
+            const result = Math.sqrt(a);
+            
+            sqrtCtx.clearRect(0, 0, sqrtCanvas.width, sqrtCanvas.height);
+            
+            const centerX = sqrtCanvas.width / 2;
+            const centerY = sqrtCanvas.height / 2;
+            const gridSize = 20;
+            
+            // 画网格
+            sqrtCtx.strokeStyle = '#e0e0e0';
+            sqrtCtx.lineWidth = 1;
+            for (let i = 0; i <= sqrtCanvas.width; i += gridSize) {
+                sqrtCtx.beginPath();
+                sqrtCtx.moveTo(i, 0);
+                sqrtCtx.lineTo(i, sqrtCanvas.height);
+                sqrtCtx.stroke();
+            }
+            for (let i = 0; i <= sqrtCanvas.height; i += gridSize) {
+                sqrtCtx.beginPath();
+                sqrtCtx.moveTo(0, i);
+                sqrtCtx.lineTo(sqrtCanvas.width, i);
+                sqrtCtx.stroke();
+            }
+            
+            // 画坐标轴
+            sqrtCtx.strokeStyle = '#333';
+            sqrtCtx.lineWidth = 2;
+            sqrtCtx.beginPath();
+            sqrtCtx.moveTo(0, centerY);
+            sqrtCtx.lineTo(sqrtCanvas.width, centerY);
+            sqrtCtx.stroke();
+            
+            sqrtCtx.beginPath();
+            sqrtCtx.moveTo(centerX, 0);
+            sqrtCtx.lineTo(centerX, sqrtCanvas.height);
+            sqrtCtx.stroke();
+            
+            // 画正方形表示面积 a
+            const squareSize = Math.min(result * gridSize, 150);
+            const squareX = centerX - squareSize / 2;
+            const squareY = centerY - squareSize / 2;
+            
+            sqrtCtx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+            sqrtCtx.fillRect(squareX, squareY, squareSize, squareSize);
+            
+            sqrtCtx.strokeStyle = '#667eea';
+            sqrtCtx.lineWidth = 3;
+            sqrtCtx.strokeRect(squareX, squareY, squareSize, squareSize);
+            
+            // 标注边长
+            sqrtCtx.fillStyle = '#667eea';
+            sqrtCtx.font = 'bold 16px Arial';
+            sqrtCtx.textAlign = 'center';
+            sqrtCtx.fillText(`边长 = √${a} = ${result.toFixed(2)}`, centerX, squareY - 10);
+            
+            // 标注面积
+            sqrtCtx.fillStyle = '#764ba2';
+            sqrtCtx.fillText(`面积 = ${a}`, centerX, centerY + 40);
+            
+            // 画 y = √x 曲线
+            sqrtCtx.strokeStyle = '#e74c3c';
+            sqrtCtx.lineWidth = 2;
+            sqrtCtx.beginPath();
+            for (let x = 0; x <= 100; x++) {
+                const plotX = centerX + x * 3;
+                const plotY = centerY - Math.sqrt(x) * gridSize;
+                if (x === 0) {
+                    sqrtCtx.moveTo(plotX, plotY);
+                } else {
+                    sqrtCtx.lineTo(plotX, plotY);
+                }
+            }
+            sqrtCtx.stroke();
+            
+            // 标注当前点
+            const pointX = centerX + a * 3;
+            const pointY = centerY - result * gridSize;
+            sqrtCtx.fillStyle = '#f59e0b';
+            sqrtCtx.beginPath();
+            sqrtCtx.arc(pointX, pointY, 6, 0, Math.PI * 2);
+            sqrtCtx.fill();
+            
+            sqrtCtx.fillStyle = '#333';
+            sqrtCtx.font = '14px Arial';
+            sqrtCtx.fillText(`(${a}, ${result.toFixed(2)})`, pointX + 10, pointY);
+        }
+        
+        // ==================== 绝对值可视化 ====================
+        function drawAbsVisualization() {
+            const x = parseInt(document.getElementById('absSlider').value);
+            const result = Math.abs(x);
+            
+            absCtx.clearRect(0, 0, absCanvas.width, absCanvas.height);
+            
+            const centerX = absCanvas.width / 2;
+            const centerY = absCanvas.height / 2;
+            const unitSize = 40;
+            
+            // 画数轴
+            absCtx.strokeStyle = '#333';
+            absCtx.lineWidth = 3;
+            absCtx.beginPath();
+            absCtx.moveTo(50, centerY);
+            absCtx.lineTo(absCanvas.width - 50, centerY);
+            absCtx.stroke();
+            
+            // 画箭头
+            absCtx.beginPath();
+            absCtx.moveTo(absCanvas.width - 50, centerY);
+            absCtx.lineTo(absCanvas.width - 60, centerY - 10);
+            absCtx.lineTo(absCanvas.width - 60, centerY + 10);
+            absCtx.closePath();
+            absCtx.fillStyle = '#333';
+            absCtx.fill();
+            
+            // 画刻度
+            absCtx.fillStyle = '#333';
+            absCtx.font = '14px Arial';
+            absCtx.textAlign = 'center';
+            for (let i = -5; i <= 5; i++) {
+                const tickX = centerX + i * unitSize;
+                absCtx.beginPath();
+                absCtx.moveTo(tickX, centerY - 5);
+                absCtx.lineTo(tickX, centerY + 5);
+                absCtx.stroke();
+                absCtx.fillText(i, tickX, centerY + 25);
+            }
+            
+            // 标注原点
+            absCtx.fillStyle = '#667eea';
+            absCtx.font = 'bold 16px Arial';
+            absCtx.fillText('原点 (0)', centerX, centerY - 15);
+            
+            // 画点 x
+            const pointX = centerX + x * unitSize;
+            absCtx.fillStyle = x >= 0 ? '#667eea' : '#e74c3c';
+            absCtx.beginPath();
+            absCtx.arc(pointX, centerY, 8, 0, Math.PI * 2);
+            absCtx.fill();
+            
+            absCtx.fillStyle = '#333';
+            absCtx.font = 'bold 14px Arial';
+            absCtx.fillText(`x = ${x}`, pointX, centerY - 15);
+            
+            // 画距离线 (绝对值)
+            absCtx.strokeStyle = '#f59e0b';
+            absCtx.lineWidth = 4;
+            absCtx.setLineDash([5, 5]);
+            absCtx.beginPath();
+            absCtx.moveTo(centerX, centerY + 40);
+            absCtx.lineTo(pointX, centerY + 40);
+            absCtx.stroke();
+            absCtx.setLineDash([]);
+            
+            // 标注距离
+            absCtx.fillStyle = '#f59e0b';
+            absCtx.font = 'bold 16px Arial';
+            absCtx.fillText(`距离 = |${x}| = ${result}`, (centerX + pointX) / 2, centerY + 65);
+            
+            // 画 y = |x| 图像
+            const graphY = centerY - 80;
+            absCtx.strokeStyle = '#764ba2';
+            absCtx.lineWidth = 2;
+            absCtx.beginPath();
+            for (let px = -5; px <= 5; px++) {
+                const plotX = centerX + px * unitSize * 0.5;
+                const plotY = graphY + Math.abs(px) * 15;
+                if (px === -5) {
+                    absCtx.moveTo(plotX, plotY);
+                } else {
+                    absCtx.lineTo(plotX, plotY);
+                }
+            }
+            absCtx.stroke();
+        }
+        
+        // ==================== 滑块事件 ====================
+        document.getElementById('sqrtSlider').addEventListener('input', function() {
+            const value = this.value;
+            document.getElementById('sqrtValue').textContent = value;
+            document.getElementById('sqrtValue2').textContent = value;
+            document.getElementById('sqrtResult').textContent = Math.sqrt(value).toFixed(2);
+            drawSqrtVisualization();
+        });
+        
+        document.getElementById('absSlider').addEventListener('input', function() {
+            const value = this.value;
+            document.getElementById('absValue').textContent = value;
+            document.getElementById('absValue2').textContent = value;
+            document.getElementById('absResult').textContent = Math.abs(value);
+            drawAbsVisualization();
+        });
+        
+        // ==================== Tab 切换 ====================
+        function switchTab(tab) {
+            document.querySelectorAll('#sqrt-tab, #abs-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tab === 'sqrt') {
+                setTimeout(drawSqrtVisualization, 100);
+            } else {
+                setTimeout(drawAbsVisualization, 100);
+            }
+        }
+        
+        function switchLearnTab(tab) {
+            document.querySelectorAll('#learn-tab, #practice-tab, #tips-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.panel .tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tab === 'practice') {
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+        
+        // ==================== 练习系统 ====================
+        function loadQuestion(index) {
+            const container = document.getElementById('question-container');
+            const q = questions[index];
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-text">第${index + 1}题：${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="checkAnswer(${i})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <div id="feedback${index}" class="feedback"></div>
+                </div>
+            `;
+            
+            // 更新按钮状态
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === questions.length - 1;
+        }
+        
+        function checkAnswer(selectedIndex) {
+            const q = questions[currentQuestionIndex];
+            const feedbackEl = document.getElementById(`feedback${currentQuestionIndex}`);
+            const optionBtns = document.querySelectorAll('.option-btn');
+            
+            // 禁用所有按钮
+            optionBtns.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === q.correct) {
+                // 答对了
+                optionBtns[selectedIndex].classList.add('correct');
+                feedbackEl.className = 'feedback correct';
+                feedbackEl.innerHTML = `<strong>✅ 正确!</strong><br>${q.explanation}`;
+                
+                // 更新分数
+                streak++;
+                correctCount++;
+                score += 10 + streak * 2;
+                
+                updateScoreBoard();
+                
+                // 检查成就
+                if (correctCount === 5) {
+                    showAchievement('🌟 半途成就!', '你已经答对 5 题了，继续加油!');
+                } else if (correctCount === 10) {
+                    showAchievement('🏆 数学大师!', '太厉害了！全部答对!', true);
+                }
+                
+                if (streak >= 5) {
+                    showAchievement('🔥 连击达人!', `连续答对${streak}题!`);
+                }
+            } else {
+                // 答错了
+                optionBtns[selectedIndex].classList.add('wrong');
+                optionBtns[q.correct].classList.add('correct');
+                feedbackEl.className = 'feedback wrong';
+                feedbackEl.innerHTML = `<strong>❌ 错误</strong><br>正确答案：${q.options[q.correct]}<br>${q.explanation}`;
+                
+                // 重置连击
+                streak = 0;
+                updateScoreBoard();
+            }
+            
+            answeredQuestions[currentQuestionIndex] = selectedIndex === q.correct;
+        }
+        
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+        
+        function updateScoreBoard() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+            document.getElementById('correct').textContent = correctCount;
+        }
+        
+        function showAchievement(title, message, isFinal = false) {
+            const popup = document.getElementById('achievementPopup');
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementMessage').textContent = message;
+            
+            popup.classList.add('show');
+            
+            if (isFinal) {
+                createConfetti();
+            }
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+        
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#f59e0b', '#e74c3c'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+        
+        // ==================== 初始化 ====================
+        window.addEventListener('load', function() {
+            initCanvases();
+            loadQuestion(0);
+        });
+        
+        window.addEventListener('resize', function() {
+            sqrtCanvas.width = sqrtCanvas.offsetWidth;
+            sqrtCanvas.height = sqrtCanvas.offsetHeight;
+            absCanvas.width = absCanvas.offsetWidth;
+            absCanvas.height = absCanvas.offsetHeight;
+            drawSqrtVisualization();
+            drawAbsVisualization();
+        });
+    </script>
+</body>
+</html>
