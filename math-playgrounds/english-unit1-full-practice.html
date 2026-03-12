@@ -326,7 +326,8 @@
             nextBtn.className = 'btn';
             nextBtn.style.marginTop = '15px';
             nextBtn.style.background = '#4caf50';
-            nextBtn.textContent = currentQuestion < questions.length - 1 ? '下一题 →' : '查看结果 →';
+            const isLastQuestion = currentQuestion >= questions.length - 1;
+            nextBtn.textContent = isLastQuestion ? '查看结果 →' : '下一题 →';
             nextBtn.onclick = function() {
                 currentQuestion++;
                 selectedOption = null;
@@ -341,7 +342,9 @@
             
             // 禁用提交按钮和输入框
             const submitBtn = optionsContainer.querySelector('.btn');
-            if (submitBtn) submitBtn.disabled = true;
+            if (submitBtn && submitBtn.textContent === '提交答案') {
+                submitBtn.disabled = true;
+            }
             const input = document.getElementById('userInput');
             if (input) input.disabled = true;
         }
