@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/sync.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/sync",
+      "dest": "api/sync.js"
+    }
+  ],
+  "env": {
+    "FLYSITE_APP_TOKEN": "AKF2bHBDVaEfEpsCLggc3mUSnyb",
+    "FLYSITE_TABLE_ID": "tblOy4VZZ5L1baTP",
+    "FLYSITE_APP_ID": "cli_a92481440eb81bb4"
+  }
+}

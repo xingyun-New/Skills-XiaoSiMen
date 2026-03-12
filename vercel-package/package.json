@@ -1,0 +1,16 @@
+{
+  "name": "feishu-sync-api",
+  "version": "1.0.0",
+  "description": "飞书答题记录同步服务",
+  "main": "api/sync.js",
+  "scripts": {
+    "start": "node api/sync.js",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
