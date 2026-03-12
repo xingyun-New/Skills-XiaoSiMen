@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初中英语 Unit 1 - 满分冲刺练习</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .motivation {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .section-title {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title h2 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .question-type {
+            background: #e8f4f8;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .question-content {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .question-content .chinese {
+            color: #666;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        
+        .input-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .input-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .knowledge-point {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #e65100;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+        
+        .result-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+        
+        .result-section.show {
+            display: block;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        .result-message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .result-detail {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .btn-restart {
+            background: #4caf50;
+            margin-top: 10px;
+        }
+        
+        .btn-restart:hover {
+            background: #43a047;
+        }
+        
+        .summary-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .summary-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .summary-list {
+            list-style: none;
+        }
+        
+        .summary-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .summary-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        .tag.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .tag.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 初中英语 Unit 1 - 满分冲刺练习</h1>
+            <p>14 个重点句子 + 核心短语，助你明天考满分！</p>
+            <div class="motivation">
+                🎯 目标：100 分！加油！你可以的！💪
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">总题数</div>
+                    <div class="stat-value" id="totalQuestions">25</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">已答题</div>
+                    <div class="stat-value" id="answeredQuestions">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">正确率</div>
+                    <div class="stat-value" id="accuracy">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <div class="result-message" id="resultMessage">完成练习！</div>
+            <div class="result-detail" id="resultDetail">答对 0 / 25 题</div>
+            <div id="syncStatus" style="margin: 20px 0; padding: 15px; background: #e3f2fd; border-radius: 10px; display: none;">
+                <span id="syncText">📡 正在同步答题记录到飞书...</span>
+            </div>
+            <button class="btn btn-restart" onclick="restartQuiz()">🔄 重新练习</button>
+            
+            <div class="summary-card" id="summaryCard" style="display: none;">
+                <h3>📝 错题回顾</h3>
+                <ul class="summary-list" id="wrongAnswersList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ===== 第一部分：句子默写（14 题）=====
+            {
+                id: 1,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>所有高空中的岁月，都将珍藏在我的记忆里。</strong>",
+                input: true,
+                answer: "All my days up high in the air will be kept in my memory.",
+                knowledge: "keep sth in my memory = 珍藏/记住；被动语态 will be kept"
+            },
+            {
+                id: 2,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>我依然记得自己成为'蜘蛛人'的第一个夏天。</strong>",
+                input: true,
+                answer: "I still remember my first summer as a 'spiderman'.",
+                knowledge: "remember = 记得；spiderman 比喻窗户清洁工"
+            },
+            {
+                id: 3,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>我浑身湿透了。</strong>",
+                input: true,
+                answer: "I was wet all over.",
+                knowledge: "all over = 遍布/处处；wet all over = 浑身湿透"
+            },
+            {
+                id: 4,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>我看着她一点一点地长大。</strong>",
+                input: true,
+                answer: "I watched her grow bit by bit.",
+                knowledge: "bit by bit = 逐渐地；watch sb do sth = 看着某人做某事"
+            },
+            {
+                id: 5,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>擦窗户并不总被认为是份好差事，但我永远不会后悔。</strong>",
+                input: true,
+                answer: "Window cleaning is not always considered a good job, but I'll never regret it.",
+                knowledge: "be considered = 被认为；regret = 后悔"
+            },
+            {
+                id: 6,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>城市因为我们变得更加明亮，而这份工作也会让我们大显身手。</strong>",
+                input: true,
+                answer: "The city shines brighter because of us, and the job will make us shine, too.",
+                knowledge: "shine 双关：发光/出类拔萃；because of = 因为"
+            },
+            {
+                id: 7,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>从捕鼠人到太空旅行导游……</strong>",
+                input: true,
+                answer: "From mouse catcher to space tour guide...",
+                knowledge: "mouse catcher = 捕鼠人；space tour guide = 太空旅行导游"
+            },
+            {
+                id: 8,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>哪些职业将走向消亡，哪些又将应运而生？</strong>",
+                input: true,
+                answer: "Which jobs will soon be history, and which ones are on the way?",
+                knowledge: "be history = 成为历史/消亡；on the way = 兴起/成为趋势；ones 指代 jobs"
+            },
+            {
+                id: 9,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>一些传统职业正逐渐淡出视野。然而，新的职业正在涌现出来，以满足新的需求。</strong>",
+                input: true,
+                answer: "Some traditional jobs are disappearing. However, new ones are springing up to meet new needs.",
+                knowledge: "spring up = 突然出现；meet...needs = 满足...的需求"
+            },
+            {
+                id: 10,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>他们可能很快就会被机器取代。</strong>",
+                input: true,
+                answer: "They may soon be replaced by machines.",
+                knowledge: "be replaced by = 被...取代；replace sth with sth = 用...替代..."
+            },
+            {
+                id: 11,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>嗯，请为我报名太空旅行！</strong>",
+                input: true,
+                answer: "Um, sign me up for a space tour, please!",
+                knowledge: "sign up for = 报名；sign sb up for sth = 为某人报名..."
+            },
+            {
+                id: 12,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>我永远不会后悔这份工作。</strong>",
+                input: true,
+                answer: "I'll never regret this job.",
+                knowledge: "regret = 后悔；never = 永不"
+            },
+            {
+                id: 13,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>新职业正在涌现。</strong>",
+                input: true,
+                answer: "New jobs are springing up.",
+                knowledge: "spring up = 突然出现/涌现"
+            },
+            {
+                id: 14,
+                type: "句子默写",
+                content: "根据中文写出英文句子：<br><strong>这份工作被认为很重要。</strong>",
+                input: true,
+                answer: "This job is considered important.",
+                knowledge: "be considered = 被认为；被动语态"
+            },
+
+            // ===== 第二部分：短语填空（6 题）=====
+            {
+                id: 15,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>The old photos will be ______ ______ ______ ______.（珍藏在我的记忆里）",
+                input: true,
+                answer: "kept in my memory",
+                knowledge: "keep sth in my memory = 珍藏/记住"
+            },
+            {
+                id: 16,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>She is growing ______ ______ ______.（一点一点地）",
+                input: true,
+                answer: "bit by bit",
+                knowledge: "bit by bit = 逐渐地"
+            },
+            {
+                id: 17,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>Many new companies are ______ ______.（涌现）",
+                input: true,
+                answer: "springing up",
+                knowledge: "spring up = 突然出现/涌现"
+            },
+            {
+                id: 18,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>We should ______ ______ ______.（满足需求）",
+                input: true,
+                answer: "meet the needs",
+                knowledge: "meet...needs = 满足...的需求"
+            },
+            {
+                id: 19,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>He will ______ ______ ______ a marathon.（报名参加）",
+                input: true,
+                answer: "sign up for",
+                knowledge: "sign up for = 报名"
+            },
+            {
+                id: 20,
+                type: "短语填空",
+                content: "用适当的短语填空：<br>Typewriters ______ ______ ______ ______.（已成为历史）",
+                input: true,
+                answer: "are history",
+                knowledge: "be history = 成为历史/消亡"
+            },
+
+            // ===== 第三部分：选择题（5 题）=====
+            {
+                id: 21,
+                type: "选择题",
+                content: "选择正确的短语：<br>The city shines brighter ______ us.",
+                options: [
+                    "because",
+                    "because of",
+                    "so",
+                    "therefore"
+                ],
+                answer: 1,
+                knowledge: "because of + 名词/代词；because + 句子"
+            },
+            {
+                id: 22,
+                type: "选择题",
+                content: "选择正确的翻译：<br>"be replaced by" 的意思是？",
+                options: [
+                    "替换",
+                    "被...取代",
+                    "代替",
+                    "取代别人"
+                ],
+                answer: 1,
+                knowledge: "be replaced by = 被...取代（被动语态）"
+            },
+            {
+                id: 23,
+                type: "选择题",
+                content: "选择正确的短语：<br>Which jobs are ______ ______ ______?（即将兴起）",
+                options: [
+                    "in the way",
+                    "on the way",
+                    "by the way",
+                    "to the way"
+                ],
+                answer: 1,
+                knowledge: "on the way = 兴起/成为趋势；by the way = 顺便说一下"
+            },
+            {
+                id: 24,
+                type: "选择题",
+                content: "选择正确的语法：<br>Window cleaning ______ considered a good job.",
+                options: [
+                    "are",
+                    "is",
+                    "were",
+                    "be"
+                ],
+                answer: 1,
+                knowledge: "Window cleaning 是动名词短语作主语，谓语用单数 is"
+            },
+            {
+                id: 25,
+                type: "选择题",
+                content: "选择正确的翻译：<br>"sign me up for a space tour" 的意思是？",
+                options: [
+                    "给我签名太空旅行",
+                    "为我报名太空旅行",
+                    "签署太空旅行文件",
+                    "标记我去太空旅行"
+                ],
+                answer: 1,
+                knowledge: "sign sb up for sth = 为某人报名..."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = 0;
+        let userAnswers = [];
+        let wrongAnswers = [];
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const container = document.getElementById('quizContainer');
+            
+            let optionsHtml = '';
+            if (q.input) {
+                optionsHtml = `
+                    <input type="text" class="input-area" id="userInput" placeholder="请输入你的答案" autocomplete="off">
+                    <button class="btn" onclick="checkAnswer()">提交答案</button>
+                `;
+            } else {
+                optionsHtml = `<div class="options">`;
+                q.options.forEach((opt, i) => {
+                    optionsHtml += `<div class="option" onclick="selectOption(${i})">${opt}</div>`;
+                });
+                optionsHtml += `</div><button class="btn" onclick="checkAnswer()" style="margin-top: 15px;">提交答案</button>`;
+            }
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <div class="question-type">${q.type}</div>
+                    </div>
+                    <div class="question-content">${q.content}</div>
+                    <div id="optionsContainer">${optionsHtml}</div>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+            
+            // 句子默写题提示用户
+            if (q.type === "句子默写") {
+                document.getElementById('userInput').placeholder = "输入英文句子（注意大小写和标点）";
+            }
+        }
+
+        let selectedOption = null;
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            selectedOption = index;
+        }
+
+        function checkAnswer() {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const optionsContainer = document.getElementById('optionsContainer');
+            
+            let isCorrect = false;
+            let userAnswer = '';
+            
+            if (q.input) {
+                const userInput = document.getElementById('userInput').value.trim();
+                userAnswer = userInput;
+                // 句子默写题忽略大小写和标点差异
+                if (q.type === "句子默写") {
+                    isCorrect = userInput.toLowerCase().replace(/[.,!?]/g, '') === q.answer.toLowerCase().replace(/[.,!?]/g, '');
+                } else {
+                    isCorrect = userInput.toLowerCase() === q.answer.toLowerCase();
+                }
+                
+                optionsContainer.innerHTML = `
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
+                        <strong>你的答案：</strong>${userInput || "（未作答）"}<br>
+                        <strong>正确答案：</strong>${q.answer}
+                    </div>
+                `;
+            } else {
+                if (selectedOption === null) {
+                    alert('请先选择一个答案！');
+                    return;
+                }
+                userAnswer = q.options[selectedOption];
+                isCorrect = selectedOption === q.answer;
+                
+                const options = document.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.remove('selected');
+                    if (i === q.answer) opt.classList.add('correct');
+                    else if (i === selectedOption && !isCorrect) opt.classList.add('incorrect');
+                });
+                
+                optionsContainer.querySelector('.btn').disabled = true;
+            }
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `✅ 回答正确！<div class="knowledge-point">📖 ${q.knowledge}</div>`;
+                score++;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `❌ 回答错误<div class="knowledge-point">📖 ${q.knowledge}</div>`;
+                wrongAnswers.push({
+                    question: q.content,
+                    userAnswer: userAnswer,
+                    correctAnswer: q.input ? q.answer : q.options[q.answer],
+                    knowledge: q.knowledge
+                });
+            }
+
+            answered++;
+            userAnswers.push({ questionId: q.id, correct: isCorrect });
+            updateStats();
+            
+            setTimeout(() => {
+                currentQuestion++;
+                selectedOption = null;
+                if (currentQuestion < questions.length) {
+                    renderQuestion(currentQuestion);
+                    updateProgress();
+                } else {
+                    showResult();
+                }
+            }, 2500);
+        }
+
+        function updateStats() {
+            document.getElementById('answeredQuestions').textContent = answered;
+            const accuracy = answered > 0 ? Math.round((score / answered) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').innerHTML = '';
+            document.getElementById('progressFill').style.width = '100%';
+            
+            const resultSection = document.getElementById('resultSection');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultDetail = document.getElementById('resultDetail');
+            
+            const accuracy = Math.round((score / questions.length) * 100);
+            scoreCircle.textContent = accuracy + '%';
+            resultDetail.textContent = `答对 ${score} / ${questions.length} 题`;
+            
+            if (accuracy === 100) {
+                resultMessage.textContent = '🎉 太棒了！满分！明天一定能考好！';
+            } else if (accuracy >= 90) {
+                resultMessage.textContent = '👏 非常好！接近满分！';
+            } else if (accuracy >= 80) {
+                resultMessage.textContent = '📚 不错！再复习一下错题就能满分！';
+            } else {
+                resultMessage.textContent = '💪 加油！多看错题，明天一定能考好！';
+            }
+            
+            // 显示错题回顾
+            if (wrongAnswers.length > 0) {
+                const summaryCard = document.getElementById('summaryCard');
+                const wrongList = document.getElementById('wrongAnswersList');
+                wrongList.innerHTML = wrongAnswers.map((item, i) => `
+                    <li>
+                        <strong>第${i + 1}题：</strong>${item.question}<br>
+                        <span class="tag incorrect">你的答案：${item.userAnswer}</span>
+                        <span class="tag correct">正确答案：${item.correctAnswer}</span><br>
+                        <small style="color: #666;">📖 ${item.knowledge}</small>
+                    </li>
+                `).join('');
+                summaryCard.style.display = 'block';
+            }
+            
+            resultSection.classList.add('show');
+            
+            // 自动同步答题记录到飞书
+            syncToFeishu(score, accuracy);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = 0;
+            userAnswers = [];
+            wrongAnswers = [];
+            selectedOption = null;
+            
+            document.getElementById('resultSection').classList.remove('show');
+            document.getElementById('summaryCard').style.display = 'none';
+            document.getElementById('answeredQuestions').textContent = '0';
+            document.getElementById('accuracy').textContent = '0%';
+            document.getElementById('progressFill').style.width = '0%';
+            
+            renderQuestion(0);
+        }
+
+        // 飞书同步功能
+        function syncToFeishu(score, accuracy) {
+            const syncStatus = document.getElementById('syncStatus');
+            const syncText = document.getElementById('syncText');
+            syncStatus.style.display = 'block';
+            syncStatus.style.background = '#e3f2fd';
+            
+            const recordData = {
+                practiceTitle: '初中英语 Unit 1 - 满分冲刺练习',
+                questionCount: questions.length,
+                score: score,
+                accuracy: accuracy,
+                practiceUrl: 'https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/english-unit1-full-practice.html'
+            };
+            
+            const feishuConfig = {
+                appToken: 'AKF2bHBDVaEfEpsCLggc3mUSnyb',
+                tableId: 'tblOy4VZZ5L1baTP',
+                webhookUrl: 'https://skills-xiao-si-men.vercel.app/sync'
+            };
+            
+            if (feishuConfig.webhookUrl) {
+                fetch(feishuConfig.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(recordData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        syncText.textContent = '✅ 答题记录已同步到飞书！';
+                        syncStatus.style.background = '#e8f5e9';
+                    } else {
+                        throw new Error('同步失败');
+                    }
+                })
+                .catch(error => {
+                    syncText.innerHTML = '⚠️ 同步失败，请稍后重试<br><small>不影响练习功能</small>';
+                    syncStatus.style.background = '#fff3e0';
+                    console.error('Sync error:', error);
+                });
+            }
+        }
+
+        // 初始化
+        renderQuestion(0);
+    </script>
+</body>
+</html>
