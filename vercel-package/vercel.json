@@ -9,7 +9,11 @@
   "routes": [
     {
       "src": "/sync",
-      "dest": "api/sync.js"
+      "dest": "/api/sync.js"
+    },
+    {
+      "src": "/health",
+      "dest": "/api/health.js"
     }
   ],
   "env": {
