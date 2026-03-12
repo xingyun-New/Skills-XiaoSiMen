@@ -1,184 +1,235 @@
-# 物理图示生成指南
+# 物理图示生成指南（PhySVG 组件库）
 
-当题目涉及受力分析、电路识别、光路分析、实验装置观察时，优先为题目附带 `diagram` 字段，让生成的 HTML 页面直接渲染示意图，而不是只用文字描述。
+题目涉及受力分析、弹簧、斜面、滑轮、浮力、杠杆、坐标图等时，使用 **PhySVG** 组件库在 `renderDiagram` 中组装专业图示。图示由页面通过 CDN 加载 `physics-svg-lib.js` 后，用代码绘制，而非 JSON schema。
 
 ## 何时必须加图示
 
-- 力学：受力分析、压力/支持力、摩擦力、浮力、杠杆
-- 电学：串联/并联识别、电表示数、电路故障、电路变化分析
-- 光学：反射、折射、平面镜成像、透镜成像、光路判断
-- 实验：实验装置识别、控制变量、步骤分析、读图题
+- 力学：受力分析、压力/支持力、摩擦力、浮力、杠杆、弹簧
+- 电学：串联/并联识别、电表示数、电路故障（可用电路图或手写 SVG）
+- 光学：反射、折射、透镜成像（可手写 SVG 或沿用旧 optics 逻辑）
+- 实验：实验装置、弹簧测力计、控制变量示意
 
-如果题目明显依赖空间关系，默认添加图示；只有在纯概念记忆题中才可以不加。
+若题目明显依赖空间关系，默认添加图示；纯概念题可不加。
 
-## 通用字段
+## 加载方式
 
-所有题型都可以增加：
+```html
+<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/physics-svg-lib.js"></script>
+```
 
-```json
-"diagram": {
-  "type": "force",
-  "title": "木块受力示意图",
-  "caption": "图中箭头长度不表示力的实际大小，仅表示方向",
-  "scene": {}
+生成动态 HTML 时，在 `renderDiagram(diagram, question)` 中根据题目用 PhySVG 绘制，并返回 **可插入 DOM 的 HTML 字符串或 SVG 元素**。若返回 SVG 元素，需转为字符串或直接插入；若返回字符串，应为包含 `<svg>` 或 `<div>` 的 HTML。
+
+建议：用 `PhySVG.createSVG(w, h)` 得到 `ctx`，调用各组件后，将 `ctx.svg` 转为字符串返回，例如：
+
+```javascript
+function renderDiagram(diagram, question) {
+  if (!diagram || !window.PhySVG) return '';
+  var ctx = PhySVG.createSVG(400, 250);
+  // ... 根据 diagram 或 question 用 PhySVG 绘制
+  return ctx.svg.outerHTML;
 }
 ```
 
-字段说明：
+---
 
-- `type`：`force` | `circuit` | `optics` | `experiment`
-- `title`：图示标题，可选但推荐填写
-- `caption`：图下注释，可选
-- `scene`：不同图示类型的结构化数据
+## 一、PhySVG 组件 API
 
-## 一、受力图 `force`
+### 1. 画布
 
-```json
-"diagram": {
-  "type": "force",
-  "title": "木块受力示意图",
-  "scene": {
-    "bodyLabel": "木块",
-    "surface": "rough",
-    "forces": [
-      { "direction": "up", "label": "F支", "color": "#42a5f5" },
-      { "direction": "down", "label": "G", "color": "#ef5350" },
-      { "direction": "right", "label": "F拉", "color": "#ab47bc" },
-      { "direction": "left", "label": "f", "color": "#66bb6a" }
-    ]
+| 方法 | 说明 |
+|------|------|
+| `PhySVG.createSVG(width, height)` | 创建画布，返回 `{ svg, g, defs }`。所有绘图函数第一个参数均为该对象。 |
+
+### 2. 物体与场景
+
+| 方法 | 参数 | 说明 |
+|------|------|------|
+| `PhySVG.block(ctx, x, y, w, h, label)` | 左上角 (x,y)，宽 w 高 h，可选 label | 木块、铁块等矩形物体 |
+| `PhySVG.circle(ctx, cx, cy, r, label)` | 圆心、半径、可选 label | 小球、质点 |
+| `PhySVG.spring(ctx, x1, y1, x2, y2, coils, stroke)` | 起点、终点、线圈数(默认 6)、颜色 | 弹簧（贝塞尔线圈） |
+| `PhySVG.incline(ctx, x, y, width, angleDeg)` | 左端 (x,y)、斜面长度、与水平夹角(度) | 斜面（带 θ 标注） |
+| `PhySVG.ground(ctx, x1, x2, y, rough)` | 左右 x、地面 y、是否粗糙 | 水平地面 |
+| `PhySVG.wall(ctx, x, y1, y2, side)` | x、上下 y、'left'\|'right' | 墙壁 |
+| `PhySVG.pulley(ctx, cx, cy, r)` | 圆心、半径 | 定滑轮/动滑轮 |
+| `PhySVG.rope(ctx, points)` | `[{x,y}, ...]` | 绳子折线 |
+| `PhySVG.lever(ctx, pivotX, pivotY, length, angleDeg)` | 支点、杆长(单侧)、与水平夹角 | 杠杆 |
+| `PhySVG.fluid(ctx, x, y, w, h, level, label)` | 容器左上角、宽高、液面(0~1 或 y 坐标)、标签 | 液体容器 |
+| `PhySVG.springScale(ctx, x, y, reading)` | 顶部挂钩位置、示数(如 "2.4N") | 弹簧测力计 |
+
+### 3. 力与标注
+
+| 方法 | 参数 | 说明 |
+|------|------|------|
+| `PhySVG.forceArrow(ctx, x, y, angleDeg, length, label, color)` | 作用点、方向角(0=右,90=上,-90=下)、长度、符号、颜色 | 力箭头（任意角度） |
+| `PhySVG.dimension(ctx, x1, y1, x2, y2, label, opts)` | 标注线端点、文字、可选 `{ dashed, offset, stroke }` | 尺寸/角度标注 |
+
+### 4. 坐标图
+
+| 方法 | 参数 | 说明 |
+|------|------|------|
+| `PhySVG.graph(ctx, options)` | `{ data: [[x,y],...], width, height, originX, originY, xLabel, yLabel, xTicks, yTicks, scaleX, scaleY }` | F-x、L-F 等折线图 |
+
+**角度约定**：`forceArrow` 的 `angleDeg` 为与 x 轴正方向夹角，逆时针为正。0° 向右，90° 向上，-90° 向下，180° 向左。
+
+**常用颜色**：重力 `#ef5350`、支持力/法向 `#42a5f5`、摩擦力 `#66bb6a`、拉力/弹力 `#ab47bc` 或 `#ff9800`。
+
+---
+
+## 二、常见场景组装示例
+
+### 场景 1：水平面匀速拉木块（四力平衡）
+
+```javascript
+var ctx = PhySVG.createSVG(360, 220);
+PhySVG.ground(ctx, 70, 290, 165, true);
+PhySVG.block(ctx, 135, 99, 90, 66, '木块');
+var cx = 180, cy = 132;
+PhySVG.forceArrow(ctx, cx, cy, -90, 55, 'G', '#ef5350');
+PhySVG.forceArrow(ctx, cx, cy, 90, 55, 'F支', '#42a5f5');
+PhySVG.forceArrow(ctx, cx, cy, 0, 50, 'F拉', '#ab47bc');
+PhySVG.forceArrow(ctx, cx, cy, 180, 50, 'f', '#66bb6a');
+return ctx.svg.outerHTML;
+```
+
+### 场景 2：斜面静止木块（重力、支持力、摩擦力）
+
+```javascript
+var ctx = PhySVG.createSVG(360, 220);
+PhySVG.incline(ctx, 50, 200, 250, 30);
+PhySVG.block(ctx, 150, 120, 60, 40, '木块');
+var cx = 180, cy = 140;
+PhySVG.forceArrow(ctx, cx, cy, -90, 60, 'G', '#ef5350');
+PhySVG.forceArrow(ctx, cx, cy, 60, 50, 'N', '#42a5f5');   // 垂直斜面，60° 与水平
+PhySVG.forceArrow(ctx, cx, cy, -30, 30, 'f', '#66bb6a');    // 沿斜面向上
+return ctx.svg.outerHTML;
+```
+
+### 场景 3：弹簧竖直挂重物
+
+```javascript
+var ctx = PhySVG.createSVG(200, 260);
+PhySVG.spring(ctx, 100, 30, 100, 120, 6);
+PhySVG.circle(ctx, 100, 165, 22, '重物');
+PhySVG.forceArrow(ctx, 100, 165, -90, 50, 'G', '#ef5350');
+PhySVG.forceArrow(ctx, 100, 120, 90, 50, 'F弹', '#ff9800');
+return ctx.svg.outerHTML;
+```
+
+### 场景 4：弹簧一端固定于墙、水平拉力
+
+```javascript
+var ctx = PhySVG.createSVG(400, 200);
+PhySVG.wall(ctx, 30, 60, 140, 'left');
+PhySVG.spring(ctx, 40, 100, 250, 100, 8);
+PhySVG.forceArrow(ctx, 250, 100, 0, 60, 'F', '#ef5350');
+PhySVG.forceArrow(ctx, 40, 110, 0, 50, 'F弹', '#ff9800');
+return ctx.svg.outerHTML;
+```
+
+### 场景 5：弹簧测力计拉木块（探究摩擦力）
+
+```javascript
+var ctx = PhySVG.createSVG(400, 200);
+PhySVG.springScale(ctx, 80, 40, '2.4N');
+PhySVG.block(ctx, 180, 100, 80, 50, '木块');
+PhySVG.ground(ctx, 100, 380, 180, true);
+PhySVG.forceArrow(ctx, 260, 125, 0, 40, 'F拉', '#ab47bc');
+PhySVG.forceArrow(ctx, 220, 125, 180, 40, 'f', '#66bb6a');
+return ctx.svg.outerHTML;
+```
+
+### 场景 6：浮力（物体浸没在液体中）
+
+```javascript
+var ctx = PhySVG.createSVG(280, 220);
+PhySVG.fluid(ctx, 80, 80, 120, 140, 0.6, '水');
+PhySVG.block(ctx, 115, 95, 50, 50, '物块');
+PhySVG.forceArrow(ctx, 140, 120, -90, 45, 'G', '#ef5350');
+PhySVG.forceArrow(ctx, 140, 120, 90, 55, 'F浮', '#42a5f5');
+return ctx.svg.outerHTML;
+```
+
+### 场景 7：定滑轮拉物体
+
+```javascript
+var ctx = PhySVG.createSVG(280, 220);
+PhySVG.pulley(ctx, 140, 70, 25);
+PhySVG.rope(ctx, [{x:140,y:95},{x:140,y:180},{x:200,y:180}]);
+PhySVG.block(ctx, 165, 180, 70, 40, '物体');
+PhySVG.forceArrow(ctx, 200, 200, -90, 50, 'G', '#ef5350');
+PhySVG.forceArrow(ctx, 200, 180, 90, 50, 'F拉', '#ab47bc');
+return ctx.svg.outerHTML;
+```
+
+### 场景 8：杠杆（支点 + 力臂）
+
+```javascript
+var ctx = PhySVG.createSVG(360, 200);
+PhySVG.lever(ctx, 180, 120, 120, 10);
+PhySVG.forceArrow(ctx, 80, 95, -90, 45, 'F₁', '#ef5350');
+PhySVG.forceArrow(ctx, 280, 95, -90, 35, 'F₂', '#42a5f5');
+PhySVG.dimension(ctx, 80, 130, 180, 130, 'L₁', { dashed: true });
+PhySVG.dimension(ctx, 180, 130, 280, 130, 'L₂', { dashed: true });
+return ctx.svg.outerHTML;
+```
+
+### 场景 9：L-F 或 F-Δx 坐标图
+
+```javascript
+var ctx = PhySVG.createSVG(360, 220);
+PhySVG.graph(ctx, {
+  data: [[0, 0], [2, 1], [4, 2], [6, 3]],
+  width: 280,
+  height: 160,
+  originX: 50,
+  originY: 180,
+  xLabel: 'L(cm)',
+  yLabel: 'F(N)',
+  scaleX: 40,
+  scaleY: 45
+});
+return ctx.svg.outerHTML;
+```
+
+### 场景 10：实验装置示意（弹簧测力计 + 木块 + 木板）
+
+用 `block`、`springScale`、`ground` 组合，并加 `dimension` 或文字标注即可；或继续用「实验装置图」的图标式布局（见 html-template 中的 exp-diagram 结构），由页面自行写 HTML。
+
+---
+
+## 三、在 renderDiagram 中根据题目分支
+
+动态生成 HTML 时，`renderDiagram(diagram, question)` 可根据 `question.id`、`question.diagram.scene` 或自定义字段分支，对不同题用不同 PhySVG 组合：
+
+```javascript
+function renderDiagram(diagram, question) {
+  if (!diagram || typeof PhySVG === 'undefined') return '';
+  var scene = diagram.scene || {};
+  var ctx = PhySVG.createSVG(scene.width || 360, scene.height || 220);
+  if (scene.type === 'incline') {
+    PhySVG.incline(ctx, 50, 200, 250, scene.angle || 30);
+    PhySVG.block(ctx, 150, 120, 60, 40, scene.bodyLabel || '木块');
+    (scene.forces || []).forEach(function (f) {
+      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
+    });
+  } else if (scene.type === 'horizontal') {
+    PhySVG.ground(ctx, 70, 290, 165, scene.rough);
+    PhySVG.block(ctx, 135, 99, 90, 66, scene.bodyLabel || '木块');
+    (scene.forces || []).forEach(function (f) {
+      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
+    });
   }
+  return ctx.svg.outerHTML;
 }
 ```
 
-规则：
+也可完全按题目逐题手写 PhySVG 调用或手写 SVG 字符串，以最大程度贴合题干。
 
-- `surface`：`rough` | `smooth` | `none`
-- `direction`：`up`、`down`、`left`、`right`、`up-left`、`up-right`、`down-left`、`down-right`
-- 标签尽量短，如 `G`、`F浮`、`F支`
-- 同一物体只画与题目有关的力，不乱加空气阻力等无关力
+---
 
-## 二、电路图 `circuit`
+## 四、生成建议
 
-```json
-"diagram": {
-  "type": "circuit",
-  "title": "串联电路示意图",
-  "scene": {
-    "layout": "series",
-    "components": [
-      { "kind": "battery", "label": "电源 6V" },
-      { "kind": "switch", "label": "S", "closed": true },
-      { "kind": "ammeter", "label": "A" },
-      { "kind": "resistor", "label": "R1=10Ω" },
-      { "kind": "resistor", "label": "R2=20Ω" }
-    ],
-    "note": "开关闭合后分析电流与电压变化"
-  }
-}
-```
-
-并联电路示例：
-
-```json
-"diagram": {
-  "type": "circuit",
-  "title": "并联电路示意图",
-  "scene": {
-    "layout": "parallel",
-    "components": [
-      { "kind": "battery", "label": "电源" },
-      { "kind": "switch", "label": "S", "closed": true },
-      { "kind": "lamp", "label": "L1", "branch": 1 },
-      { "kind": "lamp", "label": "L2", "branch": 2 }
-    ],
-    "note": "两灯并联，观察开关对支路的影响"
-  }
-}
-```
-
-规则：
-
-- `layout`：`series` 或 `parallel`
-- `kind` 推荐使用：`battery`、`switch`、`resistor`、`lamp`、`ammeter`、`voltmeter`
-- 并联图中支路元件用 `branch: 1/2/3...`
-- `closed` 仅用于开关，表示闭合或断开
-- 不要把本该并联连接的元件错误画成串联
-
-## 三、光路图 `optics`
-
-```json
-"diagram": {
-  "type": "optics",
-  "title": "光的反射示意图",
-  "scene": {
-    "kind": "reflection",
-    "rays": [
-      { "from": "leftTop", "to": "center", "label": "入射光线", "color": "#ff7043" },
-      { "from": "center", "to": "rightTop", "label": "反射光线", "color": "#42a5f5" }
-    ],
-    "note": "法线为辅助线，通常画成虚线"
-  }
-}
-```
-
-折射/透镜示例：
-
-```json
-"diagram": {
-  "type": "optics",
-  "title": "凸透镜成像示意图",
-  "scene": {
-    "kind": "convex-lens",
-    "rays": [
-      { "from": "leftObjectTop", "to": "lensTop", "label": "平行主光轴", "color": "#ff7043" },
-      { "from": "lensTop", "to": "rightFocus", "label": "折射后过焦点", "color": "#42a5f5" },
-      { "from": "leftObjectTop", "to": "lensCenter", "label": "过光心", "color": "#66bb6a" }
-    ],
-    "note": "用于分析像的大小规律"
-  }
-}
-```
-
-规则：
-
-- `kind`：`reflection` | `refraction` | `convex-lens` | `concave-lens`
-- `from` / `to` 使用模板内置锚点名，不要随意写坐标
-- 常用锚点：`leftTop`、`leftMid`、`leftBottom`、`center`、`rightTop`、`rightMid`、`rightBottom`、`leftObjectTop`、`lensTop`、`lensCenter`、`rightFocus`
-- 光线标签要体现物理意义，不写成泛泛的“光线1”
-
-## 四、实验装置图 `experiment`
-
-```json
-"diagram": {
-  "type": "experiment",
-  "title": "探究滑动摩擦力实验装置",
-  "scene": {
-    "items": [
-      { "kind": "spring-scale", "label": "弹簧测力计" },
-      { "kind": "block", "label": "木块" },
-      { "kind": "surface", "label": "长木板" },
-      { "kind": "weight", "label": "砝码" }
-    ],
-    "arrows": [
-      { "from": 0, "to": 1, "label": "水平拉动" },
-      { "from": 1, "to": 2, "label": "接触面" }
-    ],
-    "note": "比较不同条件下测力计示数的变化"
-  }
-}
-```
-
-规则：
-
-- `items` 按从左到右、从上到下的阅读顺序组织
-- `kind` 推荐使用：`spring-scale`、`block`、`surface`、`weight`、`beaker`、`thermometer`、`lamp`、`lens`
-- `arrows.from` / `arrows.to` 使用 `items` 下标
-- 装置图只画关键器材，不需要追求美术写实
-
-## 生成建议
-
-- 同一套题里不必每题都加图，但图示题至少占 20% 到 40%
-- 图示应服务于考点，不是装饰
-- 图示标题要和题干保持一致，避免学生看图后仍不知道画的是什么
-- 如果题目是“识图题”，题干中应明确写出“根据图示回答”
-- 如果题目是“作图题”，图示可以给出半成品，让学生判断应补画什么
+- 同一套题中图示题建议占 20%～40%。
+- 图示服务于考点，不堆砌无关元素。
+- 图示标题与题干一致，便于学生对应「根据图示回答」。
+- 力箭头长度可依题意表示相对大小（如二力平衡时两力等长）。
