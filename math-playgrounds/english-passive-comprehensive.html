@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初中英语 - 被动语态综合练习</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .question-type {
+            background: #e8f4f8;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .question-content {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        
+        .input-area {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .input-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .knowledge-point {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #e65100;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+        
+        .result-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+        }
+        
+        .result-section.show {
+            display: block;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        .result-message {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .result-detail {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .btn-restart {
+            background: #4caf50;
+            margin-top: 10px;
+        }
+        
+        .btn-restart:hover {
+            background: #43a047;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 初中英语 - 被动语态综合练习</h1>
+            <p>基于错题本知识点生成的综合练习题，共 10 题</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">总题数</div>
+                    <div class="stat-value" id="totalQuestions">10</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">已答题</div>
+                    <div class="stat-value" id="answeredQuestions">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">正确率</div>
+                    <div class="stat-value" id="accuracy">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <div class="result-message" id="resultMessage">完成练习！</div>
+            <div class="result-detail" id="resultDetail">答对 0 / 10 题</div>
+            <button class="btn btn-restart" onclick="restartQuiz()">🔄 重新练习</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                type: "连词成句",
+                content: "将下列单词组成被动语态一般疑问句：<br><strong>English / speak / all over the world</strong>",
+                options: [
+                    "Is English spoken all over the world?",
+                    "Does English speak all over the world?",
+                    "Is English speaking all over the world?",
+                    "English is spoken all over the world?"
+                ],
+                answer: 0,
+                knowledge: "一般现在时被动语态一般疑问句：Is/Are + 主语 + 过去分词"
+            },
+            {
+                id: 2,
+                type: "连词成句",
+                content: "将下列单词组成被动语态一般疑问句：<br><strong>the window / break / by Tom / yesterday</strong>",
+                options: [
+                    "Did the window break by Tom yesterday?",
+                    "Was the window broken by Tom yesterday?",
+                    "Is the window broken by Tom yesterday?",
+                    "The window was broken by Tom yesterday?"
+                ],
+                answer: 1,
+                knowledge: "一般过去时被动语态一般疑问句：Was/Were + 主语 + 过去分词"
+            },
+            {
+                id: 3,
+                type: "连词成句",
+                content: "将下列单词组成被动语态一般疑问句：<br><strong>a new library / build / in our school / next year</strong>",
+                options: [
+                    "Will a new library build in our school next year?",
+                    "Is a new library built in our school next year?",
+                    "Will a new library be built in our school next year?",
+                    "A new library will be built next year?"
+                ],
+                answer: 2,
+                knowledge: "一般将来时被动语态一般疑问句：Will + 主语 + be + 过去分词"
+            },
+            {
+                id: 4,
+                type: "选择题",
+                content: "— ______ rice ______ in the south of China?<br>— Yes, it is.",
+                options: [
+                    "Is; grown",
+                    "Does; grow",
+                    "Was; grown",
+                    "Will; be grown"
+                ],
+                answer: 0,
+                knowledge: "一般现在时被动语态（客观事实用现在时）"
+            },
+            {
+                id: 5,
+                type: "选择题",
+                content: "— Was this book ______ by Mo Yan two years ago?<br>— Yes, it was.",
+                options: [
+                    "write",
+                    "wrote",
+                    "written",
+                    "writing"
+                ],
+                answer: 2,
+                knowledge: "被动语态结构：be + 过去分词（write-wrote-written）"
+            },
+            {
+                id: 6,
+                type: "选择题",
+                content: "— Are these trees ______ every morning?<br>— Yes, they are.",
+                options: [
+                    "water",
+                    "watered",
+                    "watering",
+                    "waters"
+                ],
+                answer: 1,
+                knowledge: "一般现在时被动语态（复数主语用 Are + 过去分词）"
+            },
+            {
+                id: 7,
+                type: "选择题",
+                content: "— Will a sports meeting ______ next week?<br>— No, it won't.",
+                options: [
+                    "hold",
+                    "held",
+                    "be held",
+                    "be hold"
+                ],
+                answer: 2,
+                knowledge: "一般将来时被动语态：Will + 主语 + be + 过去分词（hold-held-held）"
+            },
+            {
+                id: 8,
+                type: "翻译题",
+                content: "翻译句子：<strong>The past 30 years were filled with both challenges and joys.</strong>",
+                input: true,
+                answer: "过去的 30 年充满了挑战和欢乐",
+                knowledge: "be filled with = 充满...；both...and... = 既...又..."
+            },
+            {
+                id: 9,
+                type: "选择题",
+                content: "— ______ the room ______ every day?<br>— Yes, it is.",
+                options: [
+                    "Does; clean",
+                    "Is; cleaned",
+                    "Was; cleaned",
+                    "Will; be cleaned"
+                ],
+                answer: 1,
+                knowledge: "一般现在时被动语态（日常习惯用现在时）"
+            },
+            {
+                id: 10,
+                type: "选择题",
+                content: "— Will more trees ______ next spring?<br>— Yes, they will.",
+                options: [
+                    "plant",
+                    "planted",
+                    "be planted",
+                    "be plant"
+                ],
+                answer: 2,
+                knowledge: "一般将来时被动语态（复数主语 they）"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = 0;
+        let userAnswers = [];
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const container = document.getElementById('quizContainer');
+            
+            let optionsHtml = '';
+            if (q.input) {
+                optionsHtml = `
+                    <input type="text" class="input-area" id="userInput" placeholder="请输入你的翻译答案">
+                    <button class="btn" onclick="checkAnswer()">提交答案</button>
+                `;
+            } else {
+                optionsHtml = `<div class="options">`;
+                q.options.forEach((opt, i) => {
+                    optionsHtml += `<div class="option" onclick="selectOption(${i})">${opt}</div>`;
+                });
+                optionsHtml += `</div><button class="btn" onclick="checkAnswer()" style="margin-top: 15px;">提交答案</button>`;
+            }
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <div class="question-type">${q.type}</div>
+                    </div>
+                    <div class="question-content">${q.content}</div>
+                    <div id="optionsContainer">${optionsHtml}</div>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+        }
+
+        let selectedOption = null;
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            selectedOption = index;
+        }
+
+        function checkAnswer() {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const optionsContainer = document.getElementById('optionsContainer');
+            
+            let isCorrect = false;
+            
+            if (q.input) {
+                const userInput = document.getElementById('userInput').value.trim();
+                isCorrect = userInput === q.answer;
+                optionsContainer.innerHTML = `
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
+                        <strong>你的答案：</strong>${userInput || "（未作答）"}<br>
+                        <strong>正确答案：</strong>${q.answer}
+                    </div>
+                `;
+            } else {
+                if (selectedOption === null) {
+                    alert('请先选择一个答案！');
+                    return;
+                }
+                isCorrect = selectedOption === q.answer;
+                
+                const options = document.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.remove('selected');
+                    if (i === q.answer) opt.classList.add('correct');
+                    else if (i === selectedOption && !isCorrect) opt.classList.add('incorrect');
+                });
+                
+                optionsContainer.querySelector('.btn').disabled = true;
+            }
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `✅ 回答正确！<div class="knowledge-point">📖 ${q.knowledge}</div>`;
+                score++;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `❌ 回答错误<div class="knowledge-point">📖 ${q.knowledge}</div>`;
+            }
+
+            answered++;
+            userAnswers.push({ questionId: q.id, correct: isCorrect });
+            updateStats();
+            
+            setTimeout(() => {
+                currentQuestion++;
+                selectedOption = null;
+                if (currentQuestion < questions.length) {
+                    renderQuestion(currentQuestion);
+                    updateProgress();
+                } else {
+                    showResult();
+                }
+            }, 2000);
+        }
+
+        function updateStats() {
+            document.getElementById('answeredQuestions').textContent = answered;
+            const accuracy = answered > 0 ? Math.round((score / answered) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').innerHTML = '';
+            document.getElementById('progressFill').style.width = '100%';
+            
+            const resultSection = document.getElementById('resultSection');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultDetail = document.getElementById('resultDetail');
+            
+            const accuracy = Math.round((score / questions.length) * 100);
+            scoreCircle.textContent = accuracy + '%';
+            resultDetail.textContent = `答对 ${score} / ${questions.length} 题`;
+            
+            if (accuracy === 100) {
+                resultMessage.textContent = '🎉 太棒了！完美通过！';
+            } else if (accuracy >= 80) {
+                resultMessage.textContent = '👏 很好！继续加油！';
+            } else if (accuracy >= 60) {
+                resultMessage.textContent = '📚 不错！还需要多练习~';
+            } else {
+                resultMessage.textContent = '💪 别灰心！多复习知识点再来！';
+            }
+            
+            resultSection.classList.add('show');
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = 0;
+            userAnswers = [];
+            selectedOption = null;
+            
+            document.getElementById('resultSection').classList.remove('show');
+            document.getElementById('answeredQuestions').textContent = '0';
+            document.getElementById('accuracy').textContent = '0%';
+            document.getElementById('progressFill').style.width = '0%';
+            
+            renderQuestion(0);
+        }
+
+        // 初始化
+        renderQuestion(0);
+    </script>
+</body>
+</html>
