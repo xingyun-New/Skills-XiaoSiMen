@@ -609,19 +609,13 @@
             };
             
             // 使用飞书开放平台 API 创建记录
-            // 本地测试使用：先运行 node feishu-sync-server.js
-            // 生产环境需要部署到服务器并配置飞书开放平台凭证
+            // 生产环境：Vercel 部署的同步服务
             const feishuConfig = {
                 appToken: 'AKF2bHBDVaEfEpsCLggc3mUSnyb',
                 tableId: 'tblOy4VZZ5L1baTP',
-                // 同步服务地址（本地测试或生产服务器）
-                webhookUrl: 'http://localhost:3000/sync'
+                // Vercel 公网同步服务地址
+                webhookUrl: 'https://skills-xiao-si-men.vercel.app/sync'
             };
-            
-            // 注意：如果要在 GitHub Pages 上使用，需要：
-            // 1. 将同步服务部署到公网服务器
-            // 2. 更新 webhookUrl 为公网地址
-            // 3. 或者使用飞书云函数方案
             
             if (feishuConfig.webhookUrl) {
                 // 有 webhook 时自动发送
