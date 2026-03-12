@@ -1,4 +1,4 @@
-﻿# 交互式学习练习系统 (Skills-XiaoSiMen)
+# 交互式学习练习系统 (Skills-XiaoSiMen)
 
 一个基于 Cursor Agent Skills 的交互式学习练习题生成系统，覆盖 **数学** 和 **初中小四门**（地理、历史、生物、道德与法治）以及 **初中语文**、**初中物理**、**初中英语**。
 
@@ -103,6 +103,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 八年级 | 弹簧与弹力专项（**图解版**+ 提示） | 2026-03-11 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/physics-spring-practice-v2.html) |
 | 八年级 | 下册第一章：力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E4%B8%8B%E5%86%8C%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%8A%9B-20260307.html) |
 | 八年级 | 下册第二章：运动和力综合 | 2026-03-08 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E8%BF%90%E5%8A%A8%E5%92%8C%E5%8A%9B%E7%BB%BC%E5%90%88-20260308.html) |
+| 八年级 | 摩擦力弹力综合（**图解版**） | 2026-03-12 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E6%91%A9%E6%93%A6%E5%8A%9B%E5%BC%B9%E5%8A%9B%E7%BB%BC%E5%90%88-20260312.html) |
 
 ### 📝 语文
 
