@@ -118,6 +118,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|---------|
+| 初中 | Unit 1 满分冲刺练习（25 题） | 2026-03-13 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/english-unit1-full-practice.html) |
 | 初中 | 被动语态一般疑问句综合练习（10 题） | 2026-03-12 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/math-playgrounds/english-passive-comprehensive.html) |
 
 ---
