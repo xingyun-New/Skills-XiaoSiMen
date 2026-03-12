@@ -307,6 +307,9 @@
             <div class="score-circle" id="scoreCircle">0%</div>
             <div class="result-message" id="resultMessage">完成练习！</div>
             <div class="result-detail" id="resultDetail">答对 0 / 10 题</div>
+            <div id="syncStatus" style="margin: 20px 0; padding: 15px; background: #e3f2fd; border-radius: 10px; display: none;">
+                <span id="syncText">📡 正在同步答题记录到飞书...</span>
+            </div>
             <button class="btn btn-restart" onclick="restartQuiz()">🔄 重新练习</button>
         </div>
     </div>
@@ -580,6 +583,66 @@
             }
             
             resultSection.classList.add('show');
+            
+            // 自动同步答题记录到飞书
+            syncToFeishu(score, accuracy);
+        }
+
+        // 飞书同步功能
+        function syncToFeishu(score, accuracy) {
+            const syncStatus = document.getElementById('syncStatus');
+            const syncText = document.getElementById('syncText');
+            syncStatus.style.display = 'block';
+            syncStatus.style.background = '#e3f2fd';
+            
+            // 生成答题记录数据
+            const recordData = {
+                practiceTitle: '初中英语 - 被动语态综合练习',
+                questionCount: questions.length,
+                score: score,
+                accuracy: accuracy,
+                answerDate: new Date().toISOString(),
+                answers: userAnswers.map(a => ({
+                    questionId: a.questionId,
+                    correct: a.correct
+                }))
+            };
+            
+            // 使用飞书开放平台 API 创建记录
+            // 注意：实际使用需要配置飞书应用和 webhook
+            const feishuConfig = {
+                appToken: 'AKF2bHBDVaEfEpsCLggc3mUSnyb',
+                tableId: 'tblOy4VZZ5L1baTP',
+                // 本地测试使用：先运行 node feishu-sync-server.js
+                // 生产环境需要部署到服务器并配置飞书开放平台凭证
+                webhookUrl: 'http://localhost:3000/sync' // 本地同步服务地址
+            };
+            
+            if (feishuConfig.webhookUrl) {
+                // 有 webhook 时自动发送
+                fetch(feishuConfig.webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(recordData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        syncText.textContent = '✅ 答题记录已同步到飞书！';
+                        syncStatus.style.background = '#e8f5e9';
+                    } else {
+                        throw new Error('同步失败');
+                    }
+                })
+                .catch(error => {
+                    syncText.textContent = '⚠️ 同步失败，请稍后重试';
+                    syncStatus.style.background = '#ffebee';
+                    console.error('Sync error:', error);
+                });
+            } else {
+                // 无 webhook 时显示提示
+                syncText.innerHTML = '⚠️ 飞书 Webhook 未配置<br><small>请联系管理员配置自动同步功能</small>';
+                syncStatus.style.background = '#fff3e0';
+            }
         }
 
         function restartQuiz() {
