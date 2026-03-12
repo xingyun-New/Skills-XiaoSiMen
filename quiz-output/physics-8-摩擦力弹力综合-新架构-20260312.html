@@ -15,11 +15,34 @@
 <script>
 (function () {
   var quizData = JSON.parse(document.getElementById('quiz-json').textContent);
-  var dirToAngle = { up: -90, down: 90, left: 180, right: 0, 'up-left': -135, 'up-right': -45, 'down-left': 135, 'down-right': 45 };
+  // 库约定：0=右，90=上，-90=下，180=左
+  var dirToAngle = { up: 90, down: -90, left: 180, right: 0, 'up-left': 135, 'up-right': 45, 'down-left': -135, 'down-right': -45 };
 
   function renderDiagram(diagram, question) {
     if (!diagram || typeof PhySVG === 'undefined') return '';
     var scene = diagram.scene || {};
+    var title = (diagram.title || '').toLowerCase();
+    var qId = question && question.id;
+
+    if (qId === 2 || title.indexOf('弹簧测力计') !== -1) {
+      var ctx = PhySVG.createSVG(280, 260);
+      PhySVG.springScale(ctx, 140, 35, '');
+      PhySVG.spring(ctx, 140, 95, 140, 172, 5, '#667eea');
+      PhySVG.circle(ctx, 140, 208, 26, '钩码');
+      PhySVG.forceArrow(ctx, 140, 208, -90, 48, 'G', '#ef5350');
+      PhySVG.forceArrow(ctx, 140, 182, 90, 42, 'F弹', '#ff9800');
+      return ctx.svg.outerHTML;
+    }
+
+    if (qId === 1 || title.indexOf('弹簧挂重物') !== -1) {
+      var ctx = PhySVG.createSVG(200, 240);
+      PhySVG.spring(ctx, 100, 40, 100, 115, 5, '#667eea');
+      PhySVG.circle(ctx, 100, 165, 24, '重物');
+      PhySVG.forceArrow(ctx, 100, 165, -90, 45, 'G', '#ef5350');
+      PhySVG.forceArrow(ctx, 100, 115, 90, 45, 'F弹', '#ff9800');
+      return ctx.svg.outerHTML;
+    }
+
     var forces = scene.forces || [];
     var ctx = PhySVG.createSVG(360, 220);
     var cx = 180, cy = 115;

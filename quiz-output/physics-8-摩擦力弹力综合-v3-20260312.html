@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理专项练习 - 摩擦力与弹力综合（图解版）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container {
+            max-width: 1000px; margin: 0 auto; background: white;
+            border-radius: 15px; padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+        .progress-bar { background: #e0e0e0; border-radius: 10px; height: 20px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: 0%; transition: width 0.3s; border-radius: 10px; }
+        .progress-text { text-align: center; margin-bottom: 10px; color: #666; font-size: 14px; }
+        .question-card { background: #f8f9fa; border-radius: 10px; padding: 25px; margin-bottom: 25px; border-left: 4px solid #667eea; display: none; }
+        .question-card.active { display: block; }
+        .question-number { background: #667eea; color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin-bottom: 15px; }
+        .question-text { font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #333; }
+        .diagram-container { background: white; border: 2px dashed #ddd; border-radius: 10px; padding: 20px; margin: 20px 0; text-align: center; }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        .hint-box { background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 5px; cursor: pointer; transition: all 0.3s; }
+        .hint-box:hover { background: #ffe0b2; }
+        .hint-title { color: #e65100; font-weight: bold; margin-bottom: 5px; }
+        .hint-content { display: none; color: #333; line-height: 1.6; margin-top: 10px; }
+        .hint-content.show { display: block; }
+        .options { list-style: none; }
+        .option { background: white; padding: 15px 20px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; border: 2px solid #e0e0e0; transition: all 0.3s; }
+        .option:hover { border-color: #667eea; background: #f0f0ff; }
+        .option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .option.correct { border-color: #4caf50; background: #4caf50; color: white; }
+        .option.incorrect { border-color: #f44336; background: #f44336; color: white; }
+        .feedback { margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4caf50; display: none; }
+        .feedback.incorrect { background: #ffebee; border-left-color: #f44336; }
+        .feedback-title { font-weight: bold; margin-bottom: 10px; font-size: 16px; }
+        .feedback-text { line-height: 1.6; color: #333; }
+        .btn { background: linear-gradient(90deg, #667eea, #764ba2); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .result-screen { text-align: center; display: none; }
+        .score-display { font-size: 48px; color: #667eea; margin: 30px 0; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0; }
+        .stat-item { background: #f8f9fa; padding: 20px; border-radius: 10px; }
+        .stat-number { font-size: 32px; color: #667eea; font-weight: bold; }
+        .stat-label { color: #666; font-size: 14px; margin-top: 5px; }
+        .knowledge-point { background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #ff9800; }
+        .knowledge-title { font-weight: bold; color: #e65100; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 物理专项练习 - 摩擦力与弹力综合</h1>
+        <p class="subtitle">配图详解版 | 弹力方向 · 弹簧测力计 · 摩擦力因素 · 静摩擦力 · 受力平衡</p>
+        <div id="quiz-screen">
+            <div class="progress-text">第 <span id="current-q">1</span> 题 / 共 <span id="total-q">10</span> 题</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+            <div id="questions-container"></div>
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+        </div>
+        <div id="result-screen" class="result-screen">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-display">得分：<span id="final-score">0</span>/100</div>
+            <div class="stats">
+                <div class="stat-item"><div class="stat-number" id="correct-count">0</div><div class="stat-label">正确题数</div></div>
+                <div class="stat-item"><div class="stat-number" id="accuracy">0%</div><div class="stat-label">准确率</div></div>
+                <div class="stat-item"><div class="stat-number" id="time-taken">0</div><div class="stat-label">用时 (秒)</div></div>
+            </div>
+            <div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;"><span id="syncText"></span></div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+    <script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
+    <script>
+        const questions = [
+            {
+                number: 1,
+                text: "下列关于弹力的说法，正确的是",
+                diagram: `<svg width="300" height="260" viewBox="0 0 300 260">
+                    <line x1="120" y1="15" x2="180" y2="15" stroke="#333" stroke-width="3"/>
+                    <path d="M 150 15 Q 160 30 150 45 T 150 75 T 150 105 T 150 135" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <line x1="150" y1="135" x2="150" y2="150" stroke="#5d4037" stroke-width="2"/>
+                    <rect x="120" y="150" width="60" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="150" y="175" font-size="13" fill="#0d47a1" font-weight="bold" text-anchor="middle">重物</text>
+                    <line x1="150" y1="190" x2="150" y2="240" stroke="#f44336" stroke-width="3" marker-end="url(#a1r)"/>
+                    <text x="165" y="235" font-size="13" fill="#f44336" font-weight="bold">G</text>
+                    <line x1="150" y1="150" x2="150" y2="100" stroke="#ff9800" stroke-width="3" marker-end="url(#a1o)"/>
+                    <text x="165" y="110" font-size="13" fill="#ff9800" font-weight="bold">F弹</text>
+                    <rect x="5" y="60" width="110" height="55" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+                    <text x="15" y="80" font-size="11" fill="#333" font-weight="bold">❓ 思考：</text>
+                    <text x="15" y="97" font-size="10" fill="#666">弹力产生需要什么</text>
+                    <text x="15" y="112" font-size="10" fill="#666">条件？仅接触够吗？</text>
+                    <defs>
+                        <marker id="a1r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a1o" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ff9800"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 弹力产生需要两个条件同时满足：①物体相互接触 ②接触处发生弹性形变。只接触不形变不会有弹力。",
+                options: ["只要两个物体接触就一定产生弹力", "弹力的产生条件是物体相互接触并发生弹性形变", "弹力的大小一定与物体的重力成正比", "弹力只能由弹簧产生，其他物体不能产生弹力"],
+                correct: 1,
+                feedback: "弹力产生需要同时满足两个条件：①物体相互接触 ②接触处发生弹性形变。A 只提到接触未提到形变；C 只在特定条件下成立；D 任何物体都能产生弹力（桌面支持力就是弹力）。",
+                knowledge: "弹力产生条件：①直接接触 ②发生弹性形变，缺一不可。桌面的支持力、绳子的拉力本质上都是弹力。"
+            },
+            {
+                number: 2,
+                text: "使用弹簧测力计测量力时，下列操作正确的是",
+                diagram: `<svg width="200" height="300" viewBox="0 0 200 300">
+                    <line x1="80" y1="15" x2="120" y2="15" stroke="#333" stroke-width="3"/>
+                    <line x1="100" y1="15" x2="100" y2="30" stroke="#5d4037" stroke-width="2"/>
+                    <rect x="78" y="30" width="44" height="65" rx="5" fill="#fff" stroke="#37474f" stroke-width="2"/>
+                    <line x1="85" y1="50" x2="115" y2="50" stroke="#ddd" stroke-width="1"/>
+                    <line x1="85" y1="60" x2="115" y2="60" stroke="#ddd" stroke-width="1"/>
+                    <line x1="85" y1="70" x2="115" y2="70" stroke="#ddd" stroke-width="1"/>
+                    <line x1="85" y1="80" x2="115" y2="80" stroke="#ddd" stroke-width="1"/>
+                    <circle cx="100" cy="65" r="3" fill="#f44336"/>
+                    <text x="100" y="47" font-size="9" fill="#333" text-anchor="middle">0</text>
+                    <text x="100" y="87" font-size="9" fill="#333" text-anchor="middle">5N</text>
+                    <path d="M 100 95 Q 110 108 100 121 T 100 147 T 100 173 T 100 195" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <line x1="100" y1="195" x2="100" y2="210" stroke="#5d4037" stroke-width="2"/>
+                    <rect x="72" y="210" width="56" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="100" y="235" font-size="13" fill="#0d47a1" font-weight="bold" text-anchor="middle">钩码</text>
+                    <line x1="100" y1="250" x2="100" y2="290" stroke="#f44336" stroke-width="3" marker-end="url(#a2r)"/>
+                    <text x="115" y="285" font-size="13" fill="#f44336" font-weight="bold">G</text>
+                    <line x1="100" y1="210" x2="100" y2="165" stroke="#ff9800" stroke-width="3" marker-end="url(#a2o)"/>
+                    <text x="115" y="175" font-size="13" fill="#ff9800" font-weight="bold">F弹</text>
+                    <defs>
+                        <marker id="a2r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a2o" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ff9800"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 弹簧测力计使用三要点：①看量程和分度值 ②校零 ③弹簧轴线方向与被测力方向一致",
+                options: ["可以超过量程使用，只需读数准确即可", "测量前不需要校零，直接挂上物体测量", "测量时应使弹簧测力计的弹簧轴线方向与被测力的方向一致", "读数时视线可以斜着看刻度盘"],
+                correct: 2,
+                feedback: "A 超量程会损坏弹簧，使其无法恢复原长；B 不校零会导致系统误差；D 视线应与刻度盘垂直（避免视差）。只有 C 是正确操作。",
+                knowledge: "弹簧测力计使用三步骤：①观察量程和分度值 ②校零（指针指向零刻度线）③使弹簧轴线与力的方向一致。原理：F=kx（胡克定律）"
+            },
+            {
+                number: 3,
+                text: "小明用弹簧测力计拉着木块在水平桌面上做匀速直线运动，以下哪种方法能增大木块受到的滑动摩擦力？",
+                diagram: `<svg width="450" height="220" viewBox="0 0 450 220">
+                    <line x1="50" y1="160" x2="350" y2="160" stroke="#6d4c41" stroke-width="4"/>
+                    <line x1="70" y1="160" x2="60" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="100" y1="160" x2="90" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="130" y1="160" x2="120" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="160" y1="160" x2="150" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="190" y1="160" x2="180" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="220" y1="160" x2="210" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="250" y1="160" x2="240" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="280" y1="160" x2="270" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <rect x="130" y="100" width="90" height="60" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="175" y="135" font-size="14" fill="#0d47a1" font-weight="bold" text-anchor="middle">木块</text>
+                    <line x1="175" y1="130" x2="175" y2="195" stroke="#f44336" stroke-width="3" marker-end="url(#a3r)"/>
+                    <text x="185" y="195" font-size="13" fill="#f44336" font-weight="bold">G</text>
+                    <line x1="175" y1="130" x2="175" y2="65" stroke="#42a5f5" stroke-width="3" marker-end="url(#a3b)"/>
+                    <text x="185" y="70" font-size="13" fill="#42a5f5" font-weight="bold">F支</text>
+                    <line x1="175" y1="130" x2="270" y2="130" stroke="#ab47bc" stroke-width="3" marker-end="url(#a3p)"/>
+                    <text x="245" y="122" font-size="13" fill="#ab47bc" font-weight="bold">F拉</text>
+                    <line x1="175" y1="130" x2="90" y2="130" stroke="#4caf50" stroke-width="3" marker-end="url(#a3g)"/>
+                    <text x="88" y="122" font-size="13" fill="#4caf50" font-weight="bold">f</text>
+                    <rect x="280" y="30" width="160" height="70" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+                    <text x="290" y="50" font-size="11" fill="#333" font-weight="bold">❓ 思考：</text>
+                    <text x="290" y="68" font-size="10" fill="#666">滑动摩擦力与哪些</text>
+                    <text x="290" y="83" font-size="10" fill="#666">因素有关？与面积、</text>
+                    <text x="290" y="98" font-size="10" fill="#666">速度有关吗？</text>
+                    <defs>
+                        <marker id="a3r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a3b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#42a5f5"/></marker>
+                        <marker id="a3p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/></marker>
+                        <marker id="a3g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 滑动摩擦力只与两个因素有关：①压力大小 ②接触面粗糙程度。与接触面积和速度无关！",
+                options: ["在木块上面再放一个砝码", "增大拉力使木块加速运动", "减小木块与桌面的接触面积", "增大木块的运动速度"],
+                correct: 0,
+                feedback: "放砝码增大了对桌面的压力（正压力N），根据 f=μN，压力增大 → 摩擦力增大。B 和 D 改变速度不影响滑动摩擦力；C 改变面积也不影响。",
+                knowledge: "f = μN（滑动摩擦力 = 动摩擦因数 × 正压力）。只与压力大小和接触面粗糙程度有关，与面积和速度无关。"
+            },
+            {
+                number: 4,
+                text: "如图所示，弹簧一端固定在墙上，另一端受水平向右的拉力 F。关于弹簧对墙的弹力方向，正确的是：",
+                diagram: `<svg width="500" height="200" viewBox="0 0 500 200">
+                    <rect x="0" y="50" width="30" height="100" fill="#9e9e9e"/>
+                    <line x1="0" y1="50" x2="0" y2="150" stroke="#333" stroke-width="2"/>
+                    <text x="5" y="45" font-size="12" fill="#333">墙</text>
+                    <line x1="30" y1="100" x2="250" y2="100" stroke="#333" stroke-width="3"/>
+                    <path d="M 40 100 Q 50 85 60 100 T 80 100 T 100 100 T 120 100 T 140 100 T 160 100 T 180 100 T 200 100 T 220 100 T 240 100" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <line x1="250" y1="100" x2="350" y2="100" stroke="#f44336" stroke-width="3" marker-end="url(#a4r)"/>
+                    <text x="280" y="90" font-size="14" fill="#f44336" font-weight="bold">F (拉力)</text>
+                    <line x1="30" y1="115" x2="80" y2="115" stroke="#4caf50" stroke-width="3" marker-end="url(#a4g)"/>
+                    <text x="40" y="135" font-size="12" fill="#4caf50" font-weight="bold">弹力方向？</text>
+                    <rect x="280" y="30" width="200" height="55" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+                    <text x="290" y="50" font-size="12" fill="#333">❓ 思考：</text>
+                    <text x="290" y="68" font-size="11" fill="#666">弹簧被拉伸，要恢复原长，</text>
+                    <text x="290" y="83" font-size="11" fill="#666">对墙的弹力向哪边？</text>
+                    <defs>
+                        <marker id="a4r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a4g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 弹簧被拉伸时，弹力指向恢复原长的方向（想收缩）。弹簧对墙的弹力方向=弹簧想拉墙的方向。",
+                options: ["水平向右", "水平向左", "竖直向上", "竖直向下"],
+                correct: 0,
+                feedback: "弹簧被向右拉伸，弹簧要恢复原长就要向左收缩。弹簧对右端物体的弹力向左（拉回），对左端墙的弹力向右（拉墙）。注意：弹簧对墙的弹力是向右的！",
+                knowledge: "弹力方向总是指向恢复原长的方向。弹簧两端的弹力方向相反：对右端→向左，对左端→向右。这是牛顿第三定律的体现。"
+            },
+            {
+                number: 5,
+                text: "一个木块放在粗糙水平面上，用逐渐增大的水平推力推木块，但木块始终静止不动。关于此时木块受到的摩擦力，正确的是",
+                diagram: `<svg width="450" height="220" viewBox="0 0 450 220">
+                    <line x1="50" y1="160" x2="350" y2="160" stroke="#6d4c41" stroke-width="4"/>
+                    <line x1="70" y1="160" x2="60" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="100" y1="160" x2="90" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="130" y1="160" x2="120" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="160" y1="160" x2="150" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="190" y1="160" x2="180" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="220" y1="160" x2="210" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="250" y1="160" x2="240" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <rect x="150" y="100" width="80" height="60" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="190" y="135" font-size="14" fill="#0d47a1" font-weight="bold" text-anchor="middle">木块</text>
+                    <text x="190" y="90" font-size="11" fill="#999" text-anchor="middle">静止</text>
+                    <line x1="150" y1="130" x2="95" y2="130" stroke="#ab47bc" stroke-width="3" marker-end="url(#a5p)"/>
+                    <text x="90" y="122" font-size="13" fill="#ab47bc" font-weight="bold">F推→</text>
+                    <line x1="230" y1="130" x2="285" y2="130" stroke="#4caf50" stroke-width="3" marker-end="url(#a5g)"/>
+                    <text x="260" y="122" font-size="13" fill="#4caf50" font-weight="bold">f静</text>
+                    <rect x="280" y="25" width="160" height="70" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+                    <text x="290" y="45" font-size="11" fill="#333" font-weight="bold">📌 关键分析：</text>
+                    <text x="290" y="63" font-size="10" fill="#666">物体静止 → 合力为零</text>
+                    <text x="290" y="78" font-size="10" fill="#666">F推 增大 → f静 ？</text>
+                    <text x="290" y="93" font-size="10" fill="#666">（始终保持平衡！）</text>
+                    <defs>
+                        <marker id="a5p" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto"><path d="M9,0 L9,6 L0,3 z" fill="#ab47bc"/></marker>
+                        <marker id="a5g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 物体静止说明合力为零。水平方向上推力与静摩擦力二力平衡，推力增大则静摩擦力也必须增大。",
+                options: ["摩擦力大小始终不变", "摩擦力大于推力", "木块没有受到摩擦力", "静摩擦力随推力的增大而增大"],
+                correct: 3,
+                feedback: "物体静止 → 合力为零 → 水平方向 F推 = f静。F推 增大 → f静 同步增大（始终等于推力）。静摩擦力是「被动力」，会随外力变化。",
+                knowledge: "静摩擦力的特点：①大小随外力变化而变化（被动力）②方向与运动趋势方向相反 ③有最大值（最大静摩擦力）。物体静止时 f静 = 外力。"
+            },
+            {
+                number: 6,
+                text: "一个物体在水平地面上向右滑动，该物体受到的滑动摩擦力的方向是",
+                diagram: `<svg width="420" height="200" viewBox="0 0 420 200">
+                    <line x1="40" y1="145" x2="340" y2="145" stroke="#6d4c41" stroke-width="4"/>
+                    <line x1="60" y1="145" x2="50" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="90" y1="145" x2="80" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="120" y1="145" x2="110" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="150" y1="145" x2="140" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="180" y1="145" x2="170" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="210" y1="145" x2="200" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="240" y1="145" x2="230" y2="155" stroke="#8d6e63" stroke-width="2"/>
+                    <rect x="130" y="90" width="75" height="55" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="167" y="122" font-size="13" fill="#0d47a1" font-weight="bold" text-anchor="middle">物体</text>
+                    <path d="M 210 115 L 260 115" stroke="#999" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#a6gray)"/>
+                    <text x="225" y="108" font-size="11" fill="#999">→ 运动方向</text>
+                    <line x1="130" y1="115" x2="70" y2="115" stroke="#4caf50" stroke-width="3" marker-end="url(#a6g)"/>
+                    <text x="75" y="108" font-size="13" fill="#4caf50" font-weight="bold">f = ?</text>
+                    <rect x="270" y="30" width="140" height="55" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+                    <text x="280" y="50" font-size="11" fill="#333" font-weight="bold">❓ 思考：</text>
+                    <text x="280" y="68" font-size="10" fill="#666">滑动摩擦力方向</text>
+                    <text x="280" y="83" font-size="10" fill="#666">与运动方向什么关系？</text>
+                    <defs>
+                        <marker id="a6g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                        <marker id="a6gray" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#999"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 滑动摩擦力的方向与物体相对运动方向相反。物体向右滑 → 摩擦力向左。",
+                options: ["向右", "向左", "向上", "向下"],
+                correct: 1,
+                feedback: "物体向右滑动，相对运动方向向右，滑动摩擦力方向与相对运动方向相反，所以向左。",
+                knowledge: "滑动摩擦力方向与物体「相对运动方向」相反。注意是「相对运动」而非绝对运动（如传送带问题）。"
+            },
+            {
+                number: 7,
+                text: "自行车刹车时用力捏闸，是通过减小接触面粗糙程度来增大摩擦力的。这句话正确吗？",
+                diagram: `<svg width="400" height="200" viewBox="0 0 400 200">
+                    <circle cx="150" cy="100" r="60" fill="none" stroke="#333" stroke-width="3"/>
+                    <circle cx="150" cy="100" r="5" fill="#333"/>
+                    <line x1="150" y1="40" x2="150" y2="55" stroke="#666" stroke-width="2"/>
+                    <line x1="150" y1="145" x2="150" y2="160" stroke="#666" stroke-width="2"/>
+                    <line x1="90" y1="100" x2="105" y2="100" stroke="#666" stroke-width="2"/>
+                    <line x1="195" y1="100" x2="210" y2="100" stroke="#666" stroke-width="2"/>
+                    <rect x="195" y="75" width="15" height="50" rx="2" fill="#ff8a65" stroke="#e64a19" stroke-width="2"/>
+                    <text x="225" y="105" font-size="11" fill="#e64a19">刹车片</text>
+                    <line x1="235" y1="100" x2="210" y2="100" stroke="#ab47bc" stroke-width="3" marker-end="url(#a7p)"/>
+                    <text x="240" y="95" font-size="11" fill="#ab47bc">F压</text>
+                    <path d="M 170 55 A 30 30 0 0 1 190 80" stroke="#999" stroke-width="1.5" fill="none" marker-end="url(#a7gray)"/>
+                    <text x="185" y="48" font-size="10" fill="#999">旋转</text>
+                    <rect x="250" y="20" width="140" height="80" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+                    <text x="260" y="40" font-size="12" fill="#333" font-weight="bold">📌 分析：</text>
+                    <text x="260" y="58" font-size="11" fill="#666">捏闸 → 增大 F压</text>
+                    <text x="260" y="73" font-size="11" fill="#666">→ 增大摩擦力</text>
+                    <text x="260" y="88" font-size="10" fill="#999">（不是改变粗糙度）</text>
+                    <defs>
+                        <marker id="a7p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/></marker>
+                        <marker id="a7gray" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#999"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 增大摩擦力有两种方法：增大压力 或 增大粗糙程度。捏闸属于哪种？",
+                options: ["正确", "错误"],
+                correct: 1,
+                feedback: "错误。用力捏闸是增大了刹车片对车轮的压力（正压力），不是改变接触面粗糙程度。轮胎上的花纹才是通过增大粗糙程度来增大摩擦力。",
+                knowledge: "增大摩擦力的两种方法：①增大压力（如捏闸、加重物）②增大粗糙程度（如轮胎花纹、鞋底纹路）。不要混淆。"
+            },
+            {
+                number: 8,
+                text: "关于弹力和重力，下列说法正确的是",
+                diagram: `<svg width="350" height="200" viewBox="0 0 350 200">
+                    <line x1="70" y1="140" x2="280" y2="140" stroke="#6d4c41" stroke-width="4"/>
+                    <rect x="110" y="75" width="60" height="30" rx="3" fill="#bdbdbd" stroke="#616161" stroke-width="2"/>
+                    <text x="140" y="95" font-size="11" fill="#333" font-weight="bold" text-anchor="middle">桌面</text>
+                    <rect x="120" y="40" width="80" height="35" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="160" y="62" font-size="13" fill="#0d47a1" font-weight="bold" text-anchor="middle">书本</text>
+                    <line x1="160" y1="75" x2="160" y2="120" stroke="#f44336" stroke-width="3" marker-end="url(#a8r)"/>
+                    <text x="175" y="118" font-size="12" fill="#f44336" font-weight="bold">G(重力)</text>
+                    <line x1="160" y1="40" x2="160" y2="10" stroke="#ff9800" stroke-width="3" marker-end="url(#a8o)"/>
+                    <text x="175" y="18" font-size="12" fill="#ff9800" font-weight="bold">F支(弹力)</text>
+                    <rect x="210" y="50" width="130" height="55" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="4"/>
+                    <text x="220" y="68" font-size="11" fill="#333" font-weight="bold">💡 关键区别：</text>
+                    <text x="220" y="83" font-size="10" fill="#666">重力 → 地球吸引</text>
+                    <text x="220" y="98" font-size="10" fill="#666">弹力 → 物体形变</text>
+                    <defs>
+                        <marker id="a8r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a8o" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ff9800"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 重力的施力物体是地球，弹力的施力物体是发生形变的物体（如桌面、弹簧）。",
+                options: ["弹力和重力都是由于地球吸引而产生的", "物体受到的弹力方向总是竖直向上的", "重力的施力物体是地球，弹力的施力物体是发生形变的物体", "物体受到的弹力大小一定等于物体的重力"],
+                correct: 2,
+                feedback: "A 错在弹力不是地球吸引产生的，弹力是物体弹性形变产生的；B 弹力方向不一定竖直向上（如水平弹簧的弹力是水平方向）；D 只在特定条件下成立（如静止在水平面上）。C 正确。",
+                knowledge: "重力施力物体=地球，弹力施力物体=发生形变的物体。支持力的施力物体是支撑面（而非地球），本质上是弹力。"
+            },
+            {
+                number: 9,
+                text: "一个重为 10N 的木块在水平桌面上被 5N 的水平拉力拉着做匀速直线运动。此时木块受到的滑动摩擦力大小为",
+                diagram: `<svg width="450" height="220" viewBox="0 0 450 220">
+                    <line x1="50" y1="160" x2="350" y2="160" stroke="#6d4c41" stroke-width="4"/>
+                    <line x1="70" y1="160" x2="60" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="100" y1="160" x2="90" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="130" y1="160" x2="120" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="160" y1="160" x2="150" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="190" y1="160" x2="180" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="220" y1="160" x2="210" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="250" y1="160" x2="240" y2="170" stroke="#8d6e63" stroke-width="2"/>
+                    <rect x="130" y="100" width="90" height="60" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="175" y="135" font-size="14" fill="#0d47a1" font-weight="bold" text-anchor="middle">木块</text>
+                    <line x1="175" y1="130" x2="175" y2="195" stroke="#f44336" stroke-width="3" marker-end="url(#a9r)"/>
+                    <text x="188" y="195" font-size="12" fill="#f44336" font-weight="bold">G=10N</text>
+                    <line x1="175" y1="130" x2="175" y2="65" stroke="#42a5f5" stroke-width="3" marker-end="url(#a9b)"/>
+                    <text x="188" y="72" font-size="12" fill="#42a5f5" font-weight="bold">F支=10N</text>
+                    <line x1="175" y1="130" x2="265" y2="130" stroke="#ab47bc" stroke-width="3" marker-end="url(#a9p)"/>
+                    <text x="235" y="122" font-size="12" fill="#ab47bc" font-weight="bold">F拉=5N</text>
+                    <line x1="175" y1="130" x2="95" y2="130" stroke="#4caf50" stroke-width="3" marker-end="url(#a9g)"/>
+                    <text x="88" y="122" font-size="12" fill="#4caf50" font-weight="bold">f=?</text>
+                    <rect x="290" y="35" width="150" height="60" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+                    <text x="300" y="55" font-size="11" fill="#333" font-weight="bold">📌 匀速 → 平衡：</text>
+                    <text x="300" y="73" font-size="11" fill="#666">F拉 = f = 5N</text>
+                    <text x="300" y="88" font-size="10" fill="#999">G = F支 = 10N</text>
+                    <defs>
+                        <marker id="a9r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+                        <marker id="a9b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#42a5f5"/></marker>
+                        <marker id="a9p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/></marker>
+                        <marker id="a9g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 匀速直线运动 = 平衡状态 = 合力为零。水平方向：F拉 = f；竖直方向：F支 = G。",
+                options: ["5N", "10N", "15N", "0N"],
+                correct: 0,
+                feedback: "匀速直线运动 → 合力为零 → 水平方向拉力与摩擦力平衡 → f = F拉 = 5N。竖直方向 F支 = G = 10N。",
+                knowledge: "匀速直线运动 = 平衡状态 = 合力为零。水平方向 F拉 = f，竖直方向 F支 = G。匀速时拉力恰好等于摩擦力（不是大于）。"
+            },
+            {
+                number: 10,
+                text: "人走路时，后脚蹬地，地面对脚的摩擦力方向向前，这个摩擦力是静摩擦力。正确吗？",
+                diagram: `<svg width="400" height="200" viewBox="0 0 400 200">
+                    <line x1="30" y1="150" x2="330" y2="150" stroke="#6d4c41" stroke-width="4"/>
+                    <line x1="50" y1="150" x2="40" y2="160" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="80" y1="150" x2="70" y2="160" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="110" y1="150" x2="100" y2="160" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="140" y1="150" x2="130" y2="160" stroke="#8d6e63" stroke-width="2"/>
+                    <line x1="170" y1="150" x2="160" y2="160" stroke="#8d6e63" stroke-width="2"/>
+                    <polygon points="80,150 90,120 140,120 160,150" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                    <text x="118" y="140" font-size="12" fill="#0d47a1" font-weight="bold" text-anchor="middle">脚</text>
+                    <line x1="120" y1="150" x2="60" y2="150" stroke="#999" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#a10gray)"/>
+                    <text x="65" y="170" font-size="10" fill="#999">蹬地方向（向后）</text>
+                    <line x1="120" y1="138" x2="200" y2="138" stroke="#4caf50" stroke-width="3" marker-end="url(#a10g)"/>
+                    <text x="155" y="130" font-size="13" fill="#4caf50" font-weight="bold">f静</text>
+                    <rect x="220" y="30" width="170" height="75" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+                    <text x="230" y="50" font-size="11" fill="#333" font-weight="bold">❓ 思考：</text>
+                    <text x="230" y="68" font-size="10" fill="#666">脚蹬地向后，脚有向后</text>
+                    <text x="230" y="83" font-size="10" fill="#666">的运动趋势。地面给脚</text>
+                    <text x="230" y="98" font-size="10" fill="#666">的是什么摩擦力？方向？</text>
+                    <defs>
+                        <marker id="a10g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+                        <marker id="a10gray" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#999"/></marker>
+                    </defs>
+                </svg>`,
+                hint: "💡 走路时脚与地面没有相对滑动（脚踏在地上不打滑），所以是静摩擦力。蹬地向后 → 运动趋势向后 → 摩擦力向前。",
+                options: ["正确", "错误"],
+                correct: 0,
+                feedback: "正确。走路时脚蹬地面向后，脚相对地面有向后的运动趋势（但没有实际滑动），地面给脚向前的静摩擦力，正是这个力推动人前进。",
+                knowledge: "人走路靠的是静摩擦力：脚蹬地向后 → 运动趋势向后 → 静摩擦力向前 → 人前进。脚与地面没有相对滑动，所以是静摩擦力而非滑动摩擦力。"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let startTime = Date.now();
+        let wrongList = [];
+
+        document.getElementById('total-q').textContent = questions.length;
+
+        function renderQuestion() {
+            const container = document.getElementById('questions-container');
+            const q = questions[currentQuestion];
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="question-number">第${q.number}题</div>
+                    <div class="question-text">${q.text}</div>
+                    ${q.diagram ? `<div class="diagram-container">${q.diagram}</div>` : ''}
+                    ${q.hint ? `<div class="hint-box" onclick="toggleHint(this)"><div class="hint-title">🔍 点击显示提示</div><div class="hint-content">${q.hint}</div></div>` : ''}
+                    <ul class="options">
+                        ${q.options.map((opt, i) => `<li class="option" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${opt}</li>`).join('')}
+                    </ul>
+                    <div class="feedback" id="feedback"></div>
+                </div>`;
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('progress-fill').style.width = `${(currentQuestion / questions.length) * 100}%`;
+            document.getElementById('next-btn').disabled = true;
+            selectedOption = null;
+        }
+
+        function toggleHint(hintBox) {
+            hintBox.querySelector('.hint-content').classList.toggle('show');
+        }
+
+        function selectOption(index) {
+            if (document.getElementById('feedback').style.display === 'block') return;
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            selectedOption = index;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                else if (i === selectedOption && i !== q.correct) opt.classList.add('incorrect');
+            });
+            if (selectedOption === q.correct) {
+                score += 10;
+                feedback.className = 'feedback';
+                feedback.innerHTML = `<div class="feedback-title">✅ 正确！</div><div class="feedback-text">${q.feedback}</div><div class="knowledge-point"><div class="knowledge-title">📌 知识点</div>${q.knowledge}</div>`;
+            } else {
+                wrongList.push({ question: q.text, correctAnswer: q.options[q.correct], studentAnswer: q.options[selectedOption], topic: q.knowledge });
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `<div class="feedback-title">❌ 错误（正确答案：${String.fromCharCode(65 + q.correct)}）</div><div class="feedback-text">${q.feedback}</div><div class="knowledge-point"><div class="knowledge-title">📌 知识点</div>${q.knowledge}</div>`;
+            }
+            feedback.style.display = 'block';
+            setTimeout(() => { currentQuestion++; currentQuestion < questions.length ? renderQuestion() : showResult(); }, 4000);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('progress-fill').style.width = '100%';
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+            const correctCount = score / 10;
+            const acc = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('accuracy').textContent = acc + '%';
+            document.getElementById('time-taken').textContent = timeTaken;
+            if (typeof FeishuSync !== 'undefined') {
+                FeishuSync.submit({ practiceTitle: document.title, questionCount: questions.length, score: correctCount, accuracy: acc, practiceUrl: location.href, statusElId: 'syncStatus', textElId: 'syncText' });
+                if (wrongList.length > 0) FeishuSync.submitWrongQuestions({ practiceTitle: document.title, practiceUrl: location.href, subject: '物理', wrongQuestions: wrongList });
+            }
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

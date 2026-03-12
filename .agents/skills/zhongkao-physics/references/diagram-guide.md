@@ -1,235 +1,520 @@
-# 物理图示生成指南（PhySVG 组件库）
+# 手绘 SVG 图示范式库
 
-题目涉及受力分析、弹簧、斜面、滑轮、浮力、杠杆、坐标图等时，使用 **PhySVG** 组件库在 `renderDiagram` 中组装专业图示。图示由页面通过 CDN 加载 `physics-svg-lib.js` 后，用代码绘制，而非 JSON schema。
+本文档提供初中物理常见场景的 **手绘 SVG 代码片段**，生成练习题时直接复制并修改即可。每个 SVG 都是独立的，不依赖任何外部库。
 
-## 何时必须加图示
+## 通用规范
 
-- 力学：受力分析、压力/支持力、摩擦力、浮力、杠杆、弹簧
-- 电学：串联/并联识别、电表示数、电路故障（可用电路图或手写 SVG）
-- 光学：反射、折射、透镜成像（可手写 SVG 或沿用旧 optics 逻辑）
-- 实验：实验装置、弹簧测力计、控制变量示意
+### 尺寸
+- 宽度：400-500px
+- 高度：200-300px
+- `viewBox` 与 width/height 一致
 
-若题目明显依赖空间关系，默认添加图示；纯概念题可不加。
+### 颜色规范
+| 物理量 | 颜色 | HEX |
+|--------|------|-----|
+| 重力 G | 红色 | `#f44336` |
+| 支持力 F支 | 蓝色 | `#42a5f5` |
+| 摩擦力 f | 绿色 | `#4caf50` |
+| 拉力/推力 F | 紫色/红色 | `#ab47bc` / `#f44336` |
+| 弹力 F弹 | 橙色 | `#ff9800` |
+| 弹簧线圈 | 品蓝 | `#667eea` |
+| 墙壁/地面 | 灰色/棕色 | `#9e9e9e` / `#6d4c41` |
+| 物体填充 | 浅蓝 | `#e3f2fd` |
 
-## 加载方式
+### 箭头 marker 模板
+每个 SVG 中按需定义（放在 `<defs>` 里）：
 
-```html
-<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/physics-svg-lib.js"></script>
+```svg
+<defs>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#42a5f5"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#ff9800"/>
+    </marker>
+    <!-- 反向箭头（向左） -->
+    <marker id="arrow-left-red" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto">
+        <path d="M9,0 L9,6 L0,3 z" fill="#f44336"/>
+    </marker>
+</defs>
 ```
 
-生成动态 HTML 时，在 `renderDiagram(diagram, question)` 中根据题目用 PhySVG 绘制，并返回 **可插入 DOM 的 HTML 字符串或 SVG 元素**。若返回 SVG 元素，需转为字符串或直接插入；若返回字符串，应为包含 `<svg>` 或 `<div>` 的 HTML。
+### 思考提示框模板
+嵌在 SVG 中，帮助学生思考：
 
-建议：用 `PhySVG.createSVG(w, h)` 得到 `ctx`，调用各组件后，将 `ctx.svg` 转为字符串返回，例如：
+```svg
+<!-- 黄色思考框 -->
+<rect x="280" y="30" width="200" height="60" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+<text x="290" y="50" font-size="12" fill="#333" font-weight="bold">❓ 思考：</text>
+<text x="290" y="70" font-size="11" fill="#666">第一行问题</text>
+<text x="290" y="85" font-size="11" fill="#666">第二行问题</text>
 
-```javascript
-function renderDiagram(diagram, question) {
-  if (!diagram || !window.PhySVG) return '';
-  var ctx = PhySVG.createSVG(400, 250);
-  // ... 根据 diagram 或 question 用 PhySVG 绘制
-  return ctx.svg.outerHTML;
-}
+<!-- 绿色分析框 -->
+<rect x="280" y="30" width="200" height="70" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+<text x="290" y="50" font-size="12" fill="#333" font-weight="bold">📌 分析：</text>
+<text x="290" y="68" font-size="11" fill="#666">要点 1</text>
+<text x="290" y="83" font-size="11" fill="#666">要点 2</text>
+
+<!-- 蓝色关键框 -->
+<rect x="280" y="30" width="200" height="60" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="4"/>
+<text x="290" y="50" font-size="13" fill="#333" font-weight="bold">💡 关键：</text>
+<text x="290" y="70" font-size="11" fill="#666">结论或规律</text>
 ```
 
 ---
 
-## 一、PhySVG 组件 API
+## 场景 1：水平面上物体受力分析
 
-### 1. 画布
+适用于：匀速直线运动、摩擦力方向、二力平衡
 
-| 方法 | 说明 |
-|------|------|
-| `PhySVG.createSVG(width, height)` | 创建画布，返回 `{ svg, g, defs }`。所有绘图函数第一个参数均为该对象。 |
+```svg
+<svg width="450" height="220" viewBox="0 0 450 220">
+    <!-- 粗糙地面 -->
+    <line x1="50" y1="160" x2="350" y2="160" stroke="#6d4c41" stroke-width="4"/>
+    <!-- 粗糙纹理 -->
+    <line x1="70" y1="160" x2="60" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="100" y1="160" x2="90" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="130" y1="160" x2="120" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="160" y1="160" x2="150" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="190" y1="160" x2="180" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="220" y1="160" x2="210" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="250" y1="160" x2="240" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="280" y1="160" x2="270" y2="170" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="310" y1="160" x2="300" y2="170" stroke="#8d6e63" stroke-width="2"/>
 
-### 2. 物体与场景
+    <!-- 木块 -->
+    <rect x="140" y="100" width="90" height="60" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+    <text x="185" y="135" font-size="14" fill="#0d47a1" font-weight="bold" text-anchor="middle">木块</text>
 
-| 方法 | 参数 | 说明 |
-|------|------|------|
-| `PhySVG.block(ctx, x, y, w, h, label)` | 左上角 (x,y)，宽 w 高 h，可选 label | 木块、铁块等矩形物体 |
-| `PhySVG.circle(ctx, cx, cy, r, label)` | 圆心、半径、可选 label | 小球、质点 |
-| `PhySVG.spring(ctx, x1, y1, x2, y2, coils, stroke)` | 起点、终点、线圈数(默认 6)、颜色 | 弹簧（贝塞尔线圈） |
-| `PhySVG.incline(ctx, x, y, width, angleDeg)` | 左端 (x,y)、斜面长度、与水平夹角(度) | 斜面（带 θ 标注） |
-| `PhySVG.ground(ctx, x1, x2, y, rough)` | 左右 x、地面 y、是否粗糙 | 水平地面 |
-| `PhySVG.wall(ctx, x, y1, y2, side)` | x、上下 y、'left'\|'right' | 墙壁 |
-| `PhySVG.pulley(ctx, cx, cy, r)` | 圆心、半径 | 定滑轮/动滑轮 |
-| `PhySVG.rope(ctx, points)` | `[{x,y}, ...]` | 绳子折线 |
-| `PhySVG.lever(ctx, pivotX, pivotY, length, angleDeg)` | 支点、杆长(单侧)、与水平夹角 | 杠杆 |
-| `PhySVG.fluid(ctx, x, y, w, h, level, label)` | 容器左上角、宽高、液面(0~1 或 y 坐标)、标签 | 液体容器 |
-| `PhySVG.springScale(ctx, x, y, reading)` | 顶部挂钩位置、示数(如 "2.4N") | 弹簧测力计 |
+    <!-- 力箭头 -->
+    <!-- G 向下 -->
+    <line x1="185" y1="130" x2="185" y2="195" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="195" y="195" font-size="13" fill="#f44336" font-weight="bold">G</text>
+    <!-- F支 向上 -->
+    <line x1="185" y1="130" x2="185" y2="65" stroke="#42a5f5" stroke-width="3" marker-end="url(#arrow-blue)"/>
+    <text x="195" y="70" font-size="13" fill="#42a5f5" font-weight="bold">F支</text>
+    <!-- F拉 向右 -->
+    <line x1="185" y1="130" x2="270" y2="130" stroke="#ab47bc" stroke-width="3" marker-end="url(#arrow-purple)"/>
+    <text x="250" y="122" font-size="13" fill="#ab47bc" font-weight="bold">F拉</text>
+    <!-- f 向左 -->
+    <line x1="185" y1="130" x2="100" y2="130" stroke="#4caf50" stroke-width="3" marker-end="url(#arrow-green)"/>
+    <text x="100" y="122" font-size="13" fill="#4caf50" font-weight="bold">f</text>
 
-### 3. 力与标注
-
-| 方法 | 参数 | 说明 |
-|------|------|------|
-| `PhySVG.forceArrow(ctx, x, y, angleDeg, length, label, color)` | 作用点、方向角(0=右,90=上,-90=下)、长度、符号、颜色 | 力箭头（任意角度） |
-| `PhySVG.dimension(ctx, x1, y1, x2, y2, label, opts)` | 标注线端点、文字、可选 `{ dashed, offset, stroke }` | 尺寸/角度标注 |
-
-### 4. 坐标图
-
-| 方法 | 参数 | 说明 |
-|------|------|------|
-| `PhySVG.graph(ctx, options)` | `{ data: [[x,y],...], width, height, originX, originY, xLabel, yLabel, xTicks, yTicks, scaleX, scaleY }` | F-x、L-F 等折线图 |
-
-**角度约定**：`forceArrow` 的 `angleDeg` 为与 x 轴正方向夹角，逆时针为正。0° 向右，90° 向上，-90° 向下，180° 向左。
-
-**常用颜色**：重力 `#ef5350`、支持力/法向 `#42a5f5`、摩擦力 `#66bb6a`、拉力/弹力 `#ab47bc` 或 `#ff9800`。
-
----
-
-## 二、常见场景组装示例
-
-### 场景 1：水平面匀速拉木块（四力平衡）
-
-```javascript
-var ctx = PhySVG.createSVG(360, 220);
-PhySVG.ground(ctx, 70, 290, 165, true);
-PhySVG.block(ctx, 135, 99, 90, 66, '木块');
-var cx = 180, cy = 132;
-PhySVG.forceArrow(ctx, cx, cy, -90, 55, 'G', '#ef5350');
-PhySVG.forceArrow(ctx, cx, cy, 90, 55, 'F支', '#42a5f5');
-PhySVG.forceArrow(ctx, cx, cy, 0, 50, 'F拉', '#ab47bc');
-PhySVG.forceArrow(ctx, cx, cy, 180, 50, 'f', '#66bb6a');
-return ctx.svg.outerHTML;
+    <!-- defs -->
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+        <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#42a5f5"/></marker>
+        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+        <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 2：斜面静止木块（重力、支持力、摩擦力）
+## 场景 2：墙壁 + 弹簧 + 水平拉力
 
-```javascript
-var ctx = PhySVG.createSVG(360, 220);
-PhySVG.incline(ctx, 50, 200, 250, 30);
-PhySVG.block(ctx, 150, 120, 60, 40, '木块');
-var cx = 180, cy = 140;
-PhySVG.forceArrow(ctx, cx, cy, -90, 60, 'G', '#ef5350');
-PhySVG.forceArrow(ctx, cx, cy, 60, 50, 'N', '#42a5f5');   // 垂直斜面，60° 与水平
-PhySVG.forceArrow(ctx, cx, cy, -30, 30, 'f', '#66bb6a');    // 沿斜面向上
-return ctx.svg.outerHTML;
+适用于：弹力方向判断、弹簧对墙的弹力
+
+```svg
+<svg width="500" height="200" viewBox="0 0 500 200">
+    <!-- 墙壁 -->
+    <rect x="0" y="50" width="30" height="100" fill="#9e9e9e"/>
+    <line x1="0" y1="50" x2="0" y2="150" stroke="#333" stroke-width="2"/>
+    <text x="5" y="45" font-size="12" fill="#333">墙</text>
+
+    <!-- 弹簧（贝塞尔曲线线圈） -->
+    <line x1="30" y1="100" x2="250" y2="100" stroke="#333" stroke-width="3"/>
+    <path d="M 40 100 Q 50 85 60 100 T 80 100 T 100 100 T 120 100 T 140 100 T 160 100 T 180 100 T 200 100 T 220 100 T 240 100"
+          stroke="#667eea" stroke-width="2" fill="none"/>
+
+    <!-- 拉力 F（向右） -->
+    <line x1="250" y1="100" x2="350" y2="100" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="280" y="90" font-size="14" fill="#f44336" font-weight="bold">F (拉力)</text>
+
+    <!-- 弹力方向标注（向左） -->
+    <line x1="30" y1="120" x2="80" y2="120" stroke="#4caf50" stroke-width="3" marker-end="url(#arrow-green)"/>
+    <text x="40" y="140" font-size="12" fill="#4caf50" font-weight="bold">弹力方向？</text>
+
+    <!-- 思考提示框 -->
+    <rect x="280" y="30" width="200" height="50" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+    <text x="290" y="50" font-size="12" fill="#333">❓ 思考：</text>
+    <text x="290" y="70" font-size="11" fill="#666">弹簧被拉伸，要恢复原长，</text>
+    <text x="290" y="82" font-size="11" fill="#666">对墙的弹力向哪边？</text>
+
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 3：弹簧竖直挂重物
+## 场景 3：弹簧测力计 + 钩码（竖直悬挂）
 
-```javascript
-var ctx = PhySVG.createSVG(200, 260);
-PhySVG.spring(ctx, 100, 30, 100, 120, 6);
-PhySVG.circle(ctx, 100, 165, 22, '重物');
-PhySVG.forceArrow(ctx, 100, 165, -90, 50, 'G', '#ef5350');
-PhySVG.forceArrow(ctx, 100, 120, 90, 50, 'F弹', '#ff9800');
-return ctx.svg.outerHTML;
+适用于：弹簧测力计使用、弹力与重力关系
+
+```svg
+<svg width="200" height="300" viewBox="0 0 200 300">
+    <!-- 固定点 -->
+    <line x1="80" y1="20" x2="120" y2="20" stroke="#333" stroke-width="3"/>
+
+    <!-- 弹簧测力计外壳 -->
+    <rect x="82" y="30" width="36" height="60" rx="4" fill="#fff" stroke="#37474f" stroke-width="2"/>
+    <text x="100" y="65" font-size="11" fill="#333" font-weight="bold" text-anchor="middle">2N</text>
+
+    <!-- 弹簧 -->
+    <path d="M 100 90 Q 110 100 100 110 T 100 130 T 100 150 T 100 170"
+          stroke="#667eea" stroke-width="2" fill="none"/>
+
+    <!-- 挂钩 -->
+    <line x1="100" y1="170" x2="100" y2="185" stroke="#5d4037" stroke-width="2"/>
+
+    <!-- 钩码 -->
+    <rect x="75" y="185" width="50" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+    <text x="100" y="210" font-size="13" fill="#0d47a1" font-weight="bold" text-anchor="middle">钩码</text>
+
+    <!-- G 向下 -->
+    <line x1="100" y1="225" x2="100" y2="280" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="115" y="275" font-size="13" fill="#f44336" font-weight="bold">G</text>
+
+    <!-- F弹 向上 -->
+    <line x1="100" y1="185" x2="100" y2="130" stroke="#ff9800" stroke-width="3" marker-end="url(#arrow-orange)"/>
+    <text x="115" y="140" font-size="13" fill="#ff9800" font-weight="bold">F弹</text>
+
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+        <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#ff9800"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 4：弹簧一端固定于墙、水平拉力
+## 场景 4：弹簧振子 A-O-B
 
-```javascript
-var ctx = PhySVG.createSVG(400, 200);
-PhySVG.wall(ctx, 30, 60, 140, 'left');
-PhySVG.spring(ctx, 40, 100, 250, 100, 8);
-PhySVG.forceArrow(ctx, 250, 100, 0, 60, 'F', '#ef5350');
-PhySVG.forceArrow(ctx, 40, 110, 0, 50, 'F弹', '#ff9800');
-return ctx.svg.outerHTML;
+适用于：弹力方向随位移变化、弹力大小变化
+
+```svg
+<svg width="500" height="250" viewBox="0 0 500 250">
+    <!-- 墙面 -->
+    <rect x="0" y="80" width="30" height="80" fill="#9e9e9e"/>
+
+    <!-- 弹簧（压缩状态，小球在 A 点） -->
+    <path d="M 30 120 Q 40 105 50 120 T 70 120 T 90 120 T 110 120 T 130 120"
+          stroke="#667eea" stroke-width="2" fill="none"/>
+    <text x="60" y="100" font-size="11" fill="#667eea">压缩</text>
+
+    <!-- 小球 A -->
+    <circle cx="140" cy="120" r="25" fill="#667eea"/>
+    <text x="130" y="125" font-size="14" fill="white" font-weight="bold">A</text>
+
+    <!-- 平衡位置 O -->
+    <line x1="250" y1="95" x2="250" y2="145" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="240" y="90" font-size="12" fill="#ff9800" font-weight="bold">O</text>
+    <text x="225" y="160" font-size="11" fill="#999">平衡位置</text>
+
+    <!-- B 点 -->
+    <line x1="360" y1="95" x2="360" y2="145" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="350" y="90" font-size="12" fill="#ff9800" font-weight="bold">B</text>
+
+    <!-- 运动方向箭头 -->
+    <line x1="170" y1="120" x2="230" y2="120" stroke="#4caf50" stroke-width="3" marker-end="url(#arrow-green)"/>
+    <text x="180" y="110" font-size="11" fill="#4caf50">A→O 运动</text>
+
+    <!-- 弹力方向 -->
+    <line x1="140" y1="155" x2="200" y2="155" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="150" y="175" font-size="11" fill="#f44336">弹力向右（推）</text>
+
+    <!-- 分析框 -->
+    <rect x="280" y="30" width="200" height="70" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+    <text x="290" y="50" font-size="12" fill="#333" font-weight="bold">📌 A→O 过程分析：</text>
+    <text x="290" y="68" font-size="11" fill="#666">• 弹簧从压缩→恢复</text>
+    <text x="290" y="83" font-size="11" fill="#666">• 弹力方向：向右（推小球）</text>
+    <text x="290" y="98" font-size="11" fill="#666">• 压缩量减小→弹力变小</text>
+
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 5：弹簧测力计拉木块（探究摩擦力）
+## 场景 5：甲乙弹簧对比（一端固定 vs 两端拉）
 
-```javascript
-var ctx = PhySVG.createSVG(400, 200);
-PhySVG.springScale(ctx, 80, 40, '2.4N');
-PhySVG.block(ctx, 180, 100, 80, 50, '木块');
-PhySVG.ground(ctx, 100, 380, 180, true);
-PhySVG.forceArrow(ctx, 260, 125, 0, 40, 'F拉', '#ab47bc');
-PhySVG.forceArrow(ctx, 220, 125, 180, 40, 'f', '#66bb6a');
-return ctx.svg.outerHTML;
+适用于：弹簧内力分析、牛顿第三定律
+
+```svg
+<svg width="500" height="280" viewBox="0 0 500 280">
+    <!-- 甲图标题 -->
+    <text x="20" y="30" font-size="16" fill="#333" font-weight="bold">甲：一端固定</text>
+
+    <!-- 墙 -->
+    <rect x="0" y="50" width="30" height="60" fill="#9e9e9e"/>
+
+    <!-- 弹簧甲 -->
+    <path d="M 30 80 Q 45 65 60 80 T 90 80 T 120 80 T 150 80 T 180 80 T 210 80"
+          stroke="#667eea" stroke-width="2" fill="none"/>
+
+    <!-- 拉力 F 向右 -->
+    <line x1="210" y1="80" x2="280" y2="80" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="230" y="70" font-size="14" fill="#f44336" font-weight="bold">F</text>
+
+    <!-- 乙图标题 -->
+    <text x="20" y="160" font-size="16" fill="#333" font-weight="bold">乙：两端受力</text>
+
+    <!-- 弹簧乙 -->
+    <path d="M 30 210 Q 45 195 60 210 T 90 210 T 120 210 T 150 210 T 180 210 T 210 210"
+          stroke="#667eea" stroke-width="2" fill="none"/>
+
+    <!-- 左拉力 F -->
+    <line x1="30" y1="210" x2="0" y2="210" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-left-red)"/>
+    <text x="10" y="200" font-size="14" fill="#f44336" font-weight="bold">F</text>
+
+    <!-- 右拉力 F -->
+    <line x1="210" y1="210" x2="280" y2="210" stroke="#f44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <text x="230" y="200" font-size="14" fill="#f44336" font-weight="bold">F</text>
+
+    <!-- 结论框 -->
+    <rect x="300" y="50" width="190" height="100" fill="#e3f2fd" stroke="#2196f3" stroke-width="2" rx="4"/>
+    <text x="310" y="75" font-size="13" fill="#333" font-weight="bold">💡 关键理解：</text>
+    <text x="310" y="95" font-size="11" fill="#666">甲图中，墙对弹簧的拉力</text>
+    <text x="310" y="110" font-size="11" fill="#666">也是 F（牛顿第三定律）</text>
+    <text x="310" y="125" font-size="11" fill="#666">∴ 甲乙两弹簧受力相同</text>
+    <text x="310" y="140" font-size="11" fill="#666">伸长量相同！</text>
+
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/></marker>
+        <marker id="arrow-left-red" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto">
+            <path d="M9,0 L9,6 L0,3 z" fill="#f44336"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 6：浮力（物体浸没在液体中）
+## 场景 6：L-F 坐标图
 
-```javascript
-var ctx = PhySVG.createSVG(280, 220);
-PhySVG.fluid(ctx, 80, 80, 120, 140, 0.6, '水');
-PhySVG.block(ctx, 115, 95, 50, 50, '物块');
-PhySVG.forceArrow(ctx, 140, 120, -90, 45, 'G', '#ef5350');
-PhySVG.forceArrow(ctx, 140, 120, 90, 55, 'F浮', '#42a5f5');
-return ctx.svg.outerHTML;
+适用于：图像读数、求劲度系数、原长判断
+
+```svg
+<svg width="400" height="300" viewBox="0 0 400 300">
+    <!-- 坐标轴 -->
+    <line x1="60" y1="250" x2="380" y2="250" stroke="#333" stroke-width="2"/>
+    <line x1="60" y1="250" x2="60" y2="30" stroke="#333" stroke-width="2"/>
+    <text x="360" y="270" font-size="14" fill="#333">L(cm)</text>
+    <text x="20" y="40" font-size="14" fill="#333">F(N)</text>
+
+    <!-- 刻度 -->
+    <line x1="140" y1="250" x2="140" y2="255" stroke="#333" stroke-width="1"/>
+    <text x="130" y="270" font-size="11" fill="#666">8</text>
+    <line x1="260" y1="250" x2="260" y2="255" stroke="#333" stroke-width="1"/>
+    <text x="250" y="270" font-size="11" fill="#666">14</text>
+    <line x1="60" y1="130" x2="55" y2="130" stroke="#333" stroke-width="1"/>
+    <text x="35" y="135" font-size="11" fill="#666">6</text>
+
+    <!-- 图像线 -->
+    <line x1="140" y1="250" x2="260" y2="130" stroke="#667eea" stroke-width="3"/>
+    <circle cx="140" cy="250" r="5" fill="#f44336"/>
+    <circle cx="260" cy="130" r="5" fill="#f44336"/>
+
+    <!-- ΔL 标注 -->
+    <line x1="140" y1="260" x2="260" y2="260" stroke="#ff9800" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="185" y="280" font-size="11" fill="#ff9800">ΔL=6cm</text>
+
+    <!-- F 标注 -->
+    <line x1="270" y1="130" x2="270" y2="250" stroke="#ff9800" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="280" y="200" font-size="11" fill="#ff9800">F=6N</text>
+
+    <!-- 说明框 -->
+    <rect x="200" y="10" width="180" height="60" fill="#f8f9fa" stroke="#ddd" rx="4"/>
+    <text x="210" y="30" font-size="12" fill="#333">📊 L-F 图像特点：</text>
+    <text x="210" y="50" font-size="11" fill="#666">• F=0 时，L=L₀(原长)</text>
+    <text x="210" y="65" font-size="11" fill="#666">• 横轴截距 = 原长 = 8cm</text>
+</svg>
 ```
 
-### 场景 7：定滑轮拉物体
+## 场景 7：数据表格 + 规律分析
 
-```javascript
-var ctx = PhySVG.createSVG(280, 220);
-PhySVG.pulley(ctx, 140, 70, 25);
-PhySVG.rope(ctx, [{x:140,y:95},{x:140,y:180},{x:200,y:180}]);
-PhySVG.block(ctx, 165, 180, 70, 40, '物体');
-PhySVG.forceArrow(ctx, 200, 200, -90, 50, 'G', '#ef5350');
-PhySVG.forceArrow(ctx, 200, 180, 90, 50, 'F拉', '#ab47bc');
-return ctx.svg.outerHTML;
+适用于：弹簧数据表、找规律、线性外推
+
+```svg
+<svg width="450" height="280" viewBox="0 0 450 280">
+    <!-- 表格框 -->
+    <rect x="20" y="20" width="200" height="130" fill="white" stroke="#333" stroke-width="2"/>
+
+    <!-- 表头 -->
+    <line x1="20" y1="50" x2="220" y2="50" stroke="#333" stroke-width="2"/>
+    <line x1="120" y1="20" x2="120" y2="150" stroke="#333" stroke-width="1"/>
+    <text x="70" y="40" font-size="13" fill="#333" font-weight="bold" text-anchor="middle">F(N)</text>
+    <text x="170" y="40" font-size="13" fill="#333" font-weight="bold" text-anchor="middle">L(cm)</text>
+
+    <!-- 数据行 -->
+    <line x1="20" y1="70" x2="220" y2="70" stroke="#ddd" stroke-width="1"/>
+    <text x="70" y="65" font-size="12" fill="#333" text-anchor="middle">0</text>
+    <text x="170" y="65" font-size="12" fill="#333" text-anchor="middle">10</text>
+
+    <line x1="20" y1="90" x2="220" y2="90" stroke="#ddd" stroke-width="1"/>
+    <text x="70" y="85" font-size="12" fill="#333" text-anchor="middle">2</text>
+    <text x="170" y="85" font-size="12" fill="#333" text-anchor="middle">11</text>
+
+    <line x1="20" y1="110" x2="220" y2="110" stroke="#ddd" stroke-width="1"/>
+    <text x="70" y="105" font-size="12" fill="#333" text-anchor="middle">4</text>
+    <text x="170" y="105" font-size="12" fill="#333" text-anchor="middle">12</text>
+
+    <line x1="20" y1="130" x2="220" y2="130" stroke="#ddd" stroke-width="1"/>
+    <text x="70" y="145" font-size="12" fill="#f44336" font-weight="bold" text-anchor="middle">?</text>
+    <text x="170" y="145" font-size="12" fill="#667eea" font-weight="bold" text-anchor="middle">13</text>
+
+    <!-- 规律分析框 -->
+    <rect x="240" y="20" width="200" height="130" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+    <text x="250" y="45" font-size="13" fill="#333" font-weight="bold">📊 找规律：</text>
+    <text x="250" y="70" font-size="11" fill="#666">F: 0 → 2 → 4 (每次+2N)</text>
+    <text x="250" y="90" font-size="11" fill="#666">L: 10 → 11 → 12 (每次+1cm)</text>
+    <text x="250" y="110" font-size="11" fill="#666">∴ L=13 时，F=6N</text>
+    <text x="250" y="130" font-size="10" fill="#ff9800">每伸长 1cm 需要 2N</text>
+</svg>
 ```
 
-### 场景 8：杠杆（支点 + 力臂）
+## 场景 8：双弹簧系统
 
-```javascript
-var ctx = PhySVG.createSVG(360, 200);
-PhySVG.lever(ctx, 180, 120, 120, 10);
-PhySVG.forceArrow(ctx, 80, 95, -90, 45, 'F₁', '#ef5350');
-PhySVG.forceArrow(ctx, 280, 95, -90, 35, 'F₂', '#42a5f5');
-PhySVG.dimension(ctx, 80, 130, 180, 130, 'L₁', { dashed: true });
-PhySVG.dimension(ctx, 180, 130, 280, 130, 'L₂', { dashed: true });
-return ctx.svg.outerHTML;
+适用于：分段弹力、临界点分析
+
+```svg
+<svg width="500" height="300" viewBox="0 0 500 300">
+    <!-- 状态 1 -->
+    <text x="20" y="30" font-size="14" fill="#333" font-weight="bold">状态 1：Δl=0.1m（只有大弹簧）</text>
+    <path d="M 50 60 Q 60 45 70 60 T 90 60 T 110 60 T 130 60 T 150 60 T 170 60 T 190 60"
+          stroke="#667eea" stroke-width="3" fill="none"/>
+    <text x="100" y="50" font-size="11" fill="#667eea">大弹簧 k₁=10N/m</text>
+    <path d="M 50 90 Q 57 80 64 90 T 78 90 T 92 90 T 106 90 T 120 90"
+          stroke="#ff9800" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+    <text x="80" y="110" font-size="10" fill="#ff9800">小弹簧（未工作）</text>
+
+    <!-- 状态 2 -->
+    <text x="20" y="160" font-size="14" fill="#333" font-weight="bold">状态 2：Δl=0.3m（两弹簧都工作）</text>
+    <path d="M 50 190 Q 65 170 80 190 T 110 190 T 140 190 T 170 190"
+          stroke="#667eea" stroke-width="3" fill="none"/>
+    <text x="90" y="180" font-size="11" fill="#667eea">大弹簧</text>
+    <path d="M 50 220 Q 62 205 74 220 T 98 220 T 122 220 T 146 220"
+          stroke="#ff9800" stroke-width="2" fill="none"/>
+    <text x="80" y="210" font-size="11" fill="#ff9800">小弹簧</text>
+
+    <!-- 计算框 -->
+    <rect x="280" y="30" width="210" height="140" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+    <text x="290" y="55" font-size="13" fill="#333" font-weight="bold">📐 计算过程：</text>
+    <text x="290" y="75" font-size="11" fill="#666">大弹簧：F₁=k₁×Δl=10×0.3=3N</text>
+    <text x="290" y="95" font-size="11" fill="#666">小弹簧：Δl₂=0.3-0.1=0.2m</text>
+    <text x="290" y="115" font-size="11" fill="#666">F₂=k₂×Δl₂=20×0.2=4N</text>
+    <text x="290" y="135" font-size="12" fill="#4caf50" font-weight="bold">总弹力 F=F₁+F₂=3+4=7N</text>
+    <text x="290" y="155" font-size="10" fill="#999">注意：小弹簧只压缩了 0.2m！</text>
+</svg>
 ```
 
-### 场景 9：L-F 或 F-Δx 坐标图
+## 场景 9：人走路时脚的受力
 
-```javascript
-var ctx = PhySVG.createSVG(360, 220);
-PhySVG.graph(ctx, {
-  data: [[0, 0], [2, 1], [4, 2], [6, 3]],
-  width: 280,
-  height: 160,
-  originX: 50,
-  originY: 180,
-  xLabel: 'L(cm)',
-  yLabel: 'F(N)',
-  scaleX: 40,
-  scaleY: 45
-});
-return ctx.svg.outerHTML;
+适用于：静摩擦力方向、运动趋势判断
+
+```svg
+<svg width="400" height="200" viewBox="0 0 400 200">
+    <!-- 地面 -->
+    <line x1="30" y1="150" x2="370" y2="150" stroke="#6d4c41" stroke-width="4"/>
+    <line x1="50" y1="150" x2="40" y2="160" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="80" y1="150" x2="70" y2="160" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="110" y1="150" x2="100" y2="160" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="140" y1="150" x2="130" y2="160" stroke="#8d6e63" stroke-width="2"/>
+    <line x1="170" y1="150" x2="160" y2="160" stroke="#8d6e63" stroke-width="2"/>
+
+    <!-- 鞋子/脚（简化为梯形） -->
+    <polygon points="80,150 90,120 140,120 160,150" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+    <text x="115" y="140" font-size="12" fill="#0d47a1" font-weight="bold" text-anchor="middle">脚</text>
+
+    <!-- 蹬地方向（向后） -->
+    <line x1="120" y1="150" x2="60" y2="150" stroke="#999" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-gray)"/>
+    <text x="65" y="170" font-size="10" fill="#999">蹬地（向后）</text>
+
+    <!-- 静摩擦力（向前） -->
+    <line x1="120" y1="140" x2="200" y2="140" stroke="#4caf50" stroke-width="3" marker-end="url(#arrow-green)"/>
+    <text x="150" y="130" font-size="13" fill="#4caf50" font-weight="bold">f静</text>
+
+    <!-- 思考框 -->
+    <rect x="220" y="30" width="170" height="70" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="4"/>
+    <text x="230" y="50" font-size="12" fill="#333" font-weight="bold">❓ 思考：</text>
+    <text x="230" y="68" font-size="11" fill="#666">脚蹬地向后，</text>
+    <text x="230" y="83" font-size="11" fill="#666">地面给脚的摩擦力</text>
+    <text x="230" y="98" font-size="11" fill="#666">向哪个方向？</text>
+
+    <defs>
+        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/></marker>
+        <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#999"/></marker>
+    </defs>
+</svg>
 ```
 
-### 场景 10：实验装置示意（弹簧测力计 + 木块 + 木板）
+## 场景 10：刹车片受力（增大摩擦力）
 
-用 `block`、`springScale`、`ground` 组合，并加 `dimension` 或文字标注即可；或继续用「实验装置图」的图标式布局（见 html-template 中的 exp-diagram 结构），由页面自行写 HTML。
+适用于：增大/减小摩擦力的方法
 
----
+```svg
+<svg width="400" height="200" viewBox="0 0 400 200">
+    <!-- 车轮（圆） -->
+    <circle cx="150" cy="100" r="60" fill="none" stroke="#333" stroke-width="3"/>
+    <circle cx="150" cy="100" r="5" fill="#333"/>
 
-## 三、在 renderDiagram 中根据题目分支
+    <!-- 轮胎花纹 -->
+    <line x1="150" y1="40" x2="150" y2="55" stroke="#666" stroke-width="2"/>
+    <line x1="150" y1="145" x2="150" y2="160" stroke="#666" stroke-width="2"/>
+    <line x1="90" y1="100" x2="105" y2="100" stroke="#666" stroke-width="2"/>
+    <line x1="195" y1="100" x2="210" y2="100" stroke="#666" stroke-width="2"/>
 
-动态生成 HTML 时，`renderDiagram(diagram, question)` 可根据 `question.id`、`question.diagram.scene` 或自定义字段分支，对不同题用不同 PhySVG 组合：
+    <!-- 刹车片 -->
+    <rect x="195" y="75" width="15" height="50" rx="2" fill="#ff8a65" stroke="#e64a19" stroke-width="2"/>
+    <text x="225" y="105" font-size="11" fill="#e64a19">刹车片</text>
 
-```javascript
-function renderDiagram(diagram, question) {
-  if (!diagram || typeof PhySVG === 'undefined') return '';
-  var scene = diagram.scene || {};
-  var ctx = PhySVG.createSVG(scene.width || 360, scene.height || 220);
-  if (scene.type === 'incline') {
-    PhySVG.incline(ctx, 50, 200, 250, scene.angle || 30);
-    PhySVG.block(ctx, 150, 120, 60, 40, scene.bodyLabel || '木块');
-    (scene.forces || []).forEach(function (f) {
-      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
-    });
-  } else if (scene.type === 'horizontal') {
-    PhySVG.ground(ctx, 70, 290, 165, scene.rough);
-    PhySVG.block(ctx, 135, 99, 90, 66, scene.bodyLabel || '木块');
-    (scene.forces || []).forEach(function (f) {
-      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
-    });
-  }
-  return ctx.svg.outerHTML;
-}
+    <!-- F压（捏闸力） -->
+    <line x1="230" y1="100" x2="210" y2="100" stroke="#ab47bc" stroke-width="3" marker-end="url(#arrow-purple)"/>
+    <text x="235" y="95" font-size="11" fill="#ab47bc">F压</text>
+
+    <!-- 旋转方向 -->
+    <path d="M 170 55 A 30 30 0 0 1 190 80" stroke="#999" stroke-width="1.5" fill="none" marker-end="url(#arrow-gray)"/>
+    <text x="185" y="50" font-size="10" fill="#999">旋转</text>
+
+    <!-- 分析框 -->
+    <rect x="250" y="20" width="140" height="80" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="4"/>
+    <text x="260" y="40" font-size="12" fill="#333" font-weight="bold">📌 分析：</text>
+    <text x="260" y="58" font-size="11" fill="#666">捏闸 → 增大 F压</text>
+    <text x="260" y="73" font-size="11" fill="#666">→ 增大摩擦力</text>
+    <text x="260" y="88" font-size="10" fill="#999">（不是改变粗糙度）</text>
+
+    <defs>
+        <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/></marker>
+        <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#999"/></marker>
+    </defs>
+</svg>
 ```
 
-也可完全按题目逐题手写 PhySVG 调用或手写 SVG 字符串，以最大程度贴合题干。
+## 使用指南
 
----
-
-## 四、生成建议
-
-- 同一套题中图示题建议占 20%～40%。
-- 图示服务于考点，不堆砌无关元素。
-- 图示标题与题干一致，便于学生对应「根据图示回答」。
-- 力箭头长度可依题意表示相对大小（如二力平衡时两力等长）。
+1. **选择场景**：根据题目类型选择对应的 SVG 模板
+2. **修改内容**：调整标签文字、数值、力的方向和大小
+3. **添加提示框**：在 SVG 中嵌入思考提示框，引导学生思考
+4. **调整尺寸**：修改 `width`、`height`、`viewBox` 适配内容
+5. **检查 marker**：确保 `<defs>` 中定义了所有用到的箭头 marker
+6. **测试显示**：SVG 放在 `.diagram-container` 中会自动 `max-width: 100%` 响应式适配

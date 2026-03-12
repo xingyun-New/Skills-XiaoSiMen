@@ -1,262 +1,529 @@
-# HTML 交互练习页面模板
+# 自包含 HTML 练习页面模板
 
-生成独立的 HTML 练习页面时，必须严格遵循以下结构。生成的文件是纯 HTML + CSS + JavaScript 单文件，无任何外部依赖。
+生成物理练习 HTML 时，必须生成**完全自包含的单文件**，内联全部 CSS + JavaScript + 手绘 SVG 图示。唯一外部依赖为 `feishu-sync.js`。
 
-## 核心架构：数据与逻辑分离
+> **范本文件**：`math-playgrounds/physics-spring-practice-v2.html` 是标准范本，所有新生成的物理练习应参考其结构和风格。
 
-题目数据放在 `<script type="application/json">` 标签中，**不是** JavaScript 代码，而是纯 JSON。这样做的好处：
-- JSON 转义规则简单明确（只需 `\"` 转义双引号）
-- 浏览器用 `JSON.parse()` 解析，不会因引号问题报错
-- 数据与代码彻底分离，更安全可靠
-
-## JSON 数据格式
-
-### 客观题格式（选择题/判断题/填空题）
-
-```json
-{
-  "title": "八年级物理 · 力学综合",
-  "questions": [
-    {
-      "id": 1,
-      "type": "choice",
-      "difficulty": 2,
-      "question": "题干文字",
-      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
-      "answer": 1,
-      "hints": [
-        "💡 方向提示：本题考查的是 XX 章节的 XX 知识点",
-        "📖 关键知识：具体的知识点内容",
-        "🎯 解题思路：根据 XX 可以判断出答案是 XX"
-      ],
-      "knowledgeCard": {
-        "topic": "考点名称",
-        "source": "人教版八年级上册 第二章",
-        "formula": "相关公式（如有）",
-        "keyMemory": "核心记忆点",
-        "commonMistake": "易错提醒",
-        "relatedTopics": "关联知识"
-      }
-    }
-  ]
-}
-```
-
-### 计算题/实验探究题格式
-
-```json
-{
-  "id": 11,
-  "type": "calculation",
-  "difficulty": 3,
-  "question": "题干文字，包含已知条件和求解要求",
-  "material": "补充材料或实验背景描述（可选，支持\\n换行和<table>表格标签）",
-  "materialLabel": "题目来源：改编自 2025 年中考题（可选）",
-  "subQuestions": [
-    {
-      "id": 1,
-      "question": "第 1 小问：求 XX",
-      "points": 4,
-      "answer": "参考解答过程和结果...",
-      "scoring": ["正确写出公式得 1 分", "代入数据得 1 分", "计算结果正确得 2 分"]
-    },
-    {
-      "id": 2,
-      "question": "第 2 小问：求 XX",
-      "points": 4,
-      "answer": "参考答案...",
-      "scoring": ["写出公式得 1 分", "结果正确得 3 分"]
-    }
-  ],
-  "hints": [
-    "💡 方向提示：本题考查 XX 章节的公式应用",
-    "📖 关键知识：核心公式 XX = XX",
-    "🎯 解题思路：先求出 XX，再利用公式 XX 计算 XX"
-  ],
-  "knowledgeCard": {
-    "topic": "考点名称",
-    "source": "人教版九年级全一册 第 X 章",
-    "formula": "核心公式",
-    "keyMemory": "核心记忆点",
-    "commonMistake": "易错提醒（如单位换算）",
-    "relatedTopics": "关联知识",
-    "answerTechnique": "答题技巧"
-  }
-}
-```
-
-实验探究题格式与计算题相同，将 `type` 改为 `"experiment"`。
-
-### 图示字段格式
-
-当题目需要显示受力图、弹簧、斜面、滑轮、坐标图等时，在题目对象中加入 `diagram` 字段。**图示由页面内的 `renderDiagram(diagram, question)` 函数负责绘制**，使用 PhySVG 组件库或手写 SVG，不再由固定模板渲染。
-
-```json
-{
-  "id": 3,
-  "type": "choice",
-  "question": "如图所示，下列说法正确的是：",
-  "diagram": {
-    "title": "木块受力示意图",
-    "caption": "箭头长度不表示实际大小，只表示方向",
-    "scene": {
-      "type": "horizontal",
-      "bodyLabel": "木块",
-      "rough": true,
-      "forces": [
-        { "x": 180, "y": 132, "angle": -90, "length": 55, "label": "G", "color": "#ef5350" },
-        { "x": 180, "y": 132, "angle": 90, "length": 55, "label": "F支", "color": "#42a5f5" },
-        { "x": 180, "y": 132, "angle": 0, "length": 50, "label": "F拉", "color": "#ab47bc" },
-        { "x": 180, "y": 132, "angle": 180, "length": 50, "label": "f", "color": "#66bb6a" }
-      ]
-    }
-  }
-}
-```
-
-- `diagram.title`、`diagram.caption` 可选，用于显示在图示上方/下方。
-- `diagram.scene` 结构由你在 **renderDiagram** 中自行约定并解析；也可不填 scene，在 renderDiagram 中根据 `question.id` 或题干为每道题手写 PhySVG 调用。
-- 图示绘制规范与 PhySVG API 见 [diagram-guide.md](diagram-guide.md)。
-
-### hints 字段说明
-
-每道题必须包含 `hints` 数组，含3级渐进式提示：
-
-| 级别 | 作用 | 扣分 | 示例 |
-|------|------|------|------|
-| 提示1 | 方向提示：指出知识点范围 | 基础分 -30% | 「本题考查欧姆定律的应用」 |
-| 提示2 | 关键知识：给出核心公式或定律 | 基础分 -60% | 「I = U/R，串联电路电流处处相等」 |
-| 提示3 | 解题思路：接近给出答案 | 基础分 -90% | 「先求总电阻 R=R₁+R₂，再用 I=U/R 求电流」 |
-
-### JSON 转义规则（只需关注这几条）
-
-| 字符 | JSON 中写法 | 示例 |
-|------|-----------|------|
-| 双引号 `"` | `\"` | `"所谓\"串联\""` |
-| 反斜杠 `\` | `\\` | `"C:\\路径"` |
-| 换行 | `\n` | `"第一行\n第二行"` |
-
-**中文引号 `""` 和 `「」` 在 JSON 中无需转义**，可以直接使用。建议优先用中文引号来包裹专有名词，彻底避免转义。
-
-### 物理特殊符号处理
-
-在 JSON 字符串中使用以下 Unicode 字符表示物理符号：
-- 希腊字母：ρ（密度）、Ω（欧姆）、η（效率）、λ（波长）
-- 上下标：用文字描述，如 "R₁"、"R₂"、"v₀"
-- 单位：℃、m/s、kg/m³、N/m²（Pa）、kW·h
-- 运算：×（乘号）、÷（除号）、≈、≥、≤、≠
-
-## 动态生成 HTML 指南（库 + 数据 + renderDiagram）
-
-物理练习页采用 **答题引擎库 + 图示库** 方式生成：题目数据仍为 JSON，图示由 **renderDiagram** 用 PhySVG 或手写 SVG 绘制。
-
-### 1. 页面结构骨架
-
-生成完整 HTML 时需包含：
-
-- 三个脚本（按顺序）：`feishu-sync.js`、`physics-svg-lib.js`、`physics-quiz-engine.js`（均使用 GitHub Pages CDN 或相对路径）。
-- 一个 `<script type="application/json" id="quiz-json">`，内容为 `{ "title": "...", "questions": [ ... ] }`。
-- 一段内联脚本：解析 JSON、实现 `renderDiagram(diagram, question)`、调用 `QuizEngine.init({ data, renderDiagram })`。
-
-引擎会自行注入样式并在找不到容器时创建默认 DOM（`#phyQuizContainer`、`#phyQuizTitle`、`#phyProgressText`、`#phyCorrectCount`、`#phyStreakCount`、`#phyTotalScore`、`#phyProgressBar`、`#phyQuizArea`）。若希望自定义布局，可在 body 内预先写好上述 ID 的容器，再调用 `QuizEngine.init`。
-
-### 2. 脚本加载与初始化示例
+## 完整模板结构
 
 ```html
-<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
-<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/physics-svg-lib.js"></script>
-<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/physics-quiz-engine.js"></script>
-<script type="application/json" id="quiz-json">
-{
-  "title": "八年级物理 · 摩擦力弹力综合",
-  "questions": [ ... ]
-}
-</script>
-<script>
-var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理专项练习 - [主题名称]（图解版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        .progress-text {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .question-card.active {
+            display: block;
+        }
+        .question-number {
+            background: #667eea;
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .diagram-container {
+            background: white;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .diagram-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .hint-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .hint-box:hover {
+            background: #ffe0b2;
+        }
+        .hint-title {
+            color: #e65100;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .hint-content {
+            display: none;
+            color: #333;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+        .hint-content.show {
+            display: block;
+        }
+        .options {
+            list-style: none;
+        }
+        .option {
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            display: none;
+        }
+        .feedback.incorrect {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .feedback-text {
+            line-height: 1.6;
+            color: #333;
+        }
+        .btn {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+        .score-display {
+            font-size: 48px;
+            color: #667eea;
+            margin: 30px 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .stat-number {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .knowledge-point {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #ff9800;
+        }
+        .knowledge-title {
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 物理专项练习 - [主题名称]</h1>
+        <p class="subtitle">配图详解版 | [副标题描述]</p>
 
-function renderDiagram(diagram, question) {
-  if (!diagram || typeof PhySVG === "undefined") return "";
-  var ctx = PhySVG.createSVG(360, 220);
-  var scene = diagram.scene || {};
-  if (scene.type === "horizontal") {
-    PhySVG.ground(ctx, 70, 290, 165, scene.rough);
-    PhySVG.block(ctx, 135, 99, 90, 66, scene.bodyLabel || "木块");
-    (scene.forces || []).forEach(function(f) {
-      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
-    });
-  } else if (scene.type === "incline") {
-    PhySVG.incline(ctx, 50, 200, 250, scene.angle || 30);
-    PhySVG.block(ctx, 150, 120, 60, 40, scene.bodyLabel || "木块");
-    (scene.forces || []).forEach(function(f) {
-      PhySVG.forceArrow(ctx, f.x, f.y, f.angle, f.length, f.label, f.color);
-    });
-  }
-  return ctx.svg.outerHTML;
-}
+        <div id="quiz-screen">
+            <div class="progress-text">第 <span id="current-q">1</span> 题 / 共 <span id="total-q">10</span> 题</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="questions-container"></div>
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+        </div>
 
-QuizEngine.init({ data: quizData, renderDiagram: renderDiagram });
-</script>
+        <div id="result-screen" class="result-screen">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-display">得分：<span id="final-score">0</span>/100</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="correct-count">0</div>
+                    <div class="stat-label">正确题数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">准确率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="time-taken">0</div>
+                    <div class="stat-label">用时 (秒)</div>
+                </div>
+            </div>
+            <div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;">
+                <span id="syncText"></span>
+            </div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+
+    <script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
+    <script>
+        // ===== 题目数据 =====
+        const questions = [
+            {
+                number: 1,
+                text: "题干文字...",
+                diagram: `<svg width="500" height="200" viewBox="0 0 500 200">
+                    <!-- 手绘 SVG 内容 -->
+                </svg>`,
+                hint: "💡 提示文字...",
+                options: ["选项 A", "选项 B", "选项 C", "选项 D"],
+                correct: 0,
+                feedback: "解析文字...",
+                knowledge: "知识点总结..."
+            }
+            // ... 更多题目
+        ];
+
+        // ===== 答题引擎 =====
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let startTime = Date.now();
+        let wrongList = [];
+
+        document.getElementById('total-q').textContent = questions.length;
+
+        function renderQuestion() {
+            const container = document.getElementById('questions-container');
+            const q = questions[currentQuestion];
+
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="question-number">第${q.number}题</div>
+                    <div class="question-text">${q.text}</div>
+                    ${q.diagram ? `<div class="diagram-container">${q.diagram}</div>` : ''}
+                    ${q.hint ? `
+                        <div class="hint-box" onclick="toggleHint(this)">
+                            <div class="hint-title">🔍 点击显示提示</div>
+                            <div class="hint-content">${q.hint}</div>
+                        </div>
+                    ` : ''}
+                    <ul class="options">
+                        ${q.options.map((opt, i) => `
+                            <li class="option" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${opt}</li>
+                        `).join('')}
+                    </ul>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('progress-fill').style.width = `${(currentQuestion / questions.length) * 100}%`;
+            document.getElementById('next-btn').disabled = true;
+            selectedOption = null;
+        }
+
+        function toggleHint(hintBox) {
+            const content = hintBox.querySelector('.hint-content');
+            content.classList.toggle('show');
+        }
+
+        function selectOption(index) {
+            if (document.getElementById('feedback').style.display === 'block') return;
+
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+
+            selectedOption = index;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const options = document.querySelectorAll('.option');
+
+            options.forEach((opt, i) => {
+                if (i === q.correct) opt.classList.add('correct');
+                else if (i === selectedOption && i !== q.correct) opt.classList.add('incorrect');
+            });
+
+            if (selectedOption === q.correct) {
+                score += 10;
+                feedback.className = 'feedback';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ 正确！</div>
+                    <div class="feedback-text">${q.feedback}</div>
+                    <div class="knowledge-point">
+                        <div class="knowledge-title">📌 知识点</div>
+                        ${q.knowledge}
+                    </div>
+                `;
+            } else {
+                wrongList.push({
+                    question: q.text,
+                    correctAnswer: q.options[q.correct],
+                    studentAnswer: q.options[selectedOption],
+                    topic: q.knowledge
+                });
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `
+                    <div class="feedback-title">❌ 错误（正确答案：${String.fromCharCode(65 + q.correct)}）</div>
+                    <div class="feedback-text">${q.feedback}</div>
+                    <div class="knowledge-point">
+                        <div class="knowledge-title">📌 知识点</div>
+                        ${q.knowledge}
+                    </div>
+                `;
+            }
+
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 4000);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('progress-fill').style.width = '100%';
+
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+            const correctCount = score / 10;
+            const accuracyVal = Math.round((correctCount / questions.length) * 100);
+
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('accuracy').textContent = accuracyVal + '%';
+            document.getElementById('time-taken').textContent = timeTaken;
+
+            // 飞书同步
+            if (typeof FeishuSync !== 'undefined') {
+                FeishuSync.submit({
+                    practiceTitle: document.title,
+                    questionCount: questions.length,
+                    score: correctCount,
+                    accuracy: accuracyVal,
+                    practiceUrl: location.href,
+                    statusElId: 'syncStatus',
+                    textElId: 'syncText'
+                });
+                if (wrongList.length > 0) {
+                    FeishuSync.submitWrongQuestions({
+                        practiceTitle: document.title,
+                        practiceUrl: location.href,
+                        subject: '物理',
+                        wrongQuestions: wrongList
+                    });
+                }
+            }
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
 ```
 
-### 3. renderDiagram 的职责
+## 题目数据字段说明
 
-- **入参**：`diagram`（题目中的 `diagram` 对象）、`question`（当前题目对象）。
-- **返回**：可插入 DOM 的 HTML 字符串（例如包含 `<svg>`），或空字符串表示不显示图。
-- **实现方式**：根据 `diagram.scene` 或 `question.id` 分支，使用 [diagram-guide.md](diagram-guide.md) 中的 PhySVG API 组装图示；复杂题可直接手写 SVG 字符串返回。
+每道题是一个 JavaScript 对象，包含以下字段：
 
-### 4. 旧版「完整模板」说明
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `number` | number | ✅ | 题号（从 1 开始） |
+| `text` | string | ✅ | 题干文字 |
+| `diagram` | string | 推荐 | 手绘 SVG 字符串（模板字符串），见 diagram-guide.md |
+| `hint` | string | ✅ | 点击显示的提示文字 |
+| `options` | string[] | ✅ | 4 个选项（选择题） |
+| `correct` | number | ✅ | 正确选项索引（0-based） |
+| `feedback` | string | ✅ | 详细解析文字 |
+| `knowledge` | string | ✅ | 知识点总结（显示在知识卡片中） |
 
-以下为旧版内联样式参考（仅作查阅，生成时以库 + 上述骨架为准）：
+### diagram 字段示例
 
-（完整旧版模板已移除，以库 + 骨架为准；样式由 physics-quiz-engine.js 自动注入。）
+diagram 是一个 JavaScript 模板字符串，包含完整的 `<svg>` 标签：
 
-## 生成要点（动态生成）
+```javascript
+diagram: `<svg width="500" height="200" viewBox="0 0 500 200">
+    <!-- 墙壁 -->
+    <rect x="0" y="50" width="30" height="100" fill="#9e9e9e"/>
+    <line x1="0" y1="50" x2="0" y2="150" stroke="#333" stroke-width="2"/>
+    <text x="5" y="45" font-size="12" fill="#333">墙</text>
 
-1. **加载三个库**：feishu-sync.js、physics-svg-lib.js、physics-quiz-engine.js（CDN 或相对路径）
-2. **题目数据**：放在 `<script type="application/json" id="quiz-json">` 中
-3. **实现 renderDiagram**：用 PhySVG 或手写 SVG，见 [diagram-guide.md](diagram-guide.md)
-4. **调用 QuizEngine.init({ data, renderDiagram })**
-5. **使用 Write 工具**：将完整 HTML 写入 `quiz-output/` 目录
-6. **文件命名**：`physics-{grade}-{topic}-{date}.html`，文件名禁止包含空格
+    <!-- 弹簧（贝塞尔曲线模拟线圈） -->
+    <path d="M 40 100 Q 50 85 60 100 T 80 100 T 100 100 T 120 100 T 140 100 T 160 100 T 180 100 T 200 100 T 220 100 T 240 100"
+          stroke="#667eea" stroke-width="2" fill="none"/>
 
----
+    <!-- 拉力 F（箭头） -->
+    <line x1="250" y1="100" x2="350" y2="100" stroke="#f44336" stroke-width="3"
+          marker-end="url(#arrow-red)"/>
+    <text x="280" y="90" font-size="14" fill="#f44336" font-weight="bold">F (拉力)</text>
 
-## JSON 数据生成规则（必须遵守）
+    <!-- 弹力标注 -->
+    <line x1="30" y1="110" x2="80" y2="110" stroke="#4caf50" stroke-width="3"
+          marker-end="url(#arrow-green)"/>
+    <text x="40" y="130" font-size="12" fill="#4caf50" font-weight="bold">弹力方向？</text>
 
-### 所有字符串值必须用双引号 `"` 包裹
+    <!-- 思考提示框 -->
+    <rect x="280" y="30" width="200" height="50" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+    <text x="290" y="50" font-size="12" fill="#333">❓ 思考：</text>
+    <text x="290" y="70" font-size="11" fill="#666">弹簧被拉伸，对墙的弹力向哪边？</text>
 
-```json
-"keyMemory": "记住密度公式 ρ=m/V"
+    <!-- 箭头 marker 定义 -->
+    <defs>
+        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/>
+        </marker>
+        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+        </marker>
+    </defs>
+</svg>`
 ```
 
-### 字符串内部的双引号用 `\"` 转义
+## 物理公式和特殊符号
 
-```json
-"commonMistake": "注意\"串联\"和\"并联\"的区别"
-```
+在 JavaScript 字符串中使用 Unicode 字符表示物理符号：
+- 希腊字母：ρ、Ω、η、λ、μ
+- 上下标：R₁、R₂、v₀、F₁、F₂
+- 单位：℃、m/s、kg/m³、Pa、kW·h
+- 运算：×、÷、≈、≥、≤、≠
+- 中文引号「」包裹专有名词，避免转义问题
 
-### 推荐用中文引号避免转义
+## 生成检查清单
 
-优先使用「」或 "" 包裹专有名词，天然不需要转义：
-
-```json
-"commonMistake": "「串联」电路中电流处处相等，「并联」电路中各支路电压相等"
-```
-
-### 物理公式在 JSON 中的写法
-
-使用文字和 Unicode 符号表示公式：
-```json
-"formula": "ρ = m/V，变形：m = ρV，V = m/ρ"
-"formula": "P = UI = I²R = U²/R"
-"formula": "F浮 = ρ液gV排"
-```
-
-### 禁止事项
-
-- 不要在 JSON 字符串中使用未转义的 `"` `\`
-- 不要在 JSON 字符串中使用真实换行（用 `\n` 代替）
-- 不要在 JSON 中使用单引号 `'` 作为字符串定界符
-- 不要使用尾随逗号（最后一个元素后不要加逗号）
-- 不要使用 LaTeX 语法写公式（如 `$F=ma$`），用纯文本代替
+生成 HTML 前确认：
+- [ ] 文件是**自包含**的（除 feishu-sync.js 外无外部依赖）
+- [ ] 每道题都有**手绘 SVG 图示**（力学/电学/光学/实验题）
+- [ ] SVG 图示包含**思考提示框**（至少关键题有）
+- [ ] 每道题都有 `hint`、`feedback`、`knowledge` 字段
+- [ ] 飞书同步代码已包含（submit + submitWrongQuestions）
+- [ ] 文件名无空格，写入 `quiz-output/` 目录
+- [ ] 手机端测试：SVG 设置了 `max-width: 100%; height: auto;`
