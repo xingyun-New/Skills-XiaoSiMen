@@ -320,7 +320,14 @@
             answered++;
             userAnswers.push({ questionId: q.id, correct: isCorrect });
             updateStats();
-            setTimeout(() => {
+            
+            // 显示下一题按钮
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn';
+            nextBtn.style.marginTop = '15px';
+            nextBtn.style.background = '#4caf50';
+            nextBtn.textContent = currentQuestion < questions.length - 1 ? '下一题 →' : '查看结果 →';
+            nextBtn.onclick = function() {
                 currentQuestion++;
                 selectedOption = null;
                 if (currentQuestion < questions.length) {
@@ -329,7 +336,14 @@
                 } else {
                     showResult();
                 }
-            }, 2500);
+            };
+            optionsContainer.appendChild(nextBtn);
+            
+            // 禁用提交按钮和输入框
+            const submitBtn = optionsContainer.querySelector('.btn');
+            if (submitBtn) submitBtn.disabled = true;
+            const input = document.getElementById('userInput');
+            if (input) input.disabled = true;
         }
 
         function updateStats() {
