@@ -239,7 +239,59 @@ Every generated artifact follows this pattern:
 ✅ **Gamified**: Points, achievements, feedback
 ✅ **Educational**: Clear explanations
 ✅ **Accessible**: Keyboard navigation, ARIA labels
-✅ **Standalone**: No external dependencies
+✅ **Standalone**: No external dependencies (except feishu-sync.js)
+✅ **Auto-Sync**: Results and wrong questions synced to Feishu
+
+### Feishu Sync Integration (REQUIRED)
+
+Every generated quiz/challenge HTML **MUST** include Feishu answer-record sync. Add the following:
+
+**1. Script tag** (before the main `<script>` block):
+```html
+<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
+```
+
+**2. Sync status HTML** (inside the result/completion area):
+```html
+<div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;">
+  <span id="syncText"></span>
+</div>
+```
+
+**3. Call sync on quiz completion** (in the showResults/showResult function):
+```javascript
+FeishuSync.submit({
+  practiceTitle: document.title,
+  questionCount: totalProblems,
+  score: correctAnswers,
+  accuracy: Math.round((correctAnswers / totalProblems) * 100),
+  practiceUrl: location.href,
+  statusElId: 'syncStatus',
+  textElId: 'syncText'
+});
+```
+
+**4. Submit wrong questions** (if any wrong answers exist):
+```javascript
+if (wrongList.length > 0) {
+  FeishuSync.submitWrongQuestions({
+    practiceTitle: document.title,
+    practiceUrl: location.href,
+    subject: '数学',
+    wrongQuestions: wrongList.map(function(w) {
+      return {
+        question: w.questionText || '',
+        correctAnswer: w.correctAnswer || '',
+        studentAnswer: w.studentAnswer || '',
+        topic: w.topic || '',
+        difficulty: w.difficulty || 0
+      };
+    })
+  });
+}
+```
+
+This integration is **mandatory** for all quiz/challenge artifacts. The `feishu-sync.js` module handles communication with the Vercel proxy → Feishu Bitable.
 
 ## Usage Patterns
 

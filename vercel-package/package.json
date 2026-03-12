@@ -2,6 +2,7 @@
   "name": "feishu-sync-api",
   "version": "1.0.0",
   "description": "飞书答题记录同步服务",
+  "type": "module",
   "main": "api/sync.js",
   "scripts": {
     "start": "node api/sync.js",
@@ -11,6 +12,6 @@
     "axios": "^1.6.0"
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   }
 }

@@ -1,24 +1,18 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/sync.js",
-      "use": "@vercel/node"
-    }
+  "rewrites": [
+    { "source": "/sync", "destination": "/api/sync" },
+    { "source": "/wrong", "destination": "/api/wrong" },
+    { "source": "/health", "destination": "/api/health" }
   ],
-  "routes": [
+  "headers": [
     {
-      "src": "/sync",
-      "dest": "/api/sync.js"
-    },
-    {
-      "src": "/health",
-      "dest": "/api/health.js"
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
     }
-  ],
-  "env": {
-    "FLYSITE_APP_TOKEN": "AKF2bHBDVaEfEpsCLggc3mUSnyb",
-    "FLYSITE_TABLE_ID": "tblOy4VZZ5L1baTP",
-    "FLYSITE_APP_ID": "cli_a92481440eb81bb4"
-  }
+  ]
 }

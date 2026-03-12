@@ -1,6 +1,5 @@
-const axios = require('axios');
+import axios from 'axios';
 
-// 飞书 API 配置（从环境变量读取）
 const FLYSITE_CONFIG = {
     appToken: process.env.FLYSITE_APP_TOKEN || 'AKF2bHBDVaEfEpsCLggc3mUSnyb',
     tableId: process.env.FLYSITE_TABLE_ID || 'tblOy4VZZ5L1baTP',
@@ -75,10 +74,11 @@ export default async function handler(req, res) {
             );
             
             if (response.data.code === 0) {
-                console.log('✅ 记录创建成功:', response.data.data.record_id);
+                const recordId = response.data.data.record?.record_id || response.data.data.record_id;
+                console.log('✅ 记录创建成功:', recordId);
                 return res.status(200).json({
                     success: true,
-                    recordId: response.data.data.record_id,
+                    recordId,
                     message: '同步成功'
                 });
             } else {

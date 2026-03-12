@@ -574,6 +574,7 @@
 </script>
 <!-- ========== 题目数据结束 ========== -->
 
+<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
 <script>
 var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
 var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
@@ -677,7 +678,8 @@ function useHint(level) {
 function selectChoice(idx) {
   if (answered) return; answered = true;
   var q = quizData.questions[currentIndex];
-  processAnswer(idx === q.answer);
+  var userAns = q.options ? q.options[idx] : String(idx);
+  processAnswer(idx === q.answer, userAns);
   document.querySelectorAll(".option-btn").forEach(function(btn, i) {
     btn.classList.add("disabled");
     if (i === q.answer) btn.classList.add("correct");
@@ -688,7 +690,7 @@ function selectChoice(idx) {
 function selectTF(val) {
   if (answered) return; answered = true;
   var q = quizData.questions[currentIndex];
-  processAnswer(val === q.answer);
+  processAnswer(val === q.answer, val ? "正确" : "错误");
   var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
   t.classList.add("disabled"); f.classList.add("disabled");
   (q.answer ? t : f).classList.add("correct");
@@ -740,10 +742,18 @@ function submitFill() {
     allCorrect: isAllCorrect
   };
   
-  processAnswer(isAllCorrect);
+  var userFillAns = '';
+  if (numBlanks === 1) {
+    userFillAns = document.getElementById("fillInput").value.trim();
+  } else {
+    var parts = [];
+    for (var j = 0; j < numBlanks; j++) { parts.push(document.getElementById("fillInput-" + j).value.trim()); }
+    userFillAns = parts.join('；');
+  }
+  processAnswer(isAllCorrect, userFillAns);
 }
 
-function processAnswer(isCorrect) {
+function processAnswer(isCorrect, userAnswer) {
   var q = quizData.questions[currentIndex];
   if (isCorrect) {
     streak++; if (streak > maxStreak) maxStreak = streak;
@@ -757,7 +767,7 @@ function processAnswer(isCorrect) {
     if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
   } else {
     streak = 0;
-    wrongQuestions.push({ index: currentIndex });
+    wrongQuestions.push({ index: currentIndex, userAnswer: userAnswer || '' });
   }
   updateStats();
   showFeedback(isCorrect, q);
@@ -845,7 +855,46 @@ function showResult() {
     '<div class="result-score">' + pct + "分</div>" +
     '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
     "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
-    weakHtml + '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+    weakHtml +
+    '<div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;">' +
+    '<span id="syncText"></span></div>' +
+    '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+
+     syncResultToFeishu(total, pct);
+}
+
+function syncResultToFeishu(total, pct) {
+  var title = quizData.title || document.title;
+  FeishuSync.submit({
+    practiceTitle: title,
+    questionCount: total,
+    score: correctTotal,
+    accuracy: pct,
+    practiceUrl: location.href,
+    statusElId: 'syncStatus',
+    textElId: 'syncText'
+  });
+
+  if (wrongQuestions.length > 0) {
+    var wrongData = wrongQuestions.map(function(w) {
+      var q = originalQuestions[w.index];
+      var kc = q.knowledgeCard || {};
+      return {
+        question: q.question || q.text || '',
+        correctAnswer: q.answer || (q.options ? q.options[q.correctIndex] : ''),
+        studentAnswer: w.userAnswer || '',
+        topic: kc.topic || '',
+        commonMistake: kc.commonMistake || '',
+        difficulty: q.difficulty || 0
+      };
+    });
+    FeishuSync.submitWrongQuestions({
+      practiceTitle: title,
+      practiceUrl: location.href,
+      subject: title.replace(/[【】]/g, '').split('·')[0].trim(),
+      wrongQuestions: wrongData
+    });
+  }
 }
 
 function reviewWrong() {
@@ -969,7 +1018,7 @@ function selfAssess(level) {
   } else {
     document.getElementById("assessWrong").classList.add("wrong");
     streak = 0;
-    wrongQuestions.push({ index: currentIndex });
+    wrongQuestions.push({ index: currentIndex, userAnswer: '自评：错误' });
   }
   if (isCorrect) {
     streak++;

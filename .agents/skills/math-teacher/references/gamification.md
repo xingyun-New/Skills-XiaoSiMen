@@ -526,6 +526,17 @@ class TimeAttackMode {
     };
 
     displayResults(results);
+
+    // Sync results to Feishu (required)
+    FeishuSync.submit({
+      practiceTitle: document.title,
+      questionCount: this.problemsSolved,
+      score: this.problemsSolved, // time-attack: all solved = all correct
+      accuracy: 100,
+      practiceUrl: location.href,
+      statusElId: 'syncStatus',
+      textElId: 'syncText'
+    });
   }
 
   calculateRating() {
@@ -579,6 +590,17 @@ class AccuracyChallenge {
       perfect: accuracy === 100,
       reward: this.calculateReward(accuracy)
     });
+
+    // Sync results to Feishu (required)
+    FeishuSync.submit({
+      practiceTitle: document.title,
+      questionCount: this.problemCount,
+      score: this.correctAnswers,
+      accuracy: Math.round(accuracy),
+      practiceUrl: location.href,
+      statusElId: 'syncStatus',
+      textElId: 'syncText'
+    });
   }
 
   fail() {
@@ -586,6 +608,17 @@ class AccuracyChallenge {
       success: false,
       correctAnswers: this.correctAnswers,
       totalProblems: this.problemCount
+    });
+
+    // Sync results to Feishu (required) even on fail
+    FeishuSync.submit({
+      practiceTitle: document.title,
+      questionCount: this.problemCount,
+      score: this.correctAnswers,
+      accuracy: Math.round((this.correctAnswers / this.problemCount) * 100),
+      practiceUrl: location.href,
+      statusElId: 'syncStatus',
+      textElId: 'syncText'
     });
   }
 
@@ -633,3 +666,7 @@ These gamification patterns provide:
 - Sound effects and celebrations
 
 Use these to make math learning addictively fun!
+
+## Feishu Sync (MANDATORY)
+
+Every quiz/challenge MUST include `<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>` and call `FeishuSync.submit()` on completion. Also call `FeishuSync.submitWrongQuestions()` for wrong answers. See SKILL.md for the complete integration pattern.

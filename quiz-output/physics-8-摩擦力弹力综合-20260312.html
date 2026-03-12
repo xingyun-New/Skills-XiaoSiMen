@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【物理】八年级下册 · 摩擦力弹力综合练习</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #01579b 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #1a237e; background: #e8eaf6; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #1a237e; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .tf-options { display: flex; gap: 16px; }
+    .tf-btn {
+      flex: 1; padding: 16px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa; cursor: pointer;
+      font-size: 1.2em; font-weight: bold; text-align: center;
+      transition: all 0.2s;
+    }
+    .tf-btn:hover:not(.disabled) { border-color: #1a237e; transform: scale(1.02); }
+
+    .fill-input {
+      width: 100%; padding: 14px 18px; font-size: 1.1em;
+      border: 2px solid #e0e0e0; border-radius: 14px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .fill-input:focus { border-color: #1a237e; }
+    .fill-blanks-multiple { display: flex; flex-direction: column; gap: 12px; }
+    .fill-blank-item { display: flex; align-items: center; gap: 12px; }
+    .fill-blank-item label { font-weight: bold; color: #1a237e; min-width: 80px; }
+    .fill-blank-item .fill-input { flex: 1; }
+
+    .fillblank-detail {
+      background: #f5f5f5;
+      border-left: 4px solid #2196F3;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .fillblank-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; margin: 8px 0; border-radius: 8px;
+      font-size: 0.95em; line-height: 1.6;
+    }
+    .fillblank-item.correct { background: #E8F5E9; border-left: 3px solid #4CAF50; }
+    .fillblank-item.wrong { background: #FFEBEE; border-left: 3px solid #f44336; }
+    .fillblank-item .blank-num {
+      display: inline-block; width: 24px; height: 24px; border-radius: 50%;
+      background: #2196F3; color: white; text-align: center; line-height: 24px;
+      font-weight: bold; font-size: 0.9em; flex-shrink: 0;
+    }
+    .fillblank-item.correct .blank-num { background: #4CAF50; }
+    .fillblank-item.wrong .blank-num { background: #f44336; }
+    .fillblank-item .blank-status { font-weight: bold; min-width: 60px; }
+    .fillblank-item.correct .blank-status { color: #2E7D32; }
+    .fillblank-item.wrong .blank-status { color: #c62828; }
+    .fillblank-item .blank-user { color: #555; flex: 1; }
+    .fillblank-item .blank-correct { color: #c62828; font-weight: bold; font-size: 0.9em; }
+    .fillblank-summary {
+      margin-top: 12px; padding-top: 12px; border-top: 2px solid #ddd;
+      font-weight: bold; font-size: 1.05em; color: #333;
+    }
+    .fillblank-summary .summary-correct { color: #2E7D32; }
+    .fillblank-summary .summary-wrong { color: #E65100; }
+
+    .submit-btn {
+      width: 100%; padding: 14px; margin-top: 12px;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    .material-section {
+      background: #e8eaf6;
+      border-left: 4px solid #1a237e;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+    .material-content { line-height: 1.8; font-size: 1em; color: #333; }
+    .material-content table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.95em; }
+    .material-content th, .material-content td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+    .material-content th { background: #e3f2fd; font-weight: bold; }
+    .sub-questions { margin-top: 16px; }
+    .sub-question-item {
+      margin-bottom: 20px; background: #fafafa; padding: 14px;
+      border-radius: 12px; border: 1px solid #e0e0e0;
+    }
+    .sub-question-text { font-weight: 500; margin-bottom: 10px; color: #333; line-height: 1.6; }
+    .sub-question-points { font-size: 0.85em; color: #1a237e; font-weight: bold; margin-left: 8px; }
+    .answer-textarea {
+      width: 100%; min-height: 80px; padding: 12px;
+      border: 2px solid #e0e0e0; border-radius: 12px;
+      font-size: 0.95em; resize: vertical; outline: none;
+      transition: border-color 0.2s; font-family: inherit; line-height: 1.6;
+    }
+    .answer-textarea:focus { border-color: #1a237e; }
+    .submit-material-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #1a237e, #283593);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover { transform: scale(1.02); }
+    .scoring-rubric {
+      background: #e8eaf6; border-left: 4px solid #1a237e;
+      padding: 14px 16px; margin-top: 16px; border-radius: 0 8px 8px 0;
+    }
+    .scoring-title { font-weight: bold; color: #1a237e; margin-bottom: 8px; font-size: 0.95em; }
+    .scoring-item { margin: 6px 0; font-size: 0.9em; line-height: 1.5; color: #444; }
+    .scoring-item::before { content: "✓ "; color: #1a237e; font-weight: bold; }
+    .self-assess { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+    .assess-btn {
+      flex: 1; min-width: 100px; padding: 12px 16px;
+      border: 2px solid #e0e0e0; border-radius: 12px; background: #fafafa;
+      cursor: pointer; font-weight: bold; font-size: 0.95em;
+      transition: all 0.2s; text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) { border-color: #1a237e; background: #e8eaf6; transform: scale(1.02); }
+    .assess-btn.correct { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32; }
+    .assess-btn.partial { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
+    .assess-btn.wrong { border-color: #f44336; background: #FFEBEE; color: #c62828; }
+    .assess-btn.disabled { pointer-events: none; opacity: 0.6; }
+    .assess-score { font-size: 0.85em; color: #666; margin-top: 4px; }
+
+    .diagram-panel {
+      margin: 18px 0 22px;
+      background: linear-gradient(180deg, #f8fbff, #eef4ff);
+      border: 1px solid #d8e5ff;
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .diagram-title {
+      font-weight: bold;
+      color: #1a237e;
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+    .diagram-caption {
+      margin-top: 10px;
+      color: #546e7a;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+    .diagram-figure {
+      width: 100%;
+      overflow-x: auto;
+    }
+    .diagram-figure svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .diagram-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(26, 35, 126, 0.06);
+      color: #3949ab;
+      font-size: 0.92em;
+      line-height: 1.6;
+    }
+    .exp-diagram {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+    .exp-item {
+      min-width: 92px;
+      padding: 12px 10px;
+      background: white;
+      border: 2px solid #c5d7ff;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(26,35,126,0.08);
+    }
+    .exp-item-icon {
+      display: block;
+      font-size: 1.4em;
+      margin-bottom: 6px;
+    }
+    .exp-item-label {
+      font-size: 0.9em;
+      color: #1f2d3d;
+      line-height: 1.4;
+    }
+    .exp-links {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .exp-link {
+      background: #fff;
+      border: 1px dashed #90a4ae;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.86em;
+      color: #455a64;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+      .diagram-panel { padding: 12px; }
+      .exp-item { min-width: 78px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON，生成时只替换这里） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "八年级物理 · 摩擦力弹力综合练习",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "下列关于弹力的说法，正确的是",
+      "options": [
+        "只要两个物体接触就一定产生弹力",
+        "弹力的产生条件是物体相互接触并发生弹性形变",
+        "弹力的大小一定与物体的重力成正比",
+        "弹力只能由弹簧产生，其他物体不能产生弹力"
+      ],
+      "answer": 1,
+      "diagram": {
+        "type": "force",
+        "title": "弹簧挂重物受力示意图",
+        "scene": {
+          "bodyLabel": "重物",
+          "surface": "none",
+          "forces": [
+            { "direction": "up", "label": "F弹", "color": "#ff9800" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查弹力的产生条件，属于第七章「力」的内容",
+        "📖 关键知识：弹力产生需要同时满足两个条件——①物体相互接触 ②接触处发生弹性形变",
+        "🎯 解题思路：A选项只提到接触未提到形变，不完整；C、D说法过于绝对，只有B同时包含两个条件"
+      ],
+      "knowledgeCard": {
+        "topic": "弹力的产生条件",
+        "source": "人教版八年级下册 第七章 第2节",
+        "formula": "弹力产生条件：①直接接触 ②发生弹性形变",
+        "keyMemory": "弹力的产生需要两个条件同时满足：物体相互接触且发生弹性形变，缺一不可",
+        "commonMistake": "接触不一定有弹力，只有接触处发生了弹性形变才会产生弹力",
+        "relatedTopics": "弹簧测力计、弹性形变与塑性形变、重力与弹力的关系"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "使用弹簧测力计测量力时，下列操作正确的是",
+      "options": [
+        "可以超过量程使用，只需读数准确即可",
+        "测量前不需要校零，直接挂上物体测量",
+        "测量时应使弹簧测力计的弹簧轴线方向与被测力的方向一致",
+        "读数时视线可以斜着看刻度盘"
+      ],
+      "answer": 2,
+      "diagram": {
+        "type": "force",
+        "title": "弹簧测力计测量重力",
+        "scene": {
+          "bodyLabel": "钩码",
+          "surface": "none",
+          "forces": [
+            { "direction": "up", "label": "F弹", "color": "#ff9800" },
+            { "direction": "down", "label": "G", "color": "#ef5350" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查弹簧测力计的正确使用方法",
+        "📖 关键知识：弹簧测力计使用三要点——看量程、调零、弹簧轴线与力的方向一致",
+        "🎯 解题思路：A超量程会损坏弹簧；B不校零读数不准；D视线应垂直刻度盘；只有C是正确操作"
+      ],
+      "knowledgeCard": {
+        "topic": "弹簧测力计的使用",
+        "source": "人教版八年级下册 第七章 第2节",
+        "formula": "F = kx（胡克定律，弹簧测力计的工作原理）",
+        "keyMemory": "使用弹簧测力计三步骤：①观察量程和分度值 ②校零 ③使弹簧轴线与力的方向一致",
+        "commonMistake": "忘记校零导致读数偏大或偏小，或者弹簧轴线与力的方向不一致导致测量不准",
+        "relatedTopics": "弹力、胡克定律、力的测量"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "小明用弹簧测力计拉着木块在水平桌面上做匀速直线运动，以下哪种方法能增大木块受到的滑动摩擦力？",
+      "options": [
+        "在木块上面再放一个砝码",
+        "增大拉力使木块加速运动",
+        "减小木块与桌面的接触面积",
+        "增大木块的运动速度"
+      ],
+      "answer": 0,
+      "diagram": {
+        "type": "force",
+        "title": "木块在水平面上匀速运动受力图",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "F拉", "color": "#ab47bc" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查影响滑动摩擦力大小的因素",
+        "📖 关键知识：滑动摩擦力大小只与压力和接触面粗糙程度有关，与接触面积、速度无关",
+        "🎯 解题思路：放砝码增大了压力（正压力），从而增大摩擦力；B、D改变速度不影响摩擦力；C改变面积也不影响"
+      ],
+      "knowledgeCard": {
+        "topic": "影响滑动摩擦力大小的因素",
+        "source": "人教版八年级下册 第八章 第3节",
+        "formula": "f = μN（滑动摩擦力 = 动摩擦因数 × 正压力）",
+        "keyMemory": "滑动摩擦力只与两个因素有关：①压力大小 ②接触面粗糙程度。与接触面积和速度无关",
+        "commonMistake": "误以为接触面积越大摩擦力越大，或运动速度越快摩擦力越大",
+        "relatedTopics": "静摩擦力、增大和减小摩擦力的方法"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "一个木块放在粗糙水平面上，用逐渐增大的水平推力推木块，但木块始终静止不动。关于此时木块受到的摩擦力，下列说法正确的是",
+      "options": [
+        "木块受到的摩擦力大小始终不变",
+        "木块受到的摩擦力大于推力",
+        "木块没有受到摩擦力的作用",
+        "木块受到的静摩擦力随推力的增大而增大"
+      ],
+      "answer": 3,
+      "diagram": {
+        "type": "force",
+        "title": "木块静止在粗糙水平面上受力图",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "F推", "color": "#ab47bc" },
+            { "direction": "left", "label": "f静", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查静摩擦力的特点，注意物体处于静止平衡状态",
+        "📖 关键知识：静止的物体受力平衡，水平方向上推力与静摩擦力大小相等、方向相反",
+        "🎯 解题思路：物体静止说明合力为零，推力增大则静摩擦力也必须增大才能保持平衡，选D"
+      ],
+      "knowledgeCard": {
+        "topic": "静摩擦力的特点",
+        "source": "人教版八年级下册 第八章 第3节",
+        "formula": "物体静止时：F推 = f静（水平方向二力平衡）",
+        "keyMemory": "静摩擦力的大小会随外力的增大而增大，始终等于使物体运动趋势的外力，直到达到最大静摩擦力",
+        "commonMistake": "误以为静摩擦力是固定不变的，实际上静摩擦力是「被动力」，会随外力变化而变化",
+        "relatedTopics": "滑动摩擦力、力的平衡、最大静摩擦力"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "一个物体在水平地面上向右滑动，该物体受到的滑动摩擦力的方向是",
+      "options": [
+        "向右",
+        "向左",
+        "向上",
+        "向下"
+      ],
+      "answer": 1,
+      "diagram": {
+        "type": "force",
+        "title": "物体向右滑动时受力示意图",
+        "scene": {
+          "bodyLabel": "物体",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查滑动摩擦力方向的判断方法",
+        "📖 关键知识：滑动摩擦力的方向与物体相对运动方向相反",
+        "🎯 解题思路：物体向右滑动，相对运动方向向右，所以摩擦力方向向左，选B"
+      ],
+      "knowledgeCard": {
+        "topic": "摩擦力方向的判断",
+        "source": "人教版八年级下册 第八章 第3节",
+        "formula": "滑动摩擦力方向与物体相对运动方向相反",
+        "keyMemory": "判断摩擦力方向的关键词是「相对运动方向」，摩擦力总是阻碍物体间的相对运动",
+        "commonMistake": "误以为摩擦力一定与运动方向相反，实际应是与「相对运动方向」相反（如传送带上的物体）",
+        "relatedTopics": "滑动摩擦力、静摩擦力方向、二力平衡"
+      }
+    },
+    {
+      "id": 6,
+      "type": "truefalse",
+      "difficulty": 1,
+      "question": "自行车刹车时用力捏闸，是通过减小接触面粗糙程度来增大摩擦力的。",
+      "answer": false,
+      "diagram": {
+        "type": "force",
+        "title": "刹车片与车轮接触受力图",
+        "scene": {
+          "bodyLabel": "刹车片",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "F压", "color": "#ab47bc" },
+            { "direction": "left", "label": "f", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查增大摩擦力的方法，需要区分两种方式",
+        "📖 关键知识：增大摩擦力有两种方法——增大压力或增大接触面粗糙程度",
+        "🎯 解题思路：用力捏闸增大的是刹车片对车轮的压力，而不是改变粗糙程度，所以说法错误"
+      ],
+      "knowledgeCard": {
+        "topic": "增大和减小摩擦力的方法",
+        "source": "人教版八年级下册 第八章 第3节",
+        "formula": "f = μN，增大f的方法：增大μ（粗糙程度）或增大N（压力）",
+        "keyMemory": "捏闸 → 增大压力 → 增大摩擦力；轮胎花纹 → 增大粗糙程度 → 增大摩擦力",
+        "commonMistake": "混淆「增大压力」和「增大粗糙程度」两种增大摩擦力的方法",
+        "relatedTopics": "滑动摩擦力的影响因素、生活中的摩擦力应用"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "关于弹力和重力，下列说法正确的是",
+      "options": [
+        "弹力和重力都是由于地球吸引而产生的",
+        "物体受到的弹力方向总是竖直向上的",
+        "重力的施力物体是地球，弹力的施力物体是发生形变的物体",
+        "物体受到的弹力大小一定等于物体的重力"
+      ],
+      "answer": 2,
+      "diagram": {
+        "type": "force",
+        "title": "书本放在桌面上的受力图",
+        "scene": {
+          "bodyLabel": "书本",
+          "surface": "smooth",
+          "forces": [
+            { "direction": "up", "label": "F支(弹力)", "color": "#ff9800" },
+            { "direction": "down", "label": "G(重力)", "color": "#ef5350" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查弹力和重力的本质区别，需要从力的产生原因分析",
+        "📖 关键知识：重力是由于地球吸引产生的，弹力是由于物体弹性形变产生的，施力物体不同",
+        "🎯 解题思路：A错在弹力不是地球吸引产生的；B弹力方向不一定竖直向上；D只在特定条件下成立；C正确"
+      ],
+      "knowledgeCard": {
+        "topic": "弹力与重力的区别",
+        "source": "人教版八年级下册 第七章 第1-2节",
+        "formula": "G = mg（重力公式），弹力由弹性形变产生",
+        "keyMemory": "重力施力物体是地球、弹力施力物体是发生形变的物体；重力方向竖直向下、弹力方向与形变方向相反",
+        "commonMistake": "将支持力的施力物体误认为是地球，实际上支持力是弹力，施力物体是支撑面",
+        "relatedTopics": "力的分类、重力、弹力、力的三要素"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "一个重为10N的木块在水平桌面上被5N的水平拉力拉着做匀速直线运动。此时木块受到的滑动摩擦力大小为",
+      "options": [
+        "5N",
+        "10N",
+        "15N",
+        "0N"
+      ],
+      "answer": 0,
+      "diagram": {
+        "type": "force",
+        "title": "木块匀速直线运动受力分析",
+        "scene": {
+          "bodyLabel": "木块",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支=10N", "color": "#42a5f5" },
+            { "direction": "down", "label": "G=10N", "color": "#ef5350" },
+            { "direction": "right", "label": "F拉=5N", "color": "#ab47bc" },
+            { "direction": "left", "label": "f=?", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查匀速直线运动中的二力平衡，属于力学核心考点",
+        "📖 关键知识：匀速直线运动的物体处于平衡状态，受到的合力为零。水平方向：F拉 = f",
+        "🎯 解题思路：匀速直线运动 → 合力为零 → 水平方向拉力与摩擦力平衡 → f = F拉 = 5N"
+      ],
+      "knowledgeCard": {
+        "topic": "二力平衡与匀速直线运动",
+        "source": "人教版八年级下册 第八章 第2节",
+        "formula": "匀速直线运动时：F合 = 0，即 F拉 = f（水平方向），F支 = G（竖直方向）",
+        "keyMemory": "匀速直线运动 = 平衡状态 = 合力为零。水平方向上拉力等于摩擦力，竖直方向上支持力等于重力",
+        "commonMistake": "误以为物体运动就需要拉力大于摩擦力。匀速直线运动时拉力恰好等于摩擦力",
+        "relatedTopics": "牛顿第一定律、惯性、力的平衡条件"
+      }
+    },
+    {
+      "id": 9,
+      "type": "fillblank",
+      "difficulty": 2,
+      "question": "在弹性限度内，弹簧的弹力大小与弹簧的______成正比，这就是胡克定律。已知一根弹簧的劲度系数为100N/m，当弹簧被拉长了0.05m时，弹簧的弹力大小为______N。",
+      "answer": ["形变量；5"],
+      "diagram": {
+        "type": "force",
+        "title": "弹簧被拉伸时的受力图",
+        "scene": {
+          "bodyLabel": "弹簧",
+          "surface": "none",
+          "forces": [
+            { "direction": "left", "label": "F固定", "color": "#42a5f5" },
+            { "direction": "right", "label": "F拉", "color": "#ab47bc" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查胡克定律及其计算应用",
+        "📖 关键知识：胡克定律 F = kx，其中k是劲度系数，x是形变量（伸长量或压缩量）",
+        "🎯 解题思路：第一空填「形变量」；第二空用 F = kx = 100 × 0.05 = 5N"
+      ],
+      "knowledgeCard": {
+        "topic": "胡克定律",
+        "source": "人教版八年级下册 第七章 第2节",
+        "formula": "F = kx（F为弹力，k为劲度系数，x为形变量）",
+        "keyMemory": "在弹性限度内，弹簧弹力与形变量成正比。形变量 = 当前长度 - 原长",
+        "commonMistake": "混淆「形变量」和「弹簧长度」。形变量是弹簧伸长或压缩的量，不是弹簧的总长度",
+        "relatedTopics": "弹力、弹簧测力计原理、弹性限度"
+      }
+    },
+    {
+      "id": 10,
+      "type": "truefalse",
+      "difficulty": 3,
+      "question": "人走路时，后脚蹬地，地面对脚的摩擦力方向向前，这个摩擦力是静摩擦力。",
+      "answer": true,
+      "diagram": {
+        "type": "force",
+        "title": "人走路时后脚受力分析",
+        "scene": {
+          "bodyLabel": "脚",
+          "surface": "rough",
+          "forces": [
+            { "direction": "up", "label": "F支", "color": "#42a5f5" },
+            { "direction": "down", "label": "G", "color": "#ef5350" },
+            { "direction": "right", "label": "f静", "color": "#66bb6a" }
+          ]
+        }
+      },
+      "hints": [
+        "💡 方向提示：本题考查生活中摩擦力的应用，需要判断摩擦力的类型和方向",
+        "📖 关键知识：走路时脚蹬地向后，脚相对地面有向后的运动趋势，地面给脚向前的静摩擦力",
+        "🎯 解题思路：走路时脚与地面没有相对滑动，所以是静摩擦力；脚蹬地向后，摩擦力方向向前，说法正确"
+      ],
+      "knowledgeCard": {
+        "topic": "生活中的摩擦力应用",
+        "source": "人教版八年级下册 第八章 第3节",
+        "formula": "静摩擦力方向与物体运动趋势方向相反",
+        "keyMemory": "人走路靠的是静摩擦力：脚蹬地向后 → 运动趋势向后 → 静摩擦力向前 → 人前进",
+        "commonMistake": "误以为走路时脚与地面之间是滑动摩擦力，或误认为摩擦力方向向后",
+        "relatedTopics": "静摩擦力与滑动摩擦力的区别、摩擦力的方向判断"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+var materialScore = 0;
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[ch];
+  });
+}
+
+function renderDiagram(diagram) {
+  if (!diagram || !diagram.type) return "";
+  var content = "";
+  if (diagram.type === "force") content = renderForceDiagram(diagram.scene || {});
+  if (diagram.type === "circuit") content = renderCircuitDiagram(diagram.scene || {});
+  if (diagram.type === "optics") content = renderOpticsDiagram(diagram.scene || {});
+  if (diagram.type === "experiment") content = renderExperimentDiagram(diagram.scene || {});
+  if (!content) return "";
+  return '<div class="diagram-panel">' +
+    (diagram.title ? '<div class="diagram-title">🖼 ' + escapeHtml(diagram.title) + '</div>' : "") +
+    content +
+    (diagram.caption ? '<div class="diagram-caption">' + escapeHtml(diagram.caption) + '</div>' : "") +
+    "</div>";
+}
+
+function getDirectionVector(direction) {
+  var map = {
+    "up": [0, -1],
+    "down": [0, 1],
+    "left": [-1, 0],
+    "right": [1, 0],
+    "up-left": [-0.75, -0.75],
+    "up-right": [0.75, -0.75],
+    "down-left": [-0.75, 0.75],
+    "down-right": [0.75, 0.75]
+  };
+  return map[direction] || [0, -1];
+}
+
+function renderForceDiagram(scene) {
+  var bodyLabel = escapeHtml(scene.bodyLabel || "研究对象");
+  var forces = scene.forces || [];
+  var bodyShape = scene.bodyShape || "rect";
+  var surface = scene.surface || "rough";
+  var centerX = 180, centerY = 115;
+  var bodySvg = bodyShape === "circle"
+    ? '<circle cx="' + centerX + '" cy="' + centerY + '" r="32" fill="#90caf9" stroke="#1a237e" stroke-width="2"></circle>'
+    : '<rect x="135" y="82" width="90" height="66" rx="12" fill="#90caf9" stroke="#1a237e" stroke-width="2"></rect>';
+  var groundSvg = "";
+  if (surface !== "none") {
+    groundSvg = '<line x1="70" y1="165" x2="290" y2="165" stroke="#6d4c41" stroke-width="4"></line>';
+    if (surface === "rough") {
+      for (var gx = 82; gx <= 285; gx += 18) {
+        groundSvg += '<line x1="' + gx + '" y1="165" x2="' + (gx - 6) + '" y2="174" stroke="#8d6e63" stroke-width="2"></line>';
+      }
+    }
+  }
+  var arrowsSvg = forces.map(function(force) {
+    var vector = getDirectionVector(force.direction);
+    var endX = centerX + vector[0] * 68;
+    var endY = centerY + vector[1] * 68;
+    var labelX = centerX + vector[0] * 88;
+    var labelY = centerY + vector[1] * 88;
+    var color = force.color || "#ef5350";
+    return '<line x1="' + centerX + '" y1="' + centerY + '" x2="' + endX + '" y2="' + endY + '" stroke="' + color + '" stroke-width="4" marker-end="url(#arrowHead)"></line>' +
+      '<text x="' + labelX + '" y="' + labelY + '" fill="' + color + '" font-size="14" font-weight="bold" text-anchor="middle">' +
+      escapeHtml(force.label || "F") + '</text>';
+  }).join("");
+  return '<div class="diagram-figure"><svg viewBox="0 0 360 220" aria-label="受力图">' +
+    '<defs><marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">' +
+    '<path d="M0,0 L10,5 L0,10 z" fill="#546e7a"></path></marker></defs>' +
+    groundSvg + bodySvg +
+    '<text x="' + centerX + '" y="' + (centerY + 6) + '" fill="#0d47a1" font-size="16" font-weight="bold" text-anchor="middle">' + bodyLabel + '</text>' +
+    arrowsSvg + '</svg></div>';
+}
+
+function renderCircuitSymbol(kind, x, y, component) {
+  var label = escapeHtml(component.label || "");
+  var symbol = "";
+  if (kind === "battery") {
+    symbol = '<line x1="' + (x - 8) + '" y1="' + (y - 18) + '" x2="' + (x - 8) + '" y2="' + (y + 18) + '" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="' + (x + 8) + '" y1="' + (y - 12) + '" x2="' + (x + 8) + '" y2="' + (y + 12) + '" stroke="#263238" stroke-width="3"></line>';
+  } else if (kind === "switch") {
+    if (component.closed) {
+      symbol = '<line x1="' + (x - 18) + '" y1="' + y + '" x2="' + (x + 18) + '" y2="' + y + '" stroke="#263238" stroke-width="3"></line>';
+    } else {
+      symbol = '<line x1="' + (x - 18) + '" y1="' + y + '" x2="' + (x - 2) + '" y2="' + y + '" stroke="#263238" stroke-width="3"></line>' +
+        '<line x1="' + (x + 2) + '" y1="' + (y - 10) + '" x2="' + (x + 18) + '" y2="' + y + '" stroke="#263238" stroke-width="3"></line>';
+    }
+  } else if (kind === "lamp") {
+    symbol = '<circle cx="' + x + '" cy="' + y + '" r="16" fill="#fffde7" stroke="#263238" stroke-width="3"></circle>' +
+      '<line x1="' + (x - 10) + '" y1="' + (y - 10) + '" x2="' + (x + 10) + '" y2="' + (y + 10) + '" stroke="#f9a825" stroke-width="2"></line>' +
+      '<line x1="' + (x + 10) + '" y1="' + (y - 10) + '" x2="' + (x - 10) + '" y2="' + (y + 10) + '" stroke="#f9a825" stroke-width="2"></line>';
+  } else if (kind === "ammeter" || kind === "voltmeter") {
+    var mark = kind === "ammeter" ? "A" : "V";
+    symbol = '<circle cx="' + x + '" cy="' + y + '" r="16" fill="#e8f5e9" stroke="#263238" stroke-width="3"></circle>' +
+      '<text x="' + x + '" y="' + (y + 5) + '" fill="#1b5e20" font-size="15" font-weight="bold" text-anchor="middle">' + mark + '</text>';
+  } else {
+    symbol = '<rect x="' + (x - 20) + '" y="' + (y - 12) + '" width="40" height="24" rx="4" fill="#fff" stroke="#263238" stroke-width="3"></rect>';
+  }
+  if (kind === "resistor") {
+    symbol = '<rect x="' + (x - 22) + '" y="' + (y - 10) + '" width="44" height="20" rx="3" fill="#fff" stroke="#263238" stroke-width="3"></rect>';
+  }
+  return symbol + (label ? '<text x="' + x + '" y="' + (y + 36) + '" fill="#263238" font-size="13" text-anchor="middle">' + label + '</text>' : "");
+}
+
+function renderCircuitDiagram(scene) {
+  var layout = scene.layout || "series";
+  var components = scene.components || [];
+  var svg = "";
+  if (layout === "parallel") {
+    var branches = {};
+    var fixed = [];
+    components.forEach(function(component) {
+      if (component.branch) {
+        if (!branches[component.branch]) branches[component.branch] = [];
+        branches[component.branch].push(component);
+      } else {
+        fixed.push(component);
+      }
+    });
+    var branchKeys = Object.keys(branches);
+    if (branchKeys.length === 0) branchKeys = ["1"];
+    svg += '<line x1="80" y1="60" x2="80" y2="170" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="280" y1="60" x2="280" y2="170" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="80" y1="60" x2="280" y2="60" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="80" y1="170" x2="280" y2="170" stroke="#263238" stroke-width="3"></line>';
+    svg += renderCircuitSymbol("battery", 50, 115, fixed[0] || { label: "电源" });
+    svg += '<line x1="58" y1="115" x2="80" y2="115" stroke="#263238" stroke-width="3"></line>';
+    branchKeys.forEach(function(branchKey, idx) {
+      var y = 85 + idx * 42;
+      var branchComps = branches[branchKey];
+      svg += '<line x1="80" y1="' + y + '" x2="280" y2="' + y + '" stroke="#263238" stroke-width="3"></line>';
+      branchComps.forEach(function(component, compIdx) {
+        var x = 130 + compIdx * 70;
+        svg += renderCircuitSymbol(component.kind, x, y, component);
+      });
+    });
+  } else {
+    var seriesComps = components.length ? components : [{ kind: "battery", label: "电源" }, { kind: "resistor", label: "R" }];
+    var topY = 70;
+    svg += '<line x1="40" y1="' + topY + '" x2="320" y2="' + topY + '" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="320" y1="' + topY + '" x2="320" y2="170" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="320" y1="170" x2="40" y2="170" stroke="#263238" stroke-width="3"></line>' +
+      '<line x1="40" y1="170" x2="40" y2="' + topY + '" stroke="#263238" stroke-width="3"></line>';
+    seriesComps.forEach(function(component, idx) {
+      var x = 70 + idx * (230 / Math.max(1, seriesComps.length - 1));
+      svg += renderCircuitSymbol(component.kind, x, topY, component);
+    });
+  }
+  var noteHtml = scene.note ? '<div class="diagram-note">📌 ' + escapeHtml(scene.note) + '</div>' : "";
+  return '<div class="diagram-figure"><svg viewBox="0 0 360 220" aria-label="电路图">' + svg + '</svg></div>' + noteHtml;
+}
+
+function getOpticsAnchors(kind) {
+  if (kind === "convex-lens" || kind === "concave-lens") {
+    return {
+      leftObjectTop: [85, 72],
+      leftMid: [70, 110],
+      lensTop: [170, 72],
+      lensCenter: [170, 110],
+      rightFocus: [245, 110],
+      rightTop: [285, 72],
+      rightMid: [290, 110],
+      center: [170, 110]
+    };
+  }
+  return {
+    leftTop: [90, 55],
+    leftMid: [70, 110],
+    leftBottom: [90, 165],
+    center: [170, 110],
+    rightTop: [250, 55],
+    rightMid: [290, 110],
+    rightBottom: [250, 165]
+  };
+}
+
+function renderOpticsDiagram(scene) {
+  var kind = scene.kind || "reflection";
+  var anchors = getOpticsAnchors(kind);
+  var baseSvg = "";
+  if (kind === "reflection") {
+    baseSvg = '<line x1="60" y1="150" x2="280" y2="150" stroke="#455a64" stroke-width="4"></line>' +
+      '<line x1="170" y1="45" x2="170" y2="180" stroke="#90a4ae" stroke-dasharray="6 5" stroke-width="2"></line>';
+    anchors.center = [170, 150];
+  } else if (kind === "refraction") {
+    baseSvg = '<line x1="60" y1="110" x2="280" y2="110" stroke="#29b6f6" stroke-width="4"></line>' +
+      '<line x1="170" y1="35" x2="170" y2="185" stroke="#90a4ae" stroke-dasharray="6 5" stroke-width="2"></line>' +
+      '<text x="80" y="96" fill="#0277bd" font-size="13">空气</text>' +
+      '<text x="80" y="138" fill="#0277bd" font-size="13">水</text>';
+  } else if (kind === "convex-lens") {
+    baseSvg = '<line x1="40" y1="110" x2="320" y2="110" stroke="#90a4ae" stroke-width="2"></line>' +
+      '<path d="M170 45 Q145 110 170 175 Q195 110 170 45" fill="#e3f2fd" stroke="#1565c0" stroke-width="3"></path>' +
+      '<text x="115" y="104" fill="#c62828" font-size="13">F</text>' +
+      '<text x="245" y="104" fill="#c62828" font-size="13">F</text>';
+  } else {
+    baseSvg = '<line x1="40" y1="110" x2="320" y2="110" stroke="#90a4ae" stroke-width="2"></line>' +
+      '<path d="M170 45 Q195 110 170 175 Q145 110 170 45" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="3"></path>';
+  }
+  var rays = (scene.rays || []).map(function(ray) {
+    var from = anchors[ray.from] || anchors.leftTop || anchors.center;
+    var to = anchors[ray.to] || anchors.rightTop || anchors.center;
+    var color = ray.color || "#ff7043";
+    var midX = (from[0] + to[0]) / 2;
+    var midY = (from[1] + to[1]) / 2 - 6;
+    return '<line x1="' + from[0] + '" y1="' + from[1] + '" x2="' + to[0] + '" y2="' + to[1] +
+      '" stroke="' + color + '" stroke-width="3" marker-end="url(#opticsArrow)" ' +
+      (ray.dashed ? 'stroke-dasharray="6 4"' : "") + '></line>' +
+      (ray.label ? '<text x="' + midX + '" y="' + midY + '" fill="' + color + '" font-size="12" text-anchor="middle">' +
+      escapeHtml(ray.label) + '</text>' : "");
+  }).join("");
+  var noteHtml = scene.note ? '<div class="diagram-note">📌 ' + escapeHtml(scene.note) + '</div>' : "";
+  return '<div class="diagram-figure"><svg viewBox="0 0 360 220" aria-label="光路图">' +
+    '<defs><marker id="opticsArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">' +
+    '<path d="M0,0 L10,5 L0,10 z" fill="#546e7a"></path></marker></defs>' +
+    baseSvg + rays + '</svg></div>' + noteHtml;
+}
+
+function getExperimentIcon(kind) {
+  var icons = {
+    "spring-scale": "🧲",
+    "block": "🧱",
+    "surface": "📏",
+    "weight": "⚖️",
+    "beaker": "🥛",
+    "thermometer": "🌡️",
+    "lamp": "💡",
+    "lens": "🔍"
+  };
+  return icons[kind] || "🔧";
+}
+
+function renderExperimentDiagram(scene) {
+  var items = scene.items || [];
+  var itemHtml = items.map(function(item) {
+    return '<div class="exp-item"><span class="exp-item-icon">' + getExperimentIcon(item.kind) +
+      '</span><div class="exp-item-label">' + escapeHtml(item.label || item.kind || "器材") + '</div></div>';
+  }).join("");
+  var linksHtml = "";
+  if (scene.arrows && scene.arrows.length > 0) {
+    linksHtml = '<div class="exp-links">' + scene.arrows.map(function(link) {
+      var fromItem = items[link.from] ? items[link.from].label : ("器材" + link.from);
+      var toItem = items[link.to] ? items[link.to].label : ("器材" + link.to);
+      return '<div class="exp-link">' + escapeHtml(fromItem) + ' → ' + escapeHtml(toItem) +
+        (link.label ? '：' + escapeHtml(link.label) : "") + '</div>';
+    }).join("") + '</div>';
+  }
+  var noteHtml = scene.note ? '<div class="diagram-note">📌 ' + escapeHtml(scene.note) + '</div>' : "";
+  return '<div class="exp-diagram">' + itemHtml + '</div>' + linksHtml + noteHtml;
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+  var diagramHtml = renderDiagram(q.diagram);
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示1", "📖 提示2", "🎯 提示3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "truefalse") {
+    optHtml = '<div class="tf-options">' +
+      '<div class="tf-btn" onclick="selectTF(true)" id="tf-true">✓ 正确</div>' +
+      '<div class="tf-btn" onclick="selectTF(false)" id="tf-false">✗ 错误</div></div>';
+  } else if (q.type === "fillblank") {
+    var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+    var correctAnswer = answers[0].split("；");
+    var numBlanks = correctAnswer.length;
+    if (numBlanks === 1) {
+      optHtml = '<input class="fill-input" id="fillInput" placeholder="请输入答案..." ' +
+        'onkeydown="if(event.key===\'Enter\')submitFill()">' +
+        '<button class="submit-btn" onclick="submitFill()">提交答案</button>';
+    } else {
+      optHtml = '<div class="fill-blanks-multiple">' +
+        correctAnswer.map(function(_, i) {
+          return '<div class="fill-blank-item"><label>第' + (i+1) + '空：</label>' +
+            '<input class="fill-input" id="fillInput-' + i + '" placeholder="请输入第' + (i+1) + '个空的答案..." ' +
+            'onkeydown="if(event.key===\'Enter\')submitFill()"></div>';
+        }).join("") +
+        '</div><button class="submit-btn" onclick="submitFill()">提交答案</button>';
+    }
+  } else if (q.type === "calculation" || q.type === "experiment") {
+    optHtml = renderMaterialQuestion(q);
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    diagramHtml + hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var userAns = q.options ? q.options[idx] : String(idx);
+  processAnswer(idx === q.answer, userAns);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function selectTF(val) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  processAnswer(val === q.answer, val ? "正确" : "错误");
+  var t = document.getElementById("tf-true"), f = document.getElementById("tf-false");
+  t.classList.add("disabled"); f.classList.add("disabled");
+  (q.answer ? t : f).classList.add("correct");
+  (q.answer ? f : t).classList.add("wrong");
+}
+
+function submitFill() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+  var correctAnswer = answers[0].split(/[;；]/);
+  var numBlanks = correctAnswer.length;
+  var isAllCorrect = true;
+  var correctCount = 0;
+  if (numBlanks === 1) {
+    var input = document.getElementById("fillInput").value.trim();
+    if (!input) return; answered = true;
+    isAllCorrect = answers.some(function(a) { return input === a.trim(); });
+  } else {
+    for (var i = 0; i < numBlanks; i++) {
+      var input = document.getElementById("fillInput-" + i).value.trim();
+      if (!input) { alert("请完成所有空的填写！"); return; }
+      var inputEl = document.getElementById("fillInput-" + i);
+      var isThisCorrect = (input === correctAnswer[i].trim());
+      if (isThisCorrect) {
+        correctCount++;
+        inputEl.style.borderColor = "#4CAF50";
+        inputEl.style.backgroundColor = "#E8F5E9";
+      } else {
+        isAllCorrect = false;
+        inputEl.style.borderColor = "#f44336";
+        inputEl.style.backgroundColor = "#FFEBEE";
+      }
+      inputEl.disabled = true;
+    }
+    answered = true;
+  }
+  q.fillBlankResult = { total: numBlanks, correct: correctCount, allCorrect: isAllCorrect };
+
+  var userFillAns = '';
+  if (numBlanks === 1) {
+    userFillAns = document.getElementById("fillInput").value.trim();
+  } else {
+    var parts = [];
+    for (var j = 0; j < numBlanks; j++) { parts.push(document.getElementById("fillInput-" + j).value.trim()); }
+    userFillAns = parts.join('；');
+  }
+  processAnswer(isAllCorrect, userFillAns);
+}
+
+function processAnswer(isCorrect, userAnswer) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex, userAnswer: userAnswer || '' });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  var fillBlankFeedback = "";
+  if (q.type === "fillblank" && q.fillBlankResult && q.fillBlankResult.total > 1) {
+    var result = q.fillBlankResult;
+    var answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+    var correctAnswer = answers[0].split(/[;；]/);
+    fillBlankFeedback = '<div class="fillblank-detail"><div class="kc-title" style="margin-bottom:12px;">📝 各空判分详情</div>';
+    for (var i = 0; i < result.total; i++) {
+      var userInput = document.getElementById("fillInput-" + i);
+      var userVal = userInput ? userInput.value.trim() : "";
+      var isThisCorrect = (userVal === correctAnswer[i].trim());
+      fillBlankFeedback += '<div class="fillblank-item ' + (isThisCorrect ? 'correct' : 'wrong') + '">' +
+        '<span class="blank-num">' + (i+1) + '</span>' +
+        '<span class="blank-status">' + (isThisCorrect ? '✓ 正确' : '✗ 错误') + '</span>' +
+        '<span class="blank-user">你的答案：' + (userVal || "未填") + '</span>' +
+        (!isThisCorrect ? '<span class="blank-correct">正确答案：' + correctAnswer[i] + '</span>' : '') +
+        '</div>';
+    }
+    fillBlankFeedback += '<div class="fillblank-summary">共 ' + result.total + ' 空，答对 ' + result.correct + ' 空' +
+      (result.allCorrect ? ' <span class="summary-correct">✅ 全部正确！</span>' : ' <span class="summary-wrong">💪 继续加油！</span>') +
+      '</div></div>';
+  }
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>";
+  if (kc.formula) h += '<div class="kc-item">🔬 <b>相关公式：</b>' + kc.formula + "</div>";
+  h += '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  if (fillBlankFeedback) { h = fillBlankFeedback + h; }
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！物理学得真棒！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml +
+    '<div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;">' +
+    '<span id="syncText"></span></div>' +
+    '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+
+  syncResultToFeishu(total, pct);
+}
+
+function syncResultToFeishu(total, pct) {
+  var title = quizData.title || document.title;
+  FeishuSync.submit({
+    practiceTitle: title,
+    questionCount: total,
+    score: correctTotal,
+    accuracy: pct,
+    practiceUrl: location.href,
+    statusElId: 'syncStatus',
+    textElId: 'syncText'
+  });
+
+  if (wrongQuestions.length > 0) {
+    var wrongData = wrongQuestions.map(function(w) {
+      var q = originalQuestions[w.index];
+      var kc = q.knowledgeCard || {};
+      return {
+        question: q.question || q.text || '',
+        correctAnswer: q.answer || (q.options ? q.options[q.correctIndex] : ''),
+        studentAnswer: w.userAnswer || '',
+        topic: kc.topic || '',
+        commonMistake: kc.commonMistake || '',
+        difficulty: q.difficulty || 0
+      };
+    });
+    FeishuSync.submitWrongQuestions({
+      practiceTitle: title,
+      practiceUrl: location.href,
+      subject: title.replace(/[【】]/g, '').split('·')[0].trim(),
+      wrongQuestions: wrongData
+    });
+  }
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+function renderMaterialQuestion(q) {
+  var materialHtml = "";
+  if (q.material) {
+    var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
+    materialHtml = '<div class="material-section">' + materialLabel +
+      '<div class="material-content">' + q.material + '</div></div>';
+  }
+  var subQuestionsHtml = '';
+  if (q.subQuestions && q.subQuestions.length > 0) {
+    subQuestionsHtml = '<div class="sub-questions">' +
+      q.subQuestions.map(function(sq, i) {
+        return '<div class="sub-question-item">' +
+          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
+          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
+          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
+          'placeholder="请在此处写出解题过程和答案..."></textarea>' +
+          '</div>';
+      }).join("") + '</div>';
+  }
+  return materialHtml + subQuestionsHtml +
+    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
+    '<div id="materialFeedback"></div>';
+}
+
+function submitMaterial() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var allFilled = true;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      var val = document.getElementById("material-answer-" + i).value.trim();
+      if (!val) allFilled = false;
+    }
+  }
+  if (!allFilled) { alert("请先完成所有小题的作答！"); return; }
+  answered = true;
+  document.querySelectorAll(".answer-textarea").forEach(function(el) { el.disabled = true; });
+  var btn = document.querySelector(".submit-material-btn");
+  if (btn) btn.style.display = "none";
+  showMaterialFeedback(q);
+}
+
+function showMaterialFeedback(q) {
+  var kc = q.knowledgeCard;
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) { totalPoints += q.subQuestions[i].points; }
+  }
+  var scoringHtml = '';
+  if (q.subQuestions) {
+    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 参考答案与评分标准</div>' +
+      q.subQuestions.map(function(sq, i) {
+        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
+          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
+          '<div class="scoring-item">答出关键步骤即可得分</div>';
+        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
+          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
+      }).join("") + '</div>';
+  }
+  var assessHtml = '<div style="margin-top:12px;font-weight:bold;color:#1a237e;">请对照参考答案自评：</div>' +
+    '<div class="self-assess">' +
+    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
+    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
+    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
+    '❌ 错误<div class="assess-score">得 0 分</div></button></div>';
+  var feedbackArea = document.getElementById("materialFeedback");
+  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
+    '<div class="kc-title">📖 解题参考</div>' +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
+    (kc.formula ? '<div class="kc-item">🔬 <b>核心公式：</b>' + kc.formula + '</div>' : '') +
+    (kc.answerTechnique ? '<div class="kc-item">💡 <b>解题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
+    '</div>' + scoringHtml + assessHtml;
+}
+
+function selfAssess(level) {
+  var q = quizData.questions[currentIndex];
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) { totalPoints += q.subQuestions[i].points; }
+  }
+  document.querySelectorAll(".assess-btn").forEach(function(btn) { btn.classList.add("disabled"); });
+  var earnedPoints = 0;
+  var isCorrect = false;
+  if (level === "correct") {
+    earnedPoints = totalPoints; isCorrect = true;
+    document.getElementById("assessCorrect").classList.add("correct");
+  } else if (level === "partial") {
+    earnedPoints = Math.round(totalPoints * 0.5); isCorrect = true;
+    document.getElementById("assessPartial").classList.add("partial");
+  } else {
+    document.getElementById("assessWrong").classList.add("wrong");
+    streak = 0; wrongQuestions.push({ index: currentIndex, userAnswer: '自评：错误' });
+  }
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
+    score += earnedPointsWithBonus; correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+  }
+  updateStats();
+  var feedbackArea = document.getElementById("materialFeedback");
+  var kc = q.knowledgeCard;
+  var extraHtml = '';
+  if (!isCorrect) {
+    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
+  }
+  if (kc.relatedTopics) {
+    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
+  }
+  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
+    '" style="margin-top:16px;">' + extraHtml +
+    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
+    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+}
+
+init();
+</script>
+</body>
+</html>
