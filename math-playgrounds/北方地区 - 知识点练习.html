@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第七章 北方地区 - 知识点练习</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .knowledge-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .knowledge-card.show {
+            display: block;
+        }
+        
+        .knowledge-card h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .knowledge-card ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .knowledge-card li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .question-title {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .hint-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .hint-section.show {
+            display: block;
+        }
+        
+        .hint-text {
+            font-size: 15px;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .hint-level {
+            font-size: 12px;
+            color: #856404;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-hint {
+            background: #ffc107;
+            color: #856404;
+        }
+        
+        .btn-next {
+            background: #28a745;
+        }
+        
+        .score-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .score-section.show {
+            display: block;
+        }
+        
+        .score-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .progress {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .type-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .blank-input {
+            border: none;
+            border-bottom: 2px solid #667eea;
+            width: 150px;
+            padding: 5px 10px;
+            font-size: 16px;
+            text-align: center;
+            margin: 0 5px;
+        }
+        
+        .blank-input:focus {
+            outline: none;
+            border-bottom-color: #764ba2;
+        }
+        
+        .blank-input.correct {
+            border-bottom-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .blank-input.wrong {
+            border-bottom-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .blank-input.disabled {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 第七章 北方地区</h1>
+        <p class="subtitle">知识点填空 + 真题练习</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalQ">20</div>
+                <div class="stat-label">总题数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="fillQ">10</div>
+                <div class="stat-label">填空题</div>
+            </div>
+        </div>
+        
+        <div class="progress">
+            <span class="question-number" id="currentNum">1</span>
+            第 <span id="currentQ">1</span> / 20 题
+        </div>
+        
+        <!-- 知识点卡片 -->
+        <div class="knowledge-card" id="knowledgeCard">
+            <h3>📖 本节知识点</h3>
+            <ul id="knowledgeList"></ul>
+        </div>
+        
+        <div id="questions"></div>
+        
+        <div class="score-section" id="scoreSection">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-number" id="finalScore">0</div>
+            <div>正确率：<span id="accuracy">0</span>%</div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // ========== 知识点填空题（10 道）==========
+            {
+                id: 1,
+                type: 'fill',
+                question: "北方地区位于______、青藏高原以东，内蒙古高原以南，秦岭—淮河以北。",
+                answer: "大兴安岭",
+                explanation: "北方地区的位置范围：大兴安岭、青藏高原以东，内蒙古高原以南，秦岭—淮河以北。",
+                hints: ["提示 1：这是一个山脉名称", "提示 2：它是东北 - 西南走向的山脉", "提示 3：它是我国地势第二、三级阶梯的分界线"]
+            },
+            {
+                id: 2,
+                type: 'fill',
+                question: "北方地区大部分地区属于______气候，夏季高温多雨，冬季寒冷干燥。",
+                answer: "温带季风",
+                explanation: "北方地区地跨寒温带、中温带、暖温带，大部分地区属于温带季风气候。",
+                hints: ["提示 1：这是季风气候的一种", "提示 2：分布在温带地区", "提示 3：北京就是这种气候"]
+            },
+            {
+                id: 3,
+                type: 'fill',
+                question: "东北三省的地形特征是______、沃野千里，地形以山地和平原为主。",
+                answer: "山环水绕",
+                explanation: "东北三省地形呈现'山环水绕、沃野千里'的特点，外围是黑龙江、乌苏里江等河流。",
+                hints: ["提示 1：这是一个四字成语", "提示 2：形容山水环绕", "提示 3：第一个字是'山'"]
+            },
+            {
+                id: 4,
+                type: 'fill',
+                question: "东北平原______广布，适宜大规模机械化耕作，是我国重要的商品粮基地。",
+                answer: "黑土",
+                explanation: "东北平原黑土肥沃，有机质含量高，有利于农作物生长。",
+                hints: ["提示 1：这是一种土壤类型", "提示 2：颜色是黑色的", "提示 3：非常肥沃"]
+            },
+            {
+                id: 5,
+                type: 'fill',
+                question: "黄土高原最严重的生态问题是______，导致地表千沟万壑。",
+                answer: "水土流失",
+                explanation: "黄土高原土质疏松，植被破坏严重，夏季多暴雨，导致严重的水土流失。",
+                hints: ["提示 1：这是生态问题", "提示 2：和雨水冲刷有关", "提示 3：土被水冲走了"]
+            },
+            {
+                id: 6,
+                type: 'fill',
+                question: "治理黄土高原水土流失的措施包括植树种草、修筑______、打坝淤地等。",
+                answer: "梯田",
+                explanation: "治理黄土高原的措施：植树种草、修筑梯田、打坝淤地、退耕还林还草等。",
+                hints: ["提示 1：这是一种农田形式", "提示 2：像楼梯一样一层一层", "提示 3：在坡地上修建"]
+            },
+            {
+                id: 7,
+                type: 'fill',
+                question: "北京是全国的政治中心、文化中心、______中心。",
+                answer: "国际交往",
+                explanation: "北京是我国的首都，主要职能包括政治中心、文化中心和国际交往中心。",
+                hints: ["提示 1：四个字", "提示 2：和外国有关", "提示 3：举办奥运会体现这个职能"]
+            },
+            {
+                id: 8,
+                type: 'fill',
+                question: "东北三省气候冷湿，冬季______，夏季温暖短促，降水集中在夏季。",
+                answer: "寒冷漫长",
+                explanation: "东北三省纬度高，气候特点是冬季寒冷漫长，夏季温暖短促。",
+                hints: ["提示 1：四个字", "提示 2：形容冬天很冷且时间长", "提示 3：第一个字是'寒'"]
+            },
+            {
+                id: 9,
+                type: 'fill',
+                question: "华北平原春旱严重，解决措施包括南水北调、发展______农业等。",
+                answer: "节水",
+                explanation: "解决华北缺水问题的措施：南水北调、发展节水农业、防治水污染等。",
+                hints: ["提示 1：两个字", "提示 2：和节约用水有关", "提示 3：滴灌、喷灌属于这种农业"]
+            },
+            {
+                id: 10,
+                type: 'fill',
+                question: "辽中南工业基地是我国最大的______工业基地，依托丰富的煤铁资源发展起来。",
+                answer: "重",
+                explanation: "辽中南工业基地是我国最大的重工业基地，主要发展钢铁、机械、化工等重工业。",
+                hints: ["提示 1：一个字", "提示 2：和'轻'相对", "提示 3：钢铁、机械属于这种工业"]
+            },
+            
+            // ========== 选择题（10 道真题）==========
+            {
+                id: 11,
+                type: 'choice',
+                question: "北方地区与南方地区的分界线是（ ）",
+                options: ["A. 秦岭—淮河", "B. 昆仑山—祁连山", "C. 大兴安岭—太行山", "D. 南岭"],
+                answer: 0,
+                explanation: "秦岭—淮河一线是我国南方地区与北方地区的分界线，也是 800 毫米年等降水量线和 1 月 0℃等温线经过的地方。",
+                hints: ["提示 1：这是一条重要的地理分界线", "提示 2：包括一条山脉和一条河流", "提示 3：在我国的东部地区"]
+            },
+            {
+                id: 12,
+                type: 'choice',
+                question: "东北平原的主要农作物是（ ）",
+                options: ["A. 水稻、油菜", "B. 小麦、玉米、大豆", "C. 棉花、花生", "D. 甘蔗、柑橘"],
+                answer: 1,
+                explanation: "东北平原主要种植春小麦、玉米、大豆、甜菜等作物，是我国重要的商品粮基地。",
+                hints: ["提示 1：主要是粮食作物", "提示 2：不包括热带作物", "提示 3：大豆是东北特产"]
+            },
+            {
+                id: 13,
+                type: 'choice',
+                question: "黄土高原的地表特征是（ ）",
+                options: ["A. 地势平坦，一望无际", "B. 千沟万壑，支离破碎", "C. 雪山连绵，冰川广布", "D. 崎岖不平，喀斯特地貌"],
+                answer: 1,
+                explanation: "由于长期的水土流失，黄土高原形成了'千沟万壑、支离破碎'的地表形态。",
+                hints: ["提示 1：和水有关", "提示 2：形容沟壑很多", "提示 3：不是平坦的"]
+            },
+            {
+                id: 14,
+                type: 'choice',
+                question: "北京的气候类型是（ ）",
+                options: ["A. 亚热带季风气候", "B. 温带海洋性气候", "C. 温带季风气候", "D. 热带季风气候"],
+                answer: 2,
+                explanation: "北京位于北方地区，属于温带季风气候，夏季高温多雨，冬季寒冷干燥。",
+                hints: ["提示 1：属于季风气候", "提示 2：北京在温带", "提示 3：不是亚热带"]
+            },
+            {
+                id: 15,
+                type: 'choice',
+                question: "东北三省的传统民居具有房顶坡度大、墙体厚、窗户小等特点，主要原因是（ ）",
+                options: ["A. 降水多", "B. 冬季寒冷漫长，降雪较多", "C. 夏季炎热", "D. 风力大"],
+                answer: 1,
+                explanation: "东北三省纬度高，冬季寒冷漫长，降雪多。房顶坡度大利于排雪，墙体厚、窗户小利于保暖。",
+                hints: ["提示 1：和气候有关", "提示 2：东北冬天很冷", "提示 3：不是为了防热"]
+            },
+            {
+                id: 16,
+                type: 'choice',
+                question: "我国最大的重工业基地是（ ）",
+                options: ["A. 京津唐工业基地", "B. 沪宁杭工业基地", "C. 辽中南工业基地", "D. 珠江三角洲工业基地"],
+                answer: 2,
+                explanation: "辽中南工业基地是我国最大的重工业基地，依托丰富的煤铁资源发展起来。",
+                hints: ["提示 1：在东北地区", "提示 2：在辽宁省", "提示 3：不是北京附近"]
+            },
+            {
+                id: 17,
+                type: 'choice',
+                question: "华北平原春旱严重的主要原因是（ ）",
+                options: ["A. 降水稀少", "B. 春季气温回升快，蒸发旺盛，降水少", "C. 河流结冰", "D. 地下水丰富"],
+                answer: 1,
+                explanation: "华北平原春季气温回升快，蒸发旺盛，但雨季未到，降水少，加上农业用水量大，春旱严重。",
+                hints: ["提示 1：和蒸发有关", "提示 2：春天温度升高", "提示 3：雨季还没到"]
+            },
+            {
+                id: 18,
+                type: 'choice',
+                question: "下列属于北方地区主要水果的是（ ）",
+                options: ["A. 柑橘、香蕉", "B. 苹果、梨", "C. 荔枝、龙眼", "D. 菠萝、芒果"],
+                answer: 1,
+                explanation: "北方地区主要水果有苹果、梨、枣、桃、杏等温带水果；柑橘等亚热带水果主要分布在南方地区。",
+                hints: ["提示 1：是温带水果", "提示 2：不是热带水果", "提示 3：山东烟台产这种水果"]
+            },
+            {
+                id: 19,
+                type: 'choice',
+                question: "北京历史悠久，下列名胜古迹不在北京的是（ ）",
+                options: ["A. 故宫", "B. 长城", "C. 颐和园", "D. 秦始皇陵兵马俑"],
+                answer: 3,
+                explanation: "秦始皇陵兵马俑位于陕西西安，不属于北京。北京的名胜古迹有故宫、长城、颐和园、天坛等。",
+                hints: ["提示 1：在陕西省", "提示 2：和秦始皇有关", "提示 3：不是在北京"]
+            },
+            {
+                id: 20,
+                type: 'choice',
+                question: "东北三省成为我国重要商品粮基地的有利条件包括（ ）\n①土壤肥沃 ②地势平坦 ③雨热同期 ④热量充足",
+                options: ["A. ①②③", "B. ①②④", "C. ①③④", "D. ②③④"],
+                answer: 0,
+                explanation: "东北三省纬度高，热量不足是其农业发展的限制因素，④错误。有利条件包括黑土肥沃、平原广阔、雨热同期。",
+                hints: ["提示 1：东北纬度高", "提示 2：热量是限制因素", "提示 3：排除④"]
+            }
+        ];
+
+        // 知识点卡片内容
+        const knowledgePoints = [
+            "北方地区位置：大兴安岭、青藏高原以东，内蒙古高原以南，秦岭—淮河以北",
+            "气候类型：温带季风气候，夏季高温多雨，冬季寒冷干燥",
+            "东北三省地形：山环水绕、沃野千里",
+            "东北平原：黑土肥沃，我国重要商品粮基地",
+            "黄土高原：水土流失严重，治理措施包括植树种草、修筑梯田",
+            "北京职能：政治中心、文化中心、国际交往中心",
+            "辽中南工业基地：我国最大的重工业基地"
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let hintCount = 0;
+
+        function showKnowledgeCard() {
+            const card = document.getElementById('knowledgeCard');
+            const list = document.getElementById('knowledgeList');
+            
+            list.innerHTML = knowledgePoints.map(point => `<li>✓ ${point}</li>`).join('');
+            card.classList.add('show');
+        }
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const container = document.getElementById('questions');
+            
+            document.getElementById('currentNum').textContent = index + 1;
+            document.getElementById('currentQ').textContent = index + 1;
+            
+            const typeTag = q.type === 'fill' ? '填空题' : '选择题';
+            
+            if (q.type === 'fill') {
+                // 填空题渲染
+                const parts = q.question.split('______');
+                container.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">${index + 1}</span>
+                            <span class="type-tag">${typeTag}</span>
+                        </div>
+                        <div style="font-size: 17px; line-height: 2; margin-bottom: 15px;">
+                            ${parts[0]}
+                            <input type="text" class="blank-input" id="blankInput" placeholder="填写答案">
+                            ${parts[1] || ''}
+                        </div>
+                        <div>
+                            <button class="btn" onclick="checkFillBlank()" id="submitBtn">提交答案</button>
+                            <button class="btn btn-hint" onclick="showHint()" id="hintBtn">💡 提示</button>
+                        </div>
+                        <div class="hint-section" id="hintSection">
+                            <div class="hint-level" id="hintLevel"></div>
+                            <div class="hint-text" id="hintText"></div>
+                        </div>
+                        <div class="feedback" id="feedback"></div>
+                        <button class="btn btn-next" id="nextBtn" style="display: none;" onclick="nextQuestion()">下一题 →</button>
+                    </div>
+                `;
+            } else {
+                // 选择题渲染
+                container.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-title">
+                            <span class="question-number">${index + 1}</span>
+                            <span class="type-tag">${typeTag}</span>
+                        </div>
+                        <div style="font-size: 17px; margin-bottom: 15px; white-space: pre-line;">${q.question}</div>
+                        <div class="options" id="optionsContainer">
+                            ${q.options.map((opt, i) => `
+                                <div class="option" onclick="selectAnswer(${i})" id="opt${i}">${opt}</div>
+                            `).join('')}
+                        </div>
+                        <div>
+                            <button class="btn btn-hint" onclick="showHint()" id="hintBtn">💡 提示</button>
+                        </div>
+                        <div class="hint-section" id="hintSection">
+                            <div class="hint-level" id="hintLevel"></div>
+                            <div class="hint-text" id="hintText"></div>
+                        </div>
+                        <div class="feedback" id="feedback"></div>
+                        <button class="btn btn-next" id="nextBtn" style="display: none;" onclick="nextQuestion()">下一题 →</button>
+                    </div>
+                `;
+            }
+            
+            answered = false;
+            hintCount = 0;
+        }
+
+        function showHint() {
+            const q = questions[currentQuestion];
+            const hintSection = document.getElementById('hintSection');
+            const hintLevel = document.getElementById('hintLevel');
+            const hintText = document.getElementById('hintText');
+            
+            if (hintCount < q.hints.length) {
+                hintSection.classList.add('show');
+                hintLevel.textContent = `提示 ${hintCount + 1}/3：`;
+                hintText.textContent = q.hints[hintCount];
+                hintCount++;
+            } else {
+                hintSection.classList.add('show');
+                hintLevel.textContent = '提示已用完：';
+                hintText.textContent = '认真思考，相信自己！';
+            }
+        }
+
+        function checkFillBlank() {
+            if (answered) return;
+            
+            const input = document.getElementById('blankInput');
+            const userAnswer = input.value.trim();
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const submitBtn = document.getElementById('submitBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            
+            if (!userAnswer) {
+                alert('请填写答案！');
+                return;
+            }
+            
+            answered = true;
+            input.disabled = true;
+            input.classList.add('disabled');
+            submitBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            
+            // 判断答案是否正确
+            const isCorrect = userAnswer === q.answer;
+            
+            if (isCorrect) {
+                score++;
+                input.classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = `<strong>✅ 正确！</strong><div class="explanation">${q.explanation}</div>`;
+            } else {
+                input.classList.add('wrong');
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `<strong>❌ 错误</strong><div class="explanation">正确答案：${q.answer}<br><br>${q.explanation}</div>`;
+            }
+            
+            // 显示"下一题"按钮
+            nextBtn.style.display = 'inline-block';
+        }
+
+        function selectAnswer(optionIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('nextBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            
+            // 禁用所有选项
+            options.forEach(opt => opt.classList.add('disabled'));
+            hintBtn.style.display = 'none';
+            
+            if (optionIndex === q.answer) {
+                score++;
+                options[optionIndex].classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = `<strong>✅ 正确！</strong><div class="explanation">${q.explanation}</div>`;
+            } else {
+                options[optionIndex].classList.add('wrong');
+                options[q.answer].classList.add('correct');
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `<strong>❌ 错误</strong><div class="explanation">${q.explanation}</div>`;
+            }
+            
+            // 显示"下一题"按钮
+            nextBtn.style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                renderQuestion(currentQuestion);
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('questions').innerHTML = '';
+            document.querySelector('.progress').style.display = 'none';
+            document.getElementById('knowledgeCard').style.display = 'none';
+            
+            const scoreSection = document.getElementById('scoreSection');
+            scoreSection.classList.add('show');
+            
+            const accuracy = (score / questions.length) * 100;
+            document.getElementById('finalScore').textContent = `${score} / ${questions.length}`;
+            document.getElementById('accuracy').textContent = accuracy.toFixed(0);
+        }
+
+        // 初始化
+        showKnowledgeCard();
+        renderQuestion(0);
+    </script>
+</body>
+</html>
