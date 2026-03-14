@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勾股定理练习题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .formula {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .question-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .question-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .option {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .score-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .score-section.show {
+            display: block;
+        }
+        
+        .score-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .progress {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 勾股定理练习题</h1>
+        <p class="subtitle">初中数学 · 直角三角形 · 经典定理</p>
+        
+        <div class="formula">
+            a² + b² = c²
+        </div>
+        
+        <div class="progress">
+            <span class="question-number" id="currentNum">1</span>
+            第 <span id="currentQ">1</span> / 10 题
+        </div>
+        
+        <div id="questions"></div>
+        
+        <div class="score-section" id="scoreSection">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-number" id="finalScore">0</div>
+            <div>正确率：<span id="accuracy">0</span>%</div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "在直角三角形中，两条直角边分别为 3 和 4，斜边长是多少？",
+                options: ["A. 5", "B. 6", "C. 7", "D. 8"],
+                answer: 0,
+                explanation: "根据勾股定理：c = √(3² + 4²) = √(9 + 16) = √25 = 5"
+            },
+            {
+                id: 2,
+                question: "直角三角形的斜边为 13，一条直角边为 5，另一条直角边长是多少？",
+                options: ["A. 10", "B. 12", "C. 8", "D. 15"],
+                answer: 1,
+                explanation: "根据勾股定理：b = √(13² - 5²) = √(169 - 25) = √144 = 12"
+            },
+            {
+                id: 3,
+                question: "下列哪组数可以构成直角三角形的三边？",
+                options: ["A. 2, 3, 4", "B. 5, 12, 13", "C. 4, 5, 6", "D. 6, 7, 8"],
+                answer: 1,
+                explanation: "验证：5² + 12² = 25 + 144 = 169 = 13²，符合勾股定理"
+            },
+            {
+                id: 4,
+                question: "直角三角形两条直角边都是 6，斜边长是多少？",
+                options: ["A. 6√2", "B. 12", "C. 6√3", "D. 9"],
+                answer: 0,
+                explanation: "根据勾股定理：c = √(6² + 6²) = √72 = 6√2"
+            },
+            {
+                id: 5,
+                question: "一个直角三角形的斜边长为 10，一条直角边长为 8，求另一条直角边。",
+                options: ["A. 4", "B. 6", "C. 5", "D. 7"],
+                answer: 1,
+                explanation: "根据勾股定理：b = √(10² - 8²) = √(100 - 64) = √36 = 6"
+            },
+            {
+                id: 6,
+                question: "勾股定理适用于什么三角形？",
+                options: ["A. 任意三角形", "B. 等腰三角形", "C. 直角三角形", "D. 等边三角形"],
+                answer: 2,
+                explanation: "勾股定理只适用于直角三角形，描述的是直角三角形三边的关系"
+            },
+            {
+                id: 7,
+                question: "直角三角形的三边长为 3, 4, 5，这个三角形的面积是多少？",
+                options: ["A. 6", "B. 12", "C. 10", "D. 15"],
+                answer: 0,
+                explanation: "直角三角形面积 = (直角边 1 × 直角边 2) ÷ 2 = (3 × 4) ÷ 2 = 6"
+            },
+            {
+                id: 8,
+                question: "如果直角三角形的两条直角边分别扩大到原来的 2 倍，斜边会扩大到原来的几倍？",
+                options: ["A. 2 倍", "B. 3 倍", "C. 4 倍", "D. √2 倍"],
+                answer: 0,
+                explanation: "设原直角边为 a,b，斜边为 c。新斜边 = √((2a)² + (2b)²) = √(4a² + 4b²) = 2√(a² + b²) = 2c"
+            },
+            {
+                id: 9,
+                question: "下列哪组数是勾股数？",
+                options: ["A. 3, 4, 5", "B. 6, 8, 10", "C. 9, 12, 15", "D. 以上都是"],
+                answer: 3,
+                explanation: "三组都满足勾股定理：3²+4²=5², 6²+8²=10², 9²+12²=15²，都是勾股数"
+            },
+            {
+                id: 10,
+                question: "直角三角形中，斜边一定比直角边长吗？",
+                options: ["A. 一定", "B. 不一定", "C. 有时", "D. 无法确定"],
+                answer: 0,
+                explanation: "根据勾股定理，斜边 c = √(a² + b²)，因为 a² + b² > a² 且 a² + b² > b²，所以 c > a 且 c > b"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const container = document.getElementById('questions');
+            
+            document.getElementById('currentNum').textContent = index + 1;
+            document.getElementById('currentQ').textContent = index + 1;
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-title">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option" onclick="selectAnswer(${i})">${opt}</div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+            
+            answered = false;
+        }
+
+        function selectAnswer(optionIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            if (optionIndex === q.answer) {
+                score++;
+                options[optionIndex].classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = `<strong>✅ 正确！</strong><div class="explanation">${q.explanation}</div>`;
+            } else {
+                options[optionIndex].classList.add('wrong');
+                options[q.answer].classList.add('correct');
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `<strong>❌ 错误</strong><div class="explanation">${q.explanation}</div>`;
+            }
+            
+            // 1.5 秒后自动下一题
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    renderQuestion(currentQuestion);
+                } else {
+                    showResult();
+                }
+            }, 2000);
+        }
+
+        function showResult() {
+            document.getElementById('questions').innerHTML = '';
+            document.querySelector('.progress').style.display = 'none';
+            
+            const scoreSection = document.getElementById('scoreSection');
+            scoreSection.classList.add('show');
+            
+            const accuracy = (score / questions.length) * 100;
+            document.getElementById('finalScore').textContent = `${score} / ${questions.length}`;
+            document.getElementById('accuracy').textContent = accuracy.toFixed(0);
+        }
+
+        // 初始化
+        renderQuestion(0);
+    </script>
+</body>
+</html>
