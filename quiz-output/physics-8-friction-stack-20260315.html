@@ -70,7 +70,6 @@
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
             <div id="questions-container"></div>
-            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
         </div>
         <div id="result-screen" class="result-screen" style="display: none;">
             <h2>🎉 练习完成！</h2>
@@ -122,7 +121,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 A 和 B 都静止，它们之间有没有相对运动趋势？",
+                hint: ["💡 提示 1：A 和 B 都静止，它们之间有没有相对运动趋势？", "💡 提示 2：静摩擦力产生的条件是什么？", "💡 提示 3：A 只受到重力和支持力，水平方向没有其他力"],
                 options: ["A 受到 B 对它向右的静摩擦力", "A 受到 B 对它向左的静摩擦力", "A 和 B 之间没有摩擦力", "A 受到 B 对它向右的滑动摩擦力"],
                 correct: 2,
                 feedback: "A 和 B 都保持静止状态，A 相对于 B 没有运动趋势，因此 A 和 B 之间没有摩擦力。A 只受到重力和支持力，二力平衡。",
@@ -153,7 +152,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 三个木块一起匀速运动，它们之间有没有相对运动或相对运动趋势？",
+                hint: ["💡 提示 1：三个木块一起匀速运动，它们之间有没有相对运动或相对运动趋势？", "💡 提示 2：滑动摩擦力方向与相对运动方向相反", "💡 提示 3：C 相对于桌面向右运动，桌面对 C 的摩擦力向左"],
                 options: ["A 受到 B 对它向右的摩擦力", "B 受到 A 对它向左的摩擦力", "B 受到 C 对它向右的摩擦力", "C 受到桌面对它向左的滑动摩擦力"],
                 correct: 3,
                 feedback: "三个木块一起匀速运动，相对静止。C 相对于桌面向右运动，所以桌面对 C 有向左的滑动摩擦力。A、B、C 之间没有相对运动趋势，所以它们之间没有摩擦力。",
@@ -183,7 +182,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 滑动摩擦力 f = μN，N 是压力。B 对桌面的压力等于什么？",
+                hint: ["💡 提示 1：滑动摩擦力 f = μN，N 是压力", "💡 提示 2：B 对桌面的压力等于 A 和 B 的总重力", "💡 提示 3：N = 10N + 20N = 30N，f = 0.3 × 30N"],
                 options: [],
                 correct: 9,
                 feedback: "B 对桌面的压力 N = G_A + G_B = 10N + 20N = 30N。滑动摩擦力 f = μN = 0.3 × 30N = 9N。因为 B 做匀速直线运动，所以拉力 F = f = 9N。",
@@ -217,7 +216,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 A 随 B 一起向右加速，A 的合力方向向右。这个合力是谁提供的？",
+                hint: ["💡 提示 1：A 随 B 一起向右加速，A 的合力方向向右", "💡 提示 2：根据牛顿第二定律，合力方向与加速度方向相同", "💡 提示 3：A 在水平方向只可能受到摩擦力，这个力提供加速度"],
                 options: ["A 受到 B 对它向右的静摩擦力", "A 受到 B 对它向左的静摩擦力", "A 和 B 之间没有摩擦力", "A 受到 B 对它向右的滑动摩擦力"],
                 correct: 0,
                 feedback: "A 随 B 一起向右加速运动，A 的加速度方向向右，根据牛顿第二定律，A 的合力方向向右。A 在水平方向只可能受到摩擦力，所以 B 对 A 有向右的静摩擦力，这个力提供 A 的加速度。",
@@ -246,7 +245,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 要抽出 B，需要克服哪些摩擦力？",
+                hint: ["💡 提示 1：要抽出 B，需要克服哪些摩擦力？", "💡 提示 2：B 受到两个摩擦力：A 对 B 和地面对 B", "💡 提示 3：f₁ = 0.4 × 5N = 2N，f₂ = 0.2 × 15N = 3N"],
                 options: ["3N", "5N", "7N", "9N"],
                 correct: 2,
                 feedback: "要抽出 B，需要克服两个摩擦力：①A 对 B 的摩擦力 f₁ = μ₁N₁ = 0.4 × 5N = 2N；②地面对 B 的摩擦力 f₂ = μ₂N₂ = 0.2 × (5N + 10N) = 3N。所以 F 至少为 f₁ + f₂ = 2N + 3N = 5N。",
@@ -275,7 +274,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 静摩擦力产生的条件是什么？A 相对于 B 有运动趋势吗？",
+                hint: ["💡 提示 1：静摩擦力产生的条件是什么？", "💡 提示 2：三个条件：①接触面粗糙；②相互挤压；③有相对运动趋势", "💡 提示 3：A 相对于 B 没有运动趋势，因为 A 和 B 都静止"],
                 options: ["正确", "错误"],
                 correct: 1,
                 feedback: "错误。虽然 B 受到拉力 F 但没有被拉动，但 A 相对于 B 没有运动趋势（A 和 B 都静止），所以 A 和 B 之间没有静摩擦力。A 只受重力和支持力，二力平衡。",
@@ -306,7 +305,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 三个木块一起匀速运动，整体法和隔离法结合使用。",
+                hint: ["💡 提示 1：三个木块一起匀速运动，整体法和隔离法结合使用", "💡 提示 2：匀速运动时合力为零", "💡 提示 3：相对静止的物体间没有相对运动趋势，无摩擦力"],
                 options: [],
                 correct: 0,
                 feedback: "(1) 把 ABC 看作整体，匀速运动时合力为 0，所以桌面对 C 的摩擦力 f = F = 10N，方向向左。(2) A、B、C 相对静止，一起匀速运动，它们之间没有相对运动趋势，所以 B 对 C 的摩擦力为 0。(3) 同理，A 对 B 的摩擦力也为 0。",
@@ -333,7 +332,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 A 随 B 一起向右加速，A 的合力方向向右。这个力是谁提供的？",
+                hint: ["💡 提示 1：A 随 B 一起向右加速，A 的合力方向向右", "💡 提示 2：这个力是 B 对 A 的静摩擦力", "💡 提示 3：f = m_A × a，而 F = (m_A + m_B) × a，所以 f < F"],
                 options: ["A 受到 B 对它向右的静摩擦力，大小等于 F", "A 受到 B 对它向右的静摩擦力，大小小于 F", "A 受到 B 对它向左的静摩擦力", "A 和 B 之间没有摩擦力"],
                 correct: 1,
                 feedback: "A 随 B 一起向右加速，A 的加速度方向向右，所以 A 受到 B 对它向右的静摩擦力。这个摩擦力提供 A 的加速度，大小 f = m_A × a。而 F = (m_A + m_B) × a，所以 f < F。",
@@ -362,7 +361,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 B 匀速运动，拉力等于 B 受到的总摩擦力。B 受到哪些摩擦力？",
+                hint: ["💡 提示 1：B 匀速运动，拉力等于 B 受到的总摩擦力", "💡 提示 2：B 受到哪些摩擦力？", "💡 提示 3：A 对 B 无摩擦力，桌面对 B 的摩擦力 f = 0.3 × 50N"],
                 options: [],
                 correct: 15,
                 feedback: "B 匀速运动，拉力 F 等于 B 受到的总摩擦力。B 受到两个摩擦力：①A 对 B 的摩擦力 f₁ = 0（A、B 相对静止，无相对运动趋势）；②桌面对 B 的摩擦力 f₂ = μ₂N = 0.3 × (20N + 30N) = 15N。所以 F = 15N。",
@@ -391,7 +390,7 @@
                         </marker>
                     </defs>
                 </svg>`,
-                hint: "💡 分别对 A 和 B 进行受力分析，利用平衡条件。",
+                hint: ["💡 提示 1：分别对 A 和 B 进行受力分析", "💡 提示 2：A 匀速运动，B 静止，都处于平衡状态", "💡 提示 3：利用平衡条件和牛顿第三定律分析"],
                 options: ["A 受到的摩擦力等于 F", "B 受到 A 的摩擦力等于 F", "B 受到桌面的摩擦力等于 F", "B 受到桌面的摩擦力大于 F"],
                 correct: 2,
                 feedback: "对 A：A 匀速运动，受到 B 对它向左的摩擦力 f₁ = F。对 B：B 静止，水平方向受 A 对它向右的摩擦力 f₁' = f₁ = F，和桌面对它向左的摩擦力 f₂，由平衡条件得 f₂ = f₁' = F。所以 B 受到桌面的摩擦力等于 F。",
@@ -404,6 +403,7 @@
         let selectedOption = null;
         let startTime = Date.now();
         let wrongList = [];
+        let hintLevel = 0; // 当前提示级别
 
         function renderQuestion() {
             const q = questions[currentQuestion];
@@ -420,7 +420,6 @@
                 optionsHTML = `<div style="margin: 20px 0;">
                     <input type="number" id="fill-answer" placeholder="请输入答案（数字）" 
                            style="padding: 12px; font-size: 16px; width: 200px; border: 2px solid #ddd; border-radius: 8px;">
-                    <button class="btn" onclick="checkFillAnswer()" style="margin-left: 10px;">提交答案</button>
                 </div>`;
             } else if (q.type === '计算题') {
                 optionsHTML = `<div style="margin: 20px 0; padding: 20px; background: white; border-radius: 8px;">
@@ -440,9 +439,11 @@
                     </div>
                     ${q.diagram ? `<div class="diagram-container">${q.diagram}</div>` : ''}
                     ${optionsHTML}
-                    <div class="hint-box" onclick="toggleHint(this)">
-                        💡 点击查看提示
+                    <div class="hint-box" onclick="toggleHint(this)" id="hint-box">
+                        💡 点击查看提示（0/3）
                     </div>
+                    <button class="btn" id="submit-btn" onclick="submitAnswer()" style="margin-top: 15px;" disabled>提交答案</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="margin-top: 15px; margin-left: 10px;" disabled>下一题</button>
                     <div class="feedback-box" id="feedback">
                         <strong>✅ 解析：</strong>${q.feedback}
                     </div>
@@ -474,7 +475,14 @@
 
         function toggleHint(el) {
             const q = questions[currentQuestion];
-            el.textContent = q.hint;
+            hintLevel++;
+            if (hintLevel > 3) hintLevel = 3; // 最多显示 3 级提示
+            
+            if (Array.isArray(q.hint) && q.hint.length >= hintLevel) {
+                el.textContent = q.hint[hintLevel - 1] + `（${hintLevel}/3）`;
+            } else if (typeof q.hint === 'string') {
+                el.textContent = q.hint + `（${hintLevel}/3）`;
+            }
             el.style.cursor = 'default';
         }
 
@@ -488,7 +496,8 @@
                 if (i === idx) opt.classList.add('selected');
             });
             
-            document.getElementById('next-btn').disabled = false;
+            // 启用提交答案按钮
+            document.getElementById('submit-btn').disabled = false;
         }
 
         function checkFillAnswer() {
@@ -523,6 +532,53 @@
             showFeedback(isCorrect);
         }
 
+        function submitAnswer() {
+            const q = questions[currentQuestion];
+            
+            // 选择题和判断题
+            if (q.type === '选择题' || q.type === '判断题') {
+                if (selectedOption === null) {
+                    alert('请先选择一个答案！');
+                    return;
+                }
+                
+                const options = document.querySelectorAll('.option');
+                const isCorrect = selectedOption === q.correct;
+                
+                if (isCorrect) {
+                    score += 10;
+                    options[selectedOption].classList.add('correct');
+                } else {
+                    options[selectedOption].classList.add('incorrect');
+                    options[q.correct].classList.add('correct');
+                    wrongList.push({
+                        number: q.number,
+                        text: q.text,
+                        correctAnswer: q.options[q.correct]
+                    });
+                }
+                
+                options.forEach(opt => opt.style.cursor = 'default');
+                showFeedback(isCorrect);
+                
+                // 禁用提交按钮，启用下一题按钮
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+            // 填空题
+            else if (q.type === '填空题') {
+                checkFillAnswer();
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+            // 计算题
+            else if (q.type === '计算题') {
+                showCalculationAnswer();
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+        }
+
         function showCalculationAnswer() {
             const q = questions[currentQuestion];
             showFeedback(true);
@@ -551,48 +607,24 @@
                 wrongList.push({
                     number: questions[currentQuestion].number,
                     text: questions[currentQuestion].text,
-                    correctAnswer: questions[currentQuestion].options[questions[currentQuestion].correct]
+                    correctAnswer: questions[currentQuestion].options ? 
+                        questions[currentQuestion].options[questions[currentQuestion].correct] : 
+                        questions[currentQuestion].correct
                 });
             }
-            
-            document.getElementById('next-btn').disabled = false;
         }
 
         function nextQuestion() {
-            const q = questions[currentQuestion];
-            
-            if (q.type === '选择题' || q.type === '判断题') {
-                const options = document.querySelectorAll('.option');
-                const isCorrect = selectedOption === q.correct;
-                
-                if (isCorrect) {
-                    score += 10;
-                    options[selectedOption].classList.add('correct');
-                } else {
-                    options[selectedOption].classList.add('incorrect');
-                    options[q.correct].classList.add('correct');
-                    wrongList.push({
-                        number: q.number,
-                        text: q.text,
-                        correctAnswer: q.options[q.correct]
-                    });
-                }
-                
-                options.forEach(opt => opt.style.cursor = 'default');
+            currentQuestion++;
+            hintLevel = 0; // 重置提示级别
+            if (currentQuestion < questions.length) {
+                selectedOption = null;
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = true;
+                renderQuestion();
+            } else {
+                showResult();
             }
-            
-            showFeedback(selectedOption === q.correct);
-            
-            setTimeout(() => {
-                currentQuestion++;
-                if (currentQuestion < questions.length) {
-                    selectedOption = null;
-                    document.getElementById('next-btn').disabled = true;
-                    renderQuestion();
-                } else {
-                    showResult();
-                }
-            }, 1500);
         }
 
         function showResult() {
