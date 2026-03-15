@@ -419,7 +419,8 @@
             } else if (q.type === '填空题') {
                 optionsHTML = `<div style="margin: 20px 0;">
                     <input type="number" id="fill-answer" placeholder="请输入答案（数字）" 
-                           style="padding: 12px; font-size: 16px; width: 200px; border: 2px solid #ddd; border-radius: 8px;">
+                           style="padding: 12px; font-size: 16px; width: 200px; border: 2px solid #ddd; border-radius: 8px;"
+                           oninput="enableSubmitForFill()">
                 </div>`;
             } else if (q.type === '计算题') {
                 optionsHTML = `<div style="margin: 20px 0; padding: 20px; background: white; border-radius: 8px;">
@@ -500,36 +501,14 @@
             document.getElementById('submit-btn').disabled = false;
         }
 
-        function checkFillAnswer() {
-            if (document.querySelector('.feedback-box').style.display === 'block') return;
-            
+        function enableSubmitForFill() {
             const input = document.getElementById('fill-answer');
-            const answer = parseFloat(input.value);
-            
-            if (isNaN(answer)) {
-                alert('请输入有效的数字！');
-                return;
-            }
-            
-            const q = questions[currentQuestion];
-            const isCorrect = Math.abs(answer - q.correct) < 0.1;
-            
-            if (isCorrect) {
-                score += 10;
-                input.style.borderColor = '#4caf50';
-                input.style.backgroundColor = '#e8f5e9';
+            const submitBtn = document.getElementById('submit-btn');
+            if (input && input.value.trim() !== '') {
+                submitBtn.disabled = false;
             } else {
-                input.style.borderColor = '#f44336';
-                input.style.backgroundColor = '#ffebee';
-                wrongList.push({
-                    number: q.number,
-                    text: q.text,
-                    correctAnswer: q.correct,
-                    yourAnswer: answer
-                });
+                submitBtn.disabled = true;
             }
-            
-            showFeedback(isCorrect);
         }
 
         function submitAnswer() {
@@ -567,7 +546,32 @@
             }
             // 填空题
             else if (q.type === '填空题') {
-                checkFillAnswer();
+                const input = document.getElementById('fill-answer');
+                const answer = parseFloat(input.value);
+                
+                if (isNaN(answer)) {
+                    alert('请输入有效的数字！');
+                    return;
+                }
+                
+                const isCorrect = Math.abs(answer - q.correct) < 0.1;
+                
+                if (isCorrect) {
+                    score += 10;
+                    input.style.borderColor = '#4caf50';
+                    input.style.backgroundColor = '#e8f5e9';
+                } else {
+                    input.style.borderColor = '#f44336';
+                    input.style.backgroundColor = '#ffebee';
+                    wrongList.push({
+                        number: q.number,
+                        text: q.text,
+                        correctAnswer: q.correct,
+                        yourAnswer: answer
+                    });
+                }
+                
+                showFeedback(isCorrect);
                 document.getElementById('submit-btn').disabled = true;
                 document.getElementById('next-btn').disabled = false;
             }
@@ -621,6 +625,13 @@
                 selectedOption = null;
                 document.getElementById('submit-btn').disabled = true;
                 document.getElementById('next-btn').disabled = true;
+                // 清除填空题输入框状态
+                const fillInput = document.getElementById('fill-answer');
+                if (fillInput) {
+                    fillInput.value = '';
+                    fillInput.style.borderColor = '#ddd';
+                    fillInput.style.backgroundColor = 'white';
+                }
                 renderQuestion();
             } else {
                 showResult();
