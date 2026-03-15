@@ -299,6 +299,190 @@ output: markdown|html                # 默认：html
 - **响应式设计**：手机/平板/电脑均可使用
 - **中文界面**：全中文 UI，适合初中生使用
 
+---
+
+## ⚠️ 代码审查清单（生成后必须逐项检查）
+
+### ✅ 交互功能检查
+
+**1. 提交答案按钮**
+- [ ] 所有题型（选择题、判断题、填空题、计算题）都有提交答案按钮
+- [ ] 选择题/判断题：选择选项后提交按钮从禁用变为启用
+- [ ] 填空题：输入框有 `oninput` 事件绑定，输入内容后提交按钮启用
+- [ ] 计算题：提交按钮直接可用
+- [ ] 提交后立即显示反馈（正确答案标记、解析、知识点卡片）
+- [ ] 提交后提交按钮禁用，下一题按钮启用
+
+**2. 三级提示系统**
+- [ ] 每题的 `hint` 字段是数组格式，包含 3 个提示
+- [ ] `toggleHint()` 函数支持三级提示切换
+- [ ] 提示框显示当前级别（0/3）→（1/3）→（2/3）→（3/3）
+- [ ] 点击下一题时 `hintLevel` 重置为 0
+
+**3. 按钮状态管理**
+- [ ] 提交答案按钮初始状态为 `disabled`
+- [ ] 下一题按钮初始状态为 `disabled`
+- [ ] 只有提交答案后下一题按钮才启用
+- [ ] 跳转下一题时所有按钮状态重置
+
+### ✅ 数据结构检查
+
+**题目数据格式**
+```javascript
+{
+  number: 1,
+  type: "选择题",           // 必须是：选择题、判断题、填空题、计算题
+  difficulty: "★★☆",
+  text: "题目描述...",
+  diagram: "SVG 图示...",
+  hint: ["提示 1...", "提示 2...", "提示 3..."],  // 必须是数组！
+  options: ["A...", "B...", "C...", "D..."],     // 填空/计算题为空数组 []
+  correct: 2,               // 选择题为选项索引，填空题为数字答案
+  feedback: "详细解析...",
+  knowledge: "核心知识点..."
+}
+```
+
+**必填字段检查**
+- [ ] `type` 字段正确（四种题型之一）
+- [ ] `hint` 字段是包含 3 个元素的数组
+- [ ] `options` 字段存在（选择题有 4 个选项，填空/计算题为空数组）
+- [ ] `correct` 字段类型正确（选择题为索引数字，填空题为数值答案）
+- [ ] `feedback` 和 `knowledge` 字段非空
+
+### ✅ JavaScript 函数检查
+
+**核心函数完整性**
+- [ ] `renderQuestion()` - 渲染当前题目
+- [ ] `toggleHint(el)` - 三级提示切换
+- [ ] `selectOption(idx)` - 选择题选项选择
+- [ ] `enableSubmitForFill()` - 填空题输入启用提交按钮
+- [ ] `submitAnswer()` - 统一处理所有题型提交
+- [ ] `showFeedback(isCorrect)` - 显示反馈
+- [ ] `nextQuestion()` - 跳转下一题（重置状态）
+- [ ] `showResult()` - 显示成绩
+
+**关键逻辑检查**
+- [ ] `submitAnswer()` 函数处理所有四种题型
+- [ ] 填空题在 `submitAnswer()` 中直接处理，不是调用独立函数
+- [ ] `nextQuestion()` 函数重置所有状态（`hintLevel`、`selectedOption`、输入框内容）
+- [ ] 没有孤立的 `checkFillAnswer()` 等独立函数（所有逻辑整合到 `submitAnswer()`）
+
+### ✅ HTML 元素检查
+
+**必需元素**
+```html
+<!-- 提交答案按钮（必需） -->
+<button class="btn" id="submit-btn" onclick="submitAnswer()" disabled>提交答案</button>
+
+<!-- 下一题按钮（必需） -->
+<button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+
+<!-- 提示框（必需） -->
+<div class="hint-box" onclick="toggleHint(this)" id="hint-box">
+    💡 点击查看提示（0/3）
+</div>
+
+<!-- 反馈框（必需） -->
+<div class="feedback-box" id="feedback">
+    <strong>✅ 解析：</strong>${q.feedback}
+</div>
+
+<!-- 知识点卡片（必需） -->
+<div class="knowledge-card" id="knowledge">
+    <h3>📚 知识点卡片</h3>
+    ...
+</div>
+```
+
+**填空题输入框**
+```html
+<input type="number" id="fill-answer" 
+       placeholder="请输入答案（数字）"
+       oninput="enableSubmitForFill()">  <!-- 必须有 oninput 事件！ -->
+```
+
+### ✅ 常见错误排查
+
+**❌ 错误 1：填空题无法提交**
+- 现象：输入答案后提交按钮仍然是禁用状态
+- 原因：输入框缺少 `oninput="enableSubmitForFill()"` 事件
+- 修复：添加 `oninput` 事件绑定
+
+**❌ 错误 2：提示只显示一级**
+- 现象：点击提示直接显示全部内容
+- 原因：`hint` 字段是字符串而不是数组
+- 修复：将 `hint` 改为包含 3 个提示的数组
+
+**❌ 错误 3：提交后不显示反馈**
+- 现象：点击提交按钮后没有反应
+- 原因：`submitAnswer()` 函数中没有调用 `showFeedback()`
+- 修复：在每个题型的提交逻辑末尾调用 `showFeedback(isCorrect)`
+
+**❌ 错误 4：下一题按钮直接可用**
+- 现象：还没答题就能点击下一题
+- 原因：下一题按钮初始状态不是 `disabled`
+- 修复：确保 HTML 中下一题按钮有 `disabled` 属性
+
+**❌ 错误 5：计算题重复处理**
+- 现象：点击提交后解析显示两次
+- 原因：既有 `checkFillAnswer()` 又在 `submitAnswer()` 中处理
+- 修复：统一在 `submitAnswer()` 中处理所有题型，删除独立检查函数
+
+---
+
+## 🐛 调试技巧
+
+### 浏览器控制台检查
+
+打开浏览器开发者工具（F12），在 Console 中运行：
+
+```javascript
+// 检查题目数据
+console.log('题目总数:', questions.length);
+console.log('第 1 题 hint 类型:', typeof questions[0].hint, Array.isArray(questions[0].hint) ? '(数组)' : '(非数组)');
+
+// 检查按钮状态
+console.log('提交按钮:', document.getElementById('submit-btn'));
+console.log('提交按钮禁用状态:', document.getElementById('submit-btn').disabled);
+
+// 检查函数是否存在
+console.log('submitAnswer 函数:', typeof submitAnswer);
+console.log('enableSubmitForFill 函数:', typeof enableSubmitForFill);
+```
+
+### 快速测试流程
+
+1. **选择题测试**：
+   - 选择选项 → 提交按钮应启用 → 点击提交 → 立即显示反馈 → 下一题按钮启用
+
+2. **填空题测试**：
+   - 输入数字 → 提交按钮应启用 → 点击提交 → 立即显示反馈
+
+3. **提示系统测试**：
+   - 点击提示框 → 显示提示 1（1/3）→ 再点 → 提示 2（2/3）→ 再点 → 提示 3（3/3）
+
+4. **下一题测试**：
+   - 点击下一题 → 提示级别重置为（0/3）→ 输入框清空 → 按钮重置为禁用
+
+---
+
+## 📋 生成后自检流程
+
+**生成 HTML 文件后，按以下顺序测试（耗时<3 分钟）：**
+
+1. ✅ 在浏览器中打开 HTML 文件
+2. ✅ 第 1 题（选择题）：选择选项 → 提交 → 查看反馈 → 下一题
+3. ✅ 第 2 题（判断题）：选择选项 → 提交 → 查看反馈 → 下一题
+4. ✅ 第 3 题（填空题）：输入答案 → 提交按钮是否启用？→ 提交 → 查看反馈
+5. ✅ 测试提示系统：点击提示框 3 次，检查是否分级显示
+6. ✅ 检查下一题时提示级别是否重置
+7. ✅ 完成所有题目，检查成绩面板
+
+**如果发现任何问题，立即修复并重新测试！**
+
+---
+
 详细 HTML 模板参见 [html-template.md](references/html-template.md)，SVG 图示范式参见 [diagram-guide.md](references/diagram-guide.md)，游戏化机制参见 [gamification.md](references/gamification.md)。
 
 ### 图示生成要求
