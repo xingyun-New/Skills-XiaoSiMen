@@ -104,6 +104,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 | 八年级 | 下册第一章：力 | 2026-03-07 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E4%B8%8B%E5%86%8C%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%8A%9B-20260307.html) |
 | 八年级 | 下册第二章：运动和力综合 | 2026-03-08 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E8%BF%90%E5%8A%A8%E5%92%8C%E5%8A%9B%E7%BB%BC%E5%90%88-20260308.html) |
 | 八年级 | 摩擦力弹力综合（**图解版 v3**） | 2026-03-12 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-%E6%91%A9%E6%93%A6%E5%8A%9B%E5%BC%B9%E5%8A%9B%E7%BB%BC%E5%90%88-v3-20260312.html) |
+| 八年级 | 摩擦力堆叠问题专项（**10 道中等难度**） | 2026-03-15 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/physics-8-friction-stack-20260315.html) |
 
 ### 📝 语文
 
