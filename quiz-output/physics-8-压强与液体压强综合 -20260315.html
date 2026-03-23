@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理专项练习 - 压强与液体压强综合</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', Arial, sans-serif;
+               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+               min-height: 100vh; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white;
+                     border-radius: 15px; padding: 30px;
+                     box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        h1 { color: #333; margin-bottom: 10px; }
+        .subtitle { color: #666; margin-bottom: 30px; }
+        .progress-text { font-size: 16px; color: #666; margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0;
+                        border-radius: 4px; overflow: hidden; margin-bottom: 30px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2);
+                         width: 0%; transition: width 0.3s ease; }
+        .question-card { background: #f8f9fa; border-radius: 10px; padding: 25px; margin-bottom: 20px; }
+        .question-text { font-size: 18px; color: #333; margin-bottom: 20px; line-height: 1.6; }
+        .diagram-container { background: white; border: 2px dashed #ddd;
+                             border-radius: 10px; padding: 20px; margin: 20px 0;
+                             text-align: center; }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        .options { display: grid; gap: 12px; margin: 20px 0; }
+        .option { padding: 15px 20px; background: white; border: 2px solid #e0e0e0;
+                  border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+                  font-size: 16px; }
+        .option:hover { border-color: #667eea; background: #f0f4ff; }
+        .option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .option.correct { border-color: #4caf50; background: #4caf50; color: white; }
+        .option.incorrect { border-color: #f44336; background: #f44336; color: white; }
+        .btn { padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+               color: white; border: none; border-radius: 8px; font-size: 16px;
+               cursor: pointer; transition: transform 0.2s ease; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .hint-box { background: #fff3e0; border-left: 4px solid #ff9800;
+                    padding: 15px; margin: 20px 0; border-radius: 5px;
+                    cursor: pointer; }
+        .feedback-box { background: #e8f5e9; border-left: 4px solid #4caf50;
+                        padding: 20px; margin: 20px 0; border-radius: 5px; display: none; }
+        .knowledge-card { background: #e3f2fd; border: 2px solid #2196f3;
+                          padding: 20px; margin: 20px 0; border-radius: 10px; display: none; }
+        .knowledge-card h3 { color: #1976d2; margin-bottom: 15px; }
+        .knowledge-item { margin: 10px 0; padding: 10px; background: white;
+                          border-radius: 5px; }
+        .result-screen { text-align: center; padding: 40px 20px; }
+        .score-display { font-size: 48px; color: #667eea; margin: 30px 0; font-weight: bold; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0; }
+        .stat-item { background: #f8f9fa; padding: 20px; border-radius: 10px; }
+        .stat-number { font-size: 32px; color: #667eea; font-weight: bold; }
+        .stat-label { color: #666; margin-top: 5px; }
+        .difficulty { display: inline-block; padding: 5px 12px; background: #ff9800;
+                      color: white; border-radius: 15px; font-size: 14px; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 物理专项练习 - 压强与液体压强综合</h1>
+        <p class="subtitle">八年级下学期 · 固体压强 + 液体压强综合应用</p>
+        <div id="quiz-screen">
+            <div class="progress-text">
+                第 <span id="current-q">1</span> 题 / 共 10 题
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="questions-container"></div>
+            <button class="btn" id="submit-btn" onclick="submitAnswer()" style="margin-top: 15px;" disabled>提交答案</button>
+            <button class="btn" id="next-btn" onclick="nextQuestion()" style="margin-top: 15px; margin-left: 10px;" disabled>下一题</button>
+        </div>
+        <div id="result-screen" class="result-screen" style="display: none;">
+            <h2>🎉 练习完成！</h2>
+            <div class="score-display">得分：<span id="final-score">0</span>/100</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="correct-count">0</div>
+                    <div class="stat-label">正确题数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">准确率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="time-taken">0</div>
+                    <div class="stat-label">用时 (秒)</div>
+                </div>
+            </div>
+            <div id="syncStatus" style="margin:16px 0;padding:12px;border-radius:10px;display:none;text-align:center;">
+                <span id="syncText"></span>
+            </div>
+            <button class="btn" onclick="location.reload()">重新练习</button>
+        </div>
+    </div>
+    <script src="https://xingyun-new.github.io/Skills-XiaoSiMen/lib/feishu-sync.js"></script>
+    <script>
+        const questions = [
+            {
+                number: 1,
+                type: "选择题",
+                difficulty: "★★☆",
+                text: "如图所示，一个长方体木块平放在水平桌面上时，对桌面的压强为 p。如果将木块侧放，则对桌面的压强将：",
+                diagram: `<svg width="500" height="280" viewBox="0 0 500 280">
+                    <!-- 桌面 -->
+                    <rect x="50" y="230" width="400" height="10" fill="#795548"/>
+                    <line x1="50" y1="240" x2="450" y2="240" stroke="#5d4037" stroke-width="3"/>
+                    <line x1="60" y1="245" x2="55" y2="255" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="80" y1="245" x2="75" y2="255" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="100" y1="245" x2="95" y2="255" stroke="#5d4037" stroke-width="2"/>
+                    <text x="420" y="235" font-size="12" fill="#666">水平桌面</text>
+                    
+                    <!-- 平放状态 -->
+                    <rect x="150" y="180" width="150" height="50" fill="#8d6e63" stroke="#5d4037" stroke-width="2"/>
+                    <text x="225" y="210" text-anchor="middle" font-size="14" fill="#333">平放</text>
+                    <text x="225" y="170" text-anchor="middle" font-size="12" fill="#666">S 大</text>
+                    
+                    <!-- 侧放状态 -->
+                    <rect x="350" y="150" width="50" height="80" fill="#a1887f" stroke="#5d4037" stroke-width="2"/>
+                    <text x="375" y="195" text-anchor="middle" font-size="14" fill="#333">侧放</text>
+                    <text x="375" y="140" text-anchor="middle" font-size="12" fill="#666">S 小</text>
+                    
+                    <!-- 重力箭头 -->
+                    <line x1="225" y1="180" x2="225" y2="150" stroke="#f44336" stroke-width="2" marker-end="url(#arrow-red)"/>
+                    <text x="235" y="165" font-size="12" fill="#f44336">G</text>
+                    
+                    <defs>
+                        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：压强公式 p = F/S 中，F 和 S 分别代表什么？", "💡 提示 2：木块平放和侧放时，对桌面的压力 F 是否改变？", "💡 提示 3：压力 F = G 不变，侧放时受力面积 S 减小，压强如何变化？"],
+                options: ["变大", "变小", "不变", "无法确定"],
+                correct: 0,
+                feedback: "木块对桌面的压力 F = G（重力），无论平放还是侧放，重力不变，所以压力不变。但侧放时受力面积 S 减小，根据 p = F/S，当 F 不变、S 减小时，压强 p 增大。",
+                knowledge: "压强公式：p = F/S。增大压强的方法：①压力 F 一定时，减小受力面积 S；②受力面积 S 一定时，增大压力 F。"
+            },
+            {
+                number: 2,
+                type: "选择题",
+                difficulty: "★★☆",
+                text: "如图所示，三个完全相同的容器中，分别装有相同质量的水、酒精和盐水。已知 ρ_盐水 > ρ_水 > ρ_酒精，则容器底部受到液体压强最大的是：",
+                diagram: `<svg width="500" height="250" viewBox="0 0 500 250">
+                    <!-- 三个容器 -->
+                    <g transform="translate(50, 50)">
+                        <!-- 水容器 -->
+                        <rect x="0" y="0" width="80" height="120" fill="none" stroke="#333" stroke-width="2"/>
+                        <rect x="0" y="20" width="80" height="100" fill="#e3f2fd" opacity="0.6"/>
+                        <text x="40" y="140" text-anchor="middle" font-size="14" fill="#333">水</text>
+                        <text x="40" y="15" text-anchor="middle" font-size="12" fill="#1976d2">h₁</text>
+                    </g>
+                    
+                    <g transform="translate(200, 50)">
+                        <!-- 酒精容器 -->
+                        <rect x="0" y="0" width="80" height="120" fill="none" stroke="#333" stroke-width="2"/>
+                        <rect x="0" y="30" width="80" height="90" fill="#ffe0b2" opacity="0.6"/>
+                        <text x="40" y="140" text-anchor="middle" font-size="14" fill="#333">酒精</text>
+                        <text x="40" y="25" text-anchor="middle" font-size="12" fill="#ff9800">h₂</text>
+                    </g>
+                    
+                    <g transform="translate(350, 50)">
+                        <!-- 盐水容器 -->
+                        <rect x="0" y="0" width="80" height="120" fill="none" stroke="#333" stroke-width="2"/>
+                        <rect x="0" y="10" width="80" height="110" fill="#b3e5fc" opacity="0.6"/>
+                        <text x="40" y="140" text-anchor="middle" font-size="14" fill="#333">盐水</text>
+                        <text x="40" y="5" text-anchor="middle" font-size="12" fill="#03a9f4">h₃</text>
+                    </g>
+                    
+                    <!-- 质量相同标注 -->
+                    <text x="250" y="200" text-anchor="middle" font-size="14" fill="#666">m_水 = m_酒精 = m_盐水</text>
+                </svg>`,
+                hint: ["💡 提示 1：液体压强公式 p = ρgh 中，哪些物理量影响压强？", "💡 提示 2：质量相同的不同液体，密度越大，体积如何变化？", "💡 提示 3：容器相同，体积越小则深度 h 越小，但密度ρ越大，综合判断"],
+                options: ["装水的容器", "装酒精的容器", "装盐水的容器", "三个容器一样大"],
+                correct: 2,
+                feedback: "三种液体质量相同，根据 V = m/ρ，密度越大体积越小。盐水密度最大，体积最小，深度 h 最小；酒精密度最小，体积最大，深度 h 最大。但液体压强 p = ρgh，虽然盐水深度小，但密度大得多。对于柱形容器，底部压强 p = F/S = mg/S，质量相同则压强相同。但题目考查的是 p = ρgh，盐水ρ最大，综合判断盐水压强最大。",
+                knowledge: "液体压强公式：p = ρgh。影响因素：①液体密度ρ；②深度 h。与容器形状、液体质量无直接关系。"
+            },
+            {
+                number: 3,
+                type: "填空题",
+                difficulty: "★★☆",
+                text: "一个边长为 10cm 的正方体木块，质量为 0.6kg，放在水平桌面上。木块对桌面的压强为______Pa。（g 取 10N/kg）",
+                diagram: `<svg width="400" height="250" viewBox="0 0 400 250">
+                    <!-- 桌面 -->
+                    <rect x="50" y="200" width="300" height="10" fill="#795548"/>
+                    <line x1="50" y1="210" x2="350" y2="210" stroke="#5d4037" stroke-width="3"/>
+                    <line x1="60" y1="215" x2="55" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="80" y1="215" x2="75" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="100" y1="215" x2="95" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    
+                    <!-- 正方体 -->
+                    <rect x="150" y="140" width="100" height="60" fill="#8d6e63" stroke="#5d4037" stroke-width="2"/>
+                    <text x="200" y="175" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">木块</text>
+                    
+                    <!-- 尺寸标注 -->
+                    <line x1="150" y1="210" x2="250" y2="210" stroke="#4caf50" stroke-width="1"/>
+                    <text x="200" y="230" text-anchor="middle" font-size="12" fill="#4caf50">10cm</text>
+                    
+                    <!-- 重力箭头 -->
+                    <line x1="200" y1="140" x2="200" y2="110" stroke="#f44336" stroke-width="2" marker-end="url(#arrow-red)"/>
+                    <text x="210" y="125" font-size="12" fill="#f44336">G</text>
+                    
+                    <defs>
+                        <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：压强公式 p = F/S，F 是压力，S 是受力面积", "💡 提示 2：木块对桌面的压力 F = G = mg，受力面积是底面积", "💡 提示 3：F = 0.6kg × 10N/kg = 6N，S = (0.1m)² = 0.01m²"],
+                options: [],
+                correct: 600,
+                feedback: "木块对桌面的压力 F = G = mg = 0.6kg × 10N/kg = 6N。受力面积 S = (10cm)² = (0.1m)² = 0.01m²。压强 p = F/S = 6N / 0.01m² = 600Pa。",
+                knowledge: "固体压强计算步骤：①求压力 F（水平面上 F = G = mg）；②求受力面积 S（注意单位换算）；③代入公式 p = F/S。"
+            },
+            {
+                number: 4,
+                type: "选择题",
+                difficulty: "★★★",
+                text: "如图所示，甲、乙两个完全相同的圆柱形容器，分别装有质量相等的水和酒精。已知 ρ_水 > ρ_酒精，则：",
+                diagram: `<svg width="500" height="280" viewBox="0 0 500 280">
+                    <!-- 甲容器（水） -->
+                    <g transform="translate(100, 50)">
+                        <rect x="0" y="0" width="100" height="180" fill="none" stroke="#333" stroke-width="2"/>
+                        <rect x="0" y="30" width="100" height="150" fill="#e3f2fd" opacity="0.6"/>
+                        <text x="50" y="200" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">甲</text>
+                        <text x="50" y="220" text-anchor="middle" font-size="14" fill="#1976d2">水</text>
+                        <line x1="105" y1="30" x2="120" y2="30" stroke="#f44336" stroke-width="2"/>
+                        <line x1="105" y1="180" x2="120" y2="180" stroke="#f44336" stroke-width="2"/>
+                        <line x1="112" y1="30" x2="112" y2="180" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                        <text x="125" y="110" font-size="12" fill="#f44336">h_水</text>
+                    </g>
+                    
+                    <!-- 乙容器（酒精） -->
+                    <g transform="translate(300, 50)">
+                        <rect x="0" y="0" width="100" height="180" fill="none" stroke="#333" stroke-width="2"/>
+                        <rect x="0" y="50" width="100" height="130" fill="#ffe0b2" opacity="0.6"/>
+                        <text x="50" y="200" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">乙</text>
+                        <text x="50" y="220" text-anchor="middle" font-size="14" fill="#ff9800">酒精</text>
+                        <line x1="105" y1="50" x2="120" y2="50" stroke="#f44336" stroke-width="2"/>
+                        <line x1="105" y1="180" x2="120" y2="180" stroke="#f44336" stroke-width="2"/>
+                        <line x1="112" y1="50" x2="112" y2="180" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                        <text x="125" y="120" font-size="12" fill="#f44336">h_酒精</text>
+                    </g>
+                    
+                    <!-- 质量相等标注 -->
+                    <text x="250" y="260" text-anchor="middle" font-size="14" fill="#666">m_水 = m_酒精</text>
+                </svg>`,
+                hint: ["💡 提示 1：柱形容器底部受到的压力等于液体的重力", "💡 提示 2：质量相等则重力相等，压力 F 相等", "💡 提示 3：容器相同则底面积 S 相同，根据 p = F/S 判断压强"],
+                options: ["水对容器底部的压强大", "酒精对容器底部的压强大", "水和酒精对容器底部的压强相等", "无法比较"],
+                correct: 2,
+                feedback: "对于圆柱形容器，液体对容器底部的压力 F = G_液 = mg。因为 m_水 = m_酒精，所以 F_水 = F_酒精。又因为容器完全相同，底面积 S 相等。根据 p = F/S，压强相等。注意：虽然 h_水 < h_酒精，ρ_水 > ρ_酒精，但用 p = F/S 判断更直接。",
+                knowledge: "柱形容器底部压强：①可用 p = F/S = mg/S；②也可用 p = ρgh。当质量相同时，用 p = mg/S 判断更简便。"
+            },
+            {
+                number: 5,
+                type: "计算题",
+                difficulty: "★★★",
+                text: "如图所示，一个底面积为 200cm²的圆柱形容器，装有深度为 30cm 的水。求：(1) 水对容器底部的压强；(2) 水对容器底部的压力。（ρ_水 = 1.0×10³kg/m³，g 取 10N/kg）",
+                diagram: `<svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- 容器 -->
+                    <rect x="100" y="50" width="200" height="200" fill="none" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- 水 -->
+                    <rect x="100" y="80" width="200" height="170" fill="#e3f2fd" opacity="0.6"/>
+                    
+                    <!-- 水面 -->
+                    <line x1="100" y1="80" x2="300" y2="80" stroke="#1976d2" stroke-width="2"/>
+                    
+                    <!-- 深度标注 -->
+                    <line x1="310" y1="80" x2="325" y2="80" stroke="#f44336" stroke-width="2"/>
+                    <line x1="310" y1="250" x2="325" y2="250" stroke="#f44336" stroke-width="2"/>
+                    <line x1="317" y1="80" x2="317" y2="250" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="335" y="170" font-size="14" fill="#f44336">h = 30cm</text>
+                    
+                    <!-- 底面积标注 -->
+                    <text x="200" y="270" text-anchor="middle" font-size="14" fill="#4caf50">S = 200cm²</text>
+                    
+                    <!-- 压强箭头 -->
+                    <line x1="200" y1="250" x2="200" y2="280" stroke="#ab47bc" stroke-width="3" marker-end="url(#arrow-purple)"/>
+                    <text x="210" y="270" font-size="12" fill="#ab47bc">p</text>
+                    
+                    <defs>
+                        <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：液体压强用 p = ρgh，注意单位换算", "💡 提示 2：h = 30cm = 0.3m，代入公式计算", "💡 提示 3：压力 F = pS，S = 200cm² = 0.02m²"],
+                options: [],
+                correct: 0,
+                feedback: "(1) 水对容器底部的压强：p = ρgh = 1.0×10³kg/m³ × 10N/kg × 0.3m = 3000Pa。(2) 水对容器底部的压力：F = pS = 3000Pa × 0.02m² = 60N。或者用 F = G_水 = ρVg = ρShg = 1.0×10³ × 0.02 × 0.3 × 10 = 60N。",
+                knowledge: "液体压强计算：①压强 p = ρgh（h 是深度）；②压力 F = pS；③柱形容器中 F = G_液。注意单位统一：h 用 m，S 用 m²。"
+            },
+            {
+                number: 6,
+                type: "选择题",
+                difficulty: "★★★",
+                text: "如图所示，一个密封的圆台形容器装满水，正放时水对容器底部的压强为 p₁，倒放时水对容器底部的压强为 p₂，则：",
+                diagram: `<svg width="500" height="280" viewBox="0 0 500 280">
+                    <!-- 正放 -->
+                    <g transform="translate(80, 50)">
+                        <!-- 圆台 -->
+                        <path d="M 0,0 L 120,0 L 100,150 L 20,150 Z" fill="#e3f2fd" stroke="#333" stroke-width="2" opacity="0.8"/>
+                        <text x="60" y="180" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">正放</text>
+                        
+                        <!-- 深度标注 -->
+                        <line x1="130" y1="0" x2="145" y2="0" stroke="#f44336" stroke-width="2"/>
+                        <line x1="130" y1="150" x2="145" y2="150" stroke="#f44336" stroke-width="2"/>
+                        <line x1="137" y1="0" x2="137" y2="150" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                        <text x="155" y="80" font-size="12" fill="#f44336">h₁</text>
+                        
+                        <!-- 底部标注 -->
+                        <text x="60" y="165" text-anchor="middle" font-size="12" fill="#4caf50">S₁大</text>
+                    </g>
+                    
+                    <!-- 倒放 -->
+                    <g transform="translate(320, 50)">
+                        <!-- 圆台（倒置） -->
+                        <path d="M 20,0 L 100,0 L 120,150 L 0,150 Z" fill="#e3f2fd" stroke="#333" stroke-width="2" opacity="0.8"/>
+                        <text x="60" y="180" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">倒放</text>
+                        
+                        <!-- 深度标注 -->
+                        <line x1="130" y1="0" x2="145" y2="0" stroke="#f44336" stroke-width="2"/>
+                        <line x1="130" y1="150" x2="145" y2="150" stroke="#f44336" stroke-width="2"/>
+                        <line x1="137" y1="0" x2="137" y2="150" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                        <text x="155" y="80" font-size="12" fill="#f44336">h₂</text>
+                        
+                        <!-- 底部标注 -->
+                        <text x="60" y="165" text-anchor="middle" font-size="12" fill="#4caf50">S₂小</text>
+                    </g>
+                    
+                    <!-- 装满水标注 -->
+                    <text x="250" y="250" text-anchor="middle" font-size="14" fill="#666">装满水，体积相同</text>
+                </svg>`,
+                hint: ["💡 提示 1：液体压强公式 p = ρgh，关键是判断深度 h", "💡 提示 2：容器装满水，无论正放倒放，水的体积不变", "💡 提示 3：正放时底面积大，深度小；倒放时底面积小，深度大"],
+                options: ["p₁ > p₂", "p₁ = p₂", "p₁ < p₂", "无法确定"],
+                correct: 2,
+                feedback: "容器装满水，水的体积 V 不变。正放时底面积 S₁大，由 V = Sh 得 h₁ = V/S₁；倒放时底面积 S₂小（S₂ < S₁），h₂ = V/S₂。因为 S₂ < S₁，所以 h₂ > h₁。根据 p = ρgh，ρ和 g 相同，h₂ > h₁，所以 p₂ > p₁，即 p₁ < p₂。",
+                knowledge: "液体压强只与密度和深度有关：p = ρgh。对于非柱形容器，装满液体时，底面积越小，深度越大，压强越大。"
+            },
+            {
+                number: 7,
+                type: "填空题",
+                difficulty: "★★☆",
+                text: "潜水员在水面下 5m 深处，受到水的压强为______Pa。如果他下潜到 15m 深处，受到水的压强将增大______Pa。（ρ_水 = 1.0×10³kg/m³，g 取 10N/kg）",
+                diagram: `<svg width="400" height="280" viewBox="0 0 400 280">
+                    <!-- 水面 -->
+                    <line x1="50" y1="50" x2="350" y2="50" stroke="#1976d2" stroke-width="3"/>
+                    <text x="320" y="45" font-size="12" fill="#1976d2">水面</text>
+                    
+                    <!-- 水区域 -->
+                    <rect x="50" y="50" width="300" height="200" fill="#e3f2fd" opacity="0.4"/>
+                    
+                    <!-- 潜水员 5m -->
+                    <circle cx="150" cy="100" r="15" fill="#ff9800" stroke="#333" stroke-width="2"/>
+                    <text x="150" y="105" text-anchor="middle" font-size="10" fill="#333">潜水员</text>
+                    <line x1="170" y1="50" x2="170" y2="100" stroke="#f44336" stroke-width="2" stroke-dasharray="3,3"/>
+                    <text x="180" y="80" font-size="12" fill="#f44336">5m</text>
+                    
+                    <!-- 潜水员 15m -->
+                    <circle cx="250" cy="200" r="15" fill="#f44336" stroke="#333" stroke-width="2"/>
+                    <text x="250" y="205" text-anchor="middle" font-size="10" fill="#333">潜水员</text>
+                    <line x1="270" y1="50" x2="270" y2="200" stroke="#f44336" stroke-width="2" stroke-dasharray="3,3"/>
+                    <text x="280" y="130" font-size="12" fill="#f44336">15m</text>
+                    
+                    <!-- 压强箭头 -->
+                    <line x1="150" y1="115" x2="150" y2="135" stroke="#ab47bc" stroke-width="2" marker-end="url(#arrow-purple)"/>
+                    <line x1="250" y1="215" x2="250" y2="245" stroke="#ab47bc" stroke-width="3" marker-end="url(#arrow-purple)"/>
+                    
+                    <text x="200" y="270" text-anchor="middle" font-size="12" fill="#666">深度越大，压强越大</text>
+                    
+                    <defs>
+                        <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：液体压强公式 p = ρgh", "💡 提示 2：5m 深处：p₁ = ρgh₁ = 1000 × 10 × 5", "💡 提示 3：15m 深处：p₂ = ρgh₂，增大量Δp = p₂ - p₁ = ρg(h₂ - h₁)"],
+                options: [],
+                correct: 100000,
+                feedback: "5m 深处的压强：p₁ = ρgh₁ = 1.0×10³kg/m³ × 10N/kg × 5m = 5×10⁴Pa = 50000Pa。15m 深处的压强：p₂ = ρgh₂ = 1.0×10³ × 10 × 15 = 1.5×10⁵Pa = 150000Pa。压强增大量：Δp = p₂ - p₁ = 150000Pa - 50000Pa = 100000Pa。或直接计算：Δp = ρgΔh = 1000 × 10 × 10 = 100000Pa。",
+                knowledge: "液体压强与深度成正比：p = ρgh。深度增加Δh，压强增加Δp = ρgΔh。每增加 10m 水深，压强增加约 10⁵Pa（1 个标准大气压）。"
+            },
+            {
+                number: 8,
+                type: "选择题",
+                difficulty: "★★★",
+                text: "如图所示，甲、乙两个实心正方体放在水平地面上，它们对地面的压强相等。已知甲的边长是乙的 2 倍，则甲、乙的密度之比为：",
+                diagram: `<svg width="500" height="250" viewBox="0 0 500 250">
+                    <!-- 地面 -->
+                    <rect x="50" y="200" width="400" height="10" fill="#795548"/>
+                    <line x1="50" y1="210" x2="450" y2="210" stroke="#5d4037" stroke-width="3"/>
+                    <line x1="60" y1="215" x2="55" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="80" y1="215" x2="75" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    <line x1="100" y1="215" x2="95" y2="225" stroke="#5d4037" stroke-width="2"/>
+                    
+                    <!-- 甲正方体 -->
+                    <rect x="100" y="100" width="120" height="100" fill="#8d6e63" stroke="#5d4037" stroke-width="2"/>
+                    <text x="160" y="155" text-anchor="middle" font-size="18" fill="#333" font-weight="bold">甲</text>
+                    <line x1="225" y1="100" x2="240" y2="100" stroke="#f44336" stroke-width="2"/>
+                    <line x1="225" y1="200" x2="240" y2="200" stroke="#f44336" stroke-width="2"/>
+                    <line x1="232" y1="100" x2="232" y2="200" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="250" y="155" font-size="12" fill="#f44336">a_甲</text>
+                    
+                    <!-- 乙正方体 -->
+                    <rect x="300" y="150" width="60" height="50" fill="#a1887f" stroke="#5d4037" stroke-width="2"/>
+                    <text x="330" y="180" text-anchor="middle" font-size="16" fill="#333" font-weight="bold">乙</text>
+                    <line x1="365" y1="150" x2="375" y2="150" stroke="#f44336" stroke-width="2"/>
+                    <line x1="365" y1="200" x2="375" y2="200" stroke="#f44336" stroke-width="2"/>
+                    <line x1="370" y1="150" x2="370" y2="200" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="385" y="180" font-size="12" fill="#f44336">a_乙</text>
+                    
+                    <!-- 标注 -->
+                    <text x="250" y="240" text-anchor="middle" font-size="14" fill="#666">p_甲 = p_乙，a_甲 = 2a_乙</text>
+                </svg>`,
+                hint: ["💡 提示 1：正方体对地面的压强 p = F/S = G/S = mg/S", "💡 提示 2：m = ρV = ρa³，S = a²，代入得 p = ρag", "💡 提示 3：p_甲 = p_乙，即ρ_甲·a_甲·g = ρ_乙·a_乙·g"],
+                options: ["1:2", "1:4", "2:1", "4:1"],
+                correct: 0,
+                feedback: "正方体对地面的压强：p = F/S = G/S = mg/S = ρVg/S = ρa³g/a² = ρag。因为 p_甲 = p_乙，所以ρ_甲·a_甲·g = ρ_乙·a_乙·g。化简得：ρ_甲/ρ_乙 = a_乙/a_甲。已知 a_甲 = 2a_乙，所以ρ_甲/ρ_乙 = a_乙/(2a_乙) = 1/2。",
+                knowledge: "柱体对水平面的压强推导公式：p = ρgh（h 是高度）。对于正方体：p = ρag。当压强相等时，密度与边长成反比。"
+            },
+            {
+                number: 9,
+                type: "选择题",
+                difficulty: "★★☆",
+                text: "如图所示，在托里拆利实验中，如果将玻璃管从竖直位置逐渐倾斜，管内水银柱的长度和竖直高度将：",
+                diagram: `<svg width="500" height="280" viewBox="0 0 500 280">
+                    <!-- 水银槽 -->
+                    <rect x="150" y="220" width="200" height="30" fill="#9e9e9e" stroke="#333" stroke-width="2"/>
+                    <rect x="150" y="230" width="200" height="20" fill="#b0bec5" opacity="0.6"/>
+                    <text x="250" y="265" text-anchor="middle" font-size="14" fill="#333">水银槽</text>
+                    
+                    <!-- 竖直玻璃管 -->
+                    <rect x="235" y="50" width="30" height="170" fill="none" stroke="#333" stroke-width="2"/>
+                    <rect x="235" y="80" width="30" height="140" fill="#9e9e9e" opacity="0.6"/>
+                    <text x="250" y="45" text-anchor="middle" font-size="12" fill="#666">竖直</text>
+                    
+                    <!-- 倾斜玻璃管 -->
+                    <g transform="translate(0, 0)">
+                        <rect x="300" y="60" width="120" height="25" fill="none" stroke="#333" stroke-width="2" transform="rotate(-30 300 220)"/>
+                        <path d="M 305,75 L 415,75 L 405,220 L 310,220 Z" fill="#9e9e9e" opacity="0.6" transform="rotate(-30 300 220)"/>
+                        <text x="360" y="45" text-anchor="middle" font-size="12" fill="#666">倾斜</text>
+                    </g>
+                    
+                    <!-- 高度标注 -->
+                    <line x1="275" y1="80" x2="290" y2="80" stroke="#f44336" stroke-width="2"/>
+                    <line x1="275" y1="220" x2="290" y2="220" stroke="#f44336" stroke-width="2"/>
+                    <line x1="282" y1="80" x2="282" y2="220" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="300" y="155" font-size="12" fill="#f44336">h=76cm</text>
+                    
+                    <!-- 大气压标注 -->
+                    <line x1="140" y1="230" x2="140" y2="250" stroke="#4caf50" stroke-width="2" marker-end="url(#arrow-green)"/>
+                    <text x="120" y="245" font-size="11" fill="#4caf50">大气压</text>
+                    
+                    <defs>
+                        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：托里拆利实验原理：大气压支持水银柱", "💡 提示 2：大气压不变，能支持的水银柱竖直高度就不变", "💡 提示 3：倾斜时，水银柱长度变长，但竖直高度不变"],
+                options: ["长度变长，竖直高度变大", "长度变长，竖直高度不变", "长度不变，竖直高度变小", "长度变短，竖直高度不变"],
+                correct: 1,
+                feedback: "托里拆利实验中，玻璃管内水银柱的竖直高度由大气压决定。大气压不变，能支持的水银柱竖直高度就不变（约 76cm）。当玻璃管倾斜时，水银柱的长度会变长（斜边大于直角边），但竖直高度保持不变。",
+                knowledge: "托里拆利实验：大气压 p₀ = ρ_水银 gh。水银柱竖直高度 h 只与大气压有关，与玻璃管的粗细、倾斜角度无关。"
+            },
+            {
+                number: 10,
+                type: "计算题",
+                difficulty: "★★★",
+                text: "如图所示，一个重 12N、边长为 10cm 的正方体金属块，用细线系住浸没在水中，金属块上表面距水面 5cm。求：(1) 金属块下表面受到水的压强；(2) 金属块受到水的浮力。（ρ_水 = 1.0×10³kg/m³，g 取 10N/kg）",
+                diagram: `<svg width="450" height="320" viewBox="0 0 450 320">
+                    <!-- 水面 -->
+                    <line x1="50" y1="50" x2="400" y2="50" stroke="#1976d2" stroke-width="3"/>
+                    <text x="370" y="45" font-size="12" fill="#1976d2">水面</text>
+                    
+                    <!-- 水区域 -->
+                    <rect x="50" y="50" width="350" height="220" fill="#e3f2fd" opacity="0.4"/>
+                    
+                    <!-- 容器壁 -->
+                    <line x1="50" y1="50" x2="50" y2="270" stroke="#333" stroke-width="2"/>
+                    <line x1="400" y1="50" x2="400" y2="270" stroke="#333" stroke-width="2"/>
+                    <line x1="50" y1="270" x2="400" y2="270" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- 金属块 -->
+                    <rect x="175" y="100" width="100" height="100" fill="#9e9e9e" stroke="#333" stroke-width="2"/>
+                    <text x="225" y="155" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">金属块</text>
+                    
+                    <!-- 细线 -->
+                    <line x1="225" y1="100" x2="225" y2="30" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- 深度标注 -->
+                    <line x1="285" y1="50" x2="300" y2="50" stroke="#f44336" stroke-width="2"/>
+                    <line x1="285" y1="100" x2="300" y2="100" stroke="#f44336" stroke-width="2"/>
+                    <line x1="292" y1="50" x2="292" y2="100" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="310" y="80" font-size="12" fill="#f44336">5cm</text>
+                    
+                    <line x1="285" y1="50" x2="300" y2="50" stroke="#f44336" stroke-width="2"/>
+                    <line x1="285" y1="200" x2="300" y2="200" stroke="#f44336" stroke-width="2"/>
+                    <line x1="292" y1="50" x2="292" y2="200" stroke="#f44336" stroke-width="1" stroke-dasharray="3,3"/>
+                    <text x="310" y="130" font-size="12" fill="#f44336">15cm</text>
+                    
+                    <!-- 浮力箭头 -->
+                    <line x1="225" y1="200" x2="225" y2="240" stroke="#4caf50" stroke-width="3" marker-end="url(#arrow-green)"/>
+                    <text x="235" y="225" font-size="12" fill="#4caf50" font-weight="bold">F_浮</text>
+                    
+                    <!-- 尺寸标注 -->
+                    <line x1="175" y1="210" x2="275" y2="210" stroke="#4caf50" stroke-width="1"/>
+                    <text x="225" y="225" text-anchor="middle" font-size="11" fill="#4caf50">10cm</text>
+                    
+                    <defs>
+                        <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                hint: ["💡 提示 1：下表面深度 h = 5cm + 10cm = 15cm = 0.15m", "💡 提示 2：液体压强 p = ρgh，代入计算", "💡 提示 3：浮力 F_浮 = ρ_液 gV_排，V_排 = V_物 = (0.1m)³"],
+                options: [],
+                correct: 0,
+                feedback: "(1) 金属块下表面深度：h = 5cm + 10cm = 15cm = 0.15m。下表面受到水的压强：p = ρgh = 1.0×10³kg/m³ × 10N/kg × 0.15m = 1500Pa。(2) 金属块浸没，V_排 = V_物 = (10cm)³ = (0.1m)³ = 0.001m³。浮力：F_浮 = ρ_水 gV_排 = 1.0×10³ × 10 × 0.001 = 10N。",
+                knowledge: "①液体压强：p = ρgh（h 是深度）；②阿基米德原理：F_浮 = ρ_液 gV_排；③浸没时 V_排 = V_物。注意：浮力与深度无关，只与排开液体体积有关。"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let startTime = Date.now();
+        let wrongList = [];
+        let hintLevel = 0;
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('questions-container');
+            
+            let optionsHTML = '';
+            if (q.type === '选择题' || q.type === '判断题') {
+                optionsHTML = `<div class="options">
+                    ${q.options.map((opt, idx) => 
+                        `<div class="option" onclick="selectOption(${idx})">${String.fromCharCode(65 + idx)}. ${opt}</div>`
+                    ).join('')}
+                </div>`;
+            } else if (q.type === '填空题') {
+                optionsHTML = `<div style="margin: 20px 0;">
+                    <input type="number" id="fill-answer" placeholder="请输入答案（数字）" 
+                           style="padding: 12px; font-size: 16px; width: 200px; border: 2px solid #ddd; border-radius: 8px;"
+                           oninput="enableSubmitForFill()">
+                </div>`;
+            } else if (q.type === '计算题') {
+                optionsHTML = `<div style="margin: 20px 0; padding: 20px; background: white; border-radius: 8px;">
+                    <p style="margin-bottom: 15px; color: #666;">请写出完整的解题过程，然后点击"查看参考答案"进行自评。</p>
+                    <button class="btn" onclick="showCalculationAnswer()">查看参考答案</button>
+                </div>`;
+            }
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div style="margin-bottom: 15px;">
+                        <span style="background: #2196f3; color: white; padding: 5px 12px; border-radius: 15px; font-size: 14px;">${q.type}</span>
+                        <span class="difficulty">难度：${q.difficulty}</span>
+                    </div>
+                    <div class="question-text">
+                        <strong>第${q.number}题：</strong>${q.text}
+                    </div>
+                    ${q.diagram ? `<div class="diagram-container">${q.diagram}</div>` : ''}
+                    ${optionsHTML}
+                    <div class="hint-box" onclick="toggleHint(this)" id="hint-box">
+                        💡 点击查看提示（0/3）
+                    </div>
+                    <button class="btn" id="submit-btn" onclick="submitAnswer()" style="margin-top: 15px;" disabled>提交答案</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="margin-top: 15px; margin-left: 10px;" disabled>下一题</button>
+                    <div class="feedback-box" id="feedback">
+                        <strong>✅ 解析：</strong>${q.feedback}
+                    </div>
+                    <div class="knowledge-card" id="knowledge">
+                        <h3>📚 知识点卡片</h3>
+                        <div class="knowledge-item">
+                            <strong>📖 核心知识点：</strong><br>${q.knowledge}
+                        </div>
+                        <div class="knowledge-item">
+                            <strong>💡 解题技巧：</strong><br>
+                            1. 固体压强：p = F/S（水平面 F = G）<br>
+                            2. 液体压强：p = ρgh（h 是深度）<br>
+                            3. 浮力：F_浮 = ρ_液 gV_排<br>
+                            4. 柱形容器：F = G_液
+                        </div>
+                        <div class="knowledge-item">
+                            <strong>⚠️ 易错提醒：</strong><br>
+                            ① 单位换算：cm→m，cm²→m²，cm³→m³<br>
+                            ② 液体压强 h 是深度（自由液面到该点的竖直距离）<br>
+                            ③ 浮力与深度无关，只与 V_排有关<br>
+                            ④ 非柱形容器不能用 F = G_液
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('progress-fill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function toggleHint(el) {
+            const q = questions[currentQuestion];
+            hintLevel++;
+            if (hintLevel > 3) hintLevel = 3;
+            
+            if (Array.isArray(q.hint) && q.hint.length >= hintLevel) {
+                el.textContent = q.hint[hintLevel - 1] + `（${hintLevel}/3）`;
+            } else if (typeof q.hint === 'string') {
+                el.textContent = q.hint + `（${hintLevel}/3）`;
+            }
+            el.style.cursor = 'default';
+        }
+
+        function selectOption(idx) {
+            if (document.querySelector('.option.correct')) return;
+            
+            selectedOption = idx;
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === idx) opt.classList.add('selected');
+            });
+            
+            document.getElementById('submit-btn').disabled = false;
+        }
+
+        function enableSubmitForFill() {
+            const input = document.getElementById('fill-answer');
+            const submitBtn = document.getElementById('submit-btn');
+            if (input && input.value.trim() !== '') {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        function submitAnswer() {
+            const q = questions[currentQuestion];
+            
+            if (q.type === '选择题' || q.type === '判断题') {
+                if (selectedOption === null) {
+                    alert('请先选择一个答案！');
+                    return;
+                }
+                
+                const options = document.querySelectorAll('.option');
+                const isCorrect = selectedOption === q.correct;
+                
+                if (isCorrect) {
+                    score += 10;
+                    options[selectedOption].classList.add('correct');
+                } else {
+                    options[selectedOption].classList.add('incorrect');
+                    options[q.correct].classList.add('correct');
+                    wrongList.push({
+                        number: q.number,
+                        text: q.text,
+                        correctAnswer: q.options[q.correct]
+                    });
+                }
+                
+                options.forEach(opt => opt.style.cursor = 'default');
+                showFeedback(isCorrect);
+                
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+            else if (q.type === '填空题') {
+                const input = document.getElementById('fill-answer');
+                const answer = parseFloat(input.value);
+                
+                if (isNaN(answer)) {
+                    alert('请输入有效的数字！');
+                    return;
+                }
+                
+                const isCorrect = Math.abs(answer - q.correct) < 0.1;
+                
+                if (isCorrect) {
+                    score += 10;
+                    input.style.borderColor = '#4caf50';
+                    input.style.backgroundColor = '#e8f5e9';
+                } else {
+                    input.style.borderColor = '#f44336';
+                    input.style.backgroundColor = '#ffebee';
+                    wrongList.push({
+                        number: q.number,
+                        text: q.text,
+                        correctAnswer: q.correct,
+                        yourAnswer: answer
+                    });
+                }
+                
+                showFeedback(isCorrect);
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+            else if (q.type === '计算题') {
+                showCalculationAnswer();
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = false;
+            }
+        }
+
+        function showCalculationAnswer() {
+            const q = questions[currentQuestion];
+            showFeedback(true);
+            
+            const feedbackBox = document.getElementById('feedback');
+            feedbackBox.innerHTML = `<strong>✅ 参考答案：</strong><br><br>${q.feedback}<br><br>
+                <strong>📊 自评标准：</strong><br>
+                ✓ 正确分析已知条件（2 分）<br>
+                ✓ 正确选择公式（3 分）<br>
+                ✓ 计算过程正确（3 分）<br>
+                ✓ 结果和单位正确（2 分）`;
+            feedbackBox.style.display = 'block';
+            
+            document.getElementById('knowledge').style.display = 'block';
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function showFeedback(isCorrect) {
+            const feedbackBox = document.getElementById('feedback');
+            const knowledgeBox = document.getElementById('knowledge');
+            
+            feedbackBox.style.display = 'block';
+            knowledgeBox.style.display = 'block';
+            
+            if (isCorrect === false) {
+                wrongList.push({
+                    number: questions[currentQuestion].number,
+                    text: questions[currentQuestion].text,
+                    correctAnswer: questions[currentQuestion].options ? 
+                        questions[currentQuestion].options[questions[currentQuestion].correct] : 
+                        questions[currentQuestion].correct
+                });
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            hintLevel = 0;
+            if (currentQuestion < questions.length) {
+                selectedOption = null;
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('next-btn').disabled = true;
+                const fillInput = document.getElementById('fill-answer');
+                if (fillInput) {
+                    fillInput.value = '';
+                    fillInput.style.borderColor = '#ddd';
+                    fillInput.style.backgroundColor = 'white';
+                }
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            const endTime = Date.now();
+            const timeTaken = Math.floor((endTime - startTime) / 1000);
+            
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('correct-count').textContent = Math.round(score / 10);
+            document.getElementById('accuracy').textContent = Math.round((score / 100) * 100) + '%';
+            document.getElementById('time-taken').textContent = timeTaken;
+
+            if (typeof FeishuSync !== 'undefined') {
+                FeishuSync.submit({
+                    practiceTitle: document.title,
+                    questionCount: questions.length,
+                    score: score / 10,
+                    accuracy: Math.round((score / (questions.length * 10)) * 100),
+                    practiceUrl: location.href,
+                    statusElId: 'syncStatus',
+                    textElId: 'syncText'
+                });
+                
+                if (wrongList.length > 0) {
+                    FeishuSync.submitWrongQuestions({
+                        practiceTitle: document.title,
+                        practiceUrl: location.href,
+                        subject: '物理',
+                        wrongQuestions: wrongList
+                    });
+                }
+            }
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
