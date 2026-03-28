@@ -512,7 +512,22 @@ quiz-output/{subject}-{grade}-{topic}-{timestamp}.html
 - **禁止**：空格、括号、引号、特殊符号
 - topic 过长时适当缩短（控制在 10 个字以内）
 
-### Step 5: 发布到 GitHub Pages（⚠️ 强制步骤，不可跳过）
+**✅ 正确示例**：
+- `quiz-output/physics-8-压强与液体压强综合 -20260315.html`
+- `quiz-output/biology-7-上册第一章认识生物 -20260315.html`
+- `quiz-output/physics-8-friction-stack-20260315.html`
+
+**❌ 错误示例**（禁止使用）：
+- `quiz-output/physics-8-压强 与 液体压强综合 -20260315.html`（有空格）
+- `quiz-output/biology-7-上册 第一章 认识生物 -20260315.html`（有空格）
+
+**生成后检查**：
+生成文件后必须检查文件名：
+1. 文件名中不能有任何空格
+2. 如果有空格，必须重命名：将空格替换为 `-`
+3. 使用命令检查：`ls quiz-output/ | grep " "`（有输出说明有空格）
+
+---
 
 > **⚠️ 本步骤为强制步骤，不是可选的。** 生成 HTML 文件后必须立即读取 [publish-quiz.md](scripts/publish-quiz.md) 并严格执行完整的发布流程。**禁止**生成 HTML 后直接结束对话而不执行发布。
 
