@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八年级下册语文月考模拟试卷（天津卷）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', Arial, sans-serif;
+               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+               min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white;
+                     border-radius: 15px; padding: 40px;
+                     box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        h1 { color: #333; margin-bottom: 10px; text-align: center; }
+        .subtitle { color: #666; margin-bottom: 30px; text-align: center; }
+        .exam-info { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .exam-info p { margin: 5px 0; color: #555; }
+        .section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 10px; }
+        .section-title { font-size: 20px; color: #333; margin-bottom: 15px; font-weight: bold; }
+        .section-subtitle { font-size: 16px; color: #666; margin-bottom: 15px; }
+        .question { margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+        .question-text { font-size: 16px; color: #333; margin-bottom: 15px; line-height: 1.8; }
+        .passage { background: #fff; padding: 20px; border-radius: 8px; margin: 15px 0; line-height: 2; font-size: 16px; text-indent: 2em; }
+        .passage p { margin: 10px 0; }
+        .options { display: grid; gap: 10px; margin: 15px 0; }
+        .option { padding: 12px 15px; background: white; border: 2px solid #e0e0e0;
+                  border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
+                  font-size: 15px; }
+        .option:hover { border-color: #667eea; background: #f0f4ff; }
+        .option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .option.correct { border-color: #4caf50; background: #4caf50; color: white; }
+        .option.incorrect { border-color: #f44336; background: #f44336; color: white; }
+        .input-answer { padding: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 6px; width: 300px; }
+        .btn { padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+               color: white; border: none; border-radius: 8px; font-size: 16px;
+               cursor: pointer; transition: transform 0.2s ease; margin: 5px; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-submit { background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%); }
+        .feedback { margin-top: 15px; padding: 15px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 6px; display: none; }
+        .feedback h4 { color: #2e7d32; margin-bottom: 10px; }
+        .feedback p { color: #555; line-height: 1.6; }
+        .score-display { font-size: 36px; color: #667eea; font-weight: bold; text-align: center; margin: 30px 0; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0; }
+        .stat-item { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-number { font-size: 32px; color: #667eea; font-weight: bold; }
+        .stat-label { color: #666; margin-top: 5px; }
+        .progress-bar { width: 100%; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; margin: 20px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); width: 0%; transition: width 0.3s ease; }
+        .answer-area { margin: 15px 0; }
+        .answer-area textarea { width: 100%; min-height: 100px; padding: 10px; font-size: 15px; border: 2px solid #ddd; border-radius: 6px; resize: vertical; }
+        .poetry-input { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+        .poetry-input input { padding: 8px; font-size: 15px; border: 2px solid #ddd; border-radius: 6px; }
+        .hidden { display: none; }
+        .timer { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-size: 18px; font-weight: bold; color: #667eea; z-index: 1000; }
+        .multi-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
+</head>
+<body>
+    <div class="timer">
+        ⏱️ 剩余时间：<span id="time-left">100:00</span>
+    </div>
+
+    <div class="container">
+        <h1>📝 八年级下册语文月考模拟试卷</h1>
+        <p class="subtitle">天津卷 · 交互式在线考试系统</p>
+        
+        <div class="exam-info">
+            <p><strong>考试时间：</strong>100 分钟 &nbsp;&nbsp;&nbsp; <strong>满分：</strong>120 分</p>
+            <p><strong>注意事项：</strong></p>
+            <p>1. 答题前请确保网络畅通，系统会自动保存答题进度</p>
+            <p>2. 选择题点击选项即可，主观题在答题框中输入答案</p>
+            <p>3. 交卷后可查看答案解析和得分情况</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div id="exam-content">
+            <!-- 第Ⅰ卷 选择题 -->
+            <div class="section">
+                <div class="section-title">第Ⅰ卷  选择题（共 27 分）</div>
+                <div class="section-subtitle">一、（本大题共 11 小题，共 27 分。1～8 小题，每题 2 分；9～11 小题，每题 3 分）</div>
+
+                <!-- 题目 1-11 会在 JavaScript 中动态生成 -->
+            </div>
+
+            <!-- 第Ⅱ卷 非选择题 -->
+            <div class="section">
+                <div class="section-title">第Ⅱ卷  非选择题（共 93 分）</div>
+
+                <!-- 二、古诗文默写 -->
+                <div class="subsection">
+                    <div class="section-subtitle" style="font-size: 18px; margin: 20px 0;">二、古诗文默写（本大题共 1 小题，共 8 分）</div>
+                    
+                    <div class="question" data-id="12" data-type="fill" data-score="8">
+                        <div class="question-text">12. 请将古诗文名句补充完整。（每空 1 分）</div>
+                        <div class="answer-area">
+                            <div class="poetry-input">
+                                <div>（1）关关雎鸠，<input type="text" class="input-answer" data-answer="在河之洲"></div>
+                                <div>窈窕淑女，<input type="text" class="input-answer" data-answer="君子好逑"></div>
+                            </div>
+                            <div class="poetry-input" style="margin-top: 15px;">
+                                <div>（2）<input type="text" class="input-answer" data-answer="蒹葭苍苍">，白露为霜。</div>
+                                <div>所谓伊人，<input type="text" class="input-answer" data-answer="在水一方"></div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <div>（3）海内存知己，<input type="text" class="input-answer" data-answer="天涯若比邻" style="width: 200px;">。（王勃《送杜少府之任蜀州》）</div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <div>（4）<input type="text" class="input-answer" data-answer="欲济无舟楫" style="width: 200px;">，端居耻圣明。（孟浩然《望洞庭湖赠张丞相》）</div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <div>（5）《桃花源记》中描写桃花源社会环境安定平和的语句是：<input type="text" class="input-answer" data-answer="阡陌交通" style="width: 150px;">，<input type="text" class="input-answer" data-answer="鸡犬相闻" style="width: 150px;">。</div>
+                            </div>
+                        </div>
+                        <div class="feedback">
+                            <h4>✅ 参考答案</h4>
+                            <p>（1）在河之洲  君子好逑</p>
+                            <p>（2）蒹葭苍苍  在水一方</p>
+                            <p>（3）天涯若比邻</p>
+                            <p>（4）欲济无舟楫</p>
+                            <p>（5）阡陌交通  鸡犬相闻</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 三、文言文阅读 -->
+                <div class="subsection">
+                    <div class="section-subtitle" style="font-size: 18px; margin: 20px 0;">三、文言文阅读（本大题共 3 小题，共 13 分）</div>
+                    <div class="passage">
+                        <p>晋太元中，武陵人捕鱼为业。缘溪行，忘路之远近。忽逢桃花林，夹岸数百步，中无杂树，芳草鲜美，落英缤纷。渔人甚异之，复前行，欲穷其林。</p>
+                        <p>林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。土地平旷，屋舍俨然，有良田美池桑竹之属。阡陌交通，鸡犬相闻。其中往来种作，男女衣着，悉如外人。黄发垂髫，并怡然自乐。</p>
+                        <p>见渔人，乃大惊，问所从来。具答之。便要还家，设酒杀鸡作食。村中闻有此人，咸来问讯。自云先世避秦时乱，率妻子邑人来此绝境，不复出焉，遂与外人间隔。问今是何世，乃不知有汉，无论魏晋。此人一一为具言所闻，皆叹惋。余人各复延至其家，皆出酒食。停数日，辞去。此中人语云："不足为外人道也。"</p>
+                    </div>
+
+                    <div class="question" data-id="13" data-type="fill" data-score="4">
+                        <div class="question-text">13. 解释下列句子中加点的词语。（4 分）</div>
+                        <div class="answer-area">
+                            <div>（1）缘溪行，忘路之远近    缘：<input type="text" class="input-answer" data-answer="沿着" style="width: 200px;"></div>
+                            <div style="margin-top: 10px;">（2）土地平旷，屋舍俨然    俨然：<input type="text" class="input-answer" data-answer="整齐的样子" style="width: 200px;"></div>
+                            <div style="margin-top: 10px;">（3）便要还家，设酒杀鸡作食    要：<input type="text" class="input-answer" data-answer="同邀" style="width: 200px;"></div>
+                            <div style="margin-top: 10px;">（4）率妻子邑人来此绝境    妻子：<input type="text" class="input-answer" data-answer="妻子儿女" style="width: 200px;"></div>
+                        </div>
+                        <div class="feedback">
+                            <h4>✅ 参考答案</h4>
+                            <p>（1）沿着，顺着</p>
+                            <p>（2）整齐的样子</p>
+                            <p>（3）同"邀"，邀请</p>
+                            <p>（4）妻子儿女</p>
+                        </div>
+                    </div>
+
+                    <div class="question" data-id="14" data-type="text" data-score="6">
+                        <div class="question-text">14. 将下列句子翻译成现代汉语。（6 分）</div>
+                        <div class="answer-area">
+                            <div>（1）芳草鲜美，落英缤纷。（3 分）</div>
+                            <textarea placeholder="请输入你的翻译..."></textarea>
+                            <div style="margin-top: 15px;">（2）问今是何世，乃不知有汉，无论魏晋。（3 分）</div>
+                            <textarea placeholder="请输入你的翻译..."></textarea>
+                        </div>
+                        <div class="feedback">
+                            <h4>✅ 参考答案</h4>
+                            <p>（1）花草树木新鲜美好，落花纷纷。</p>
+                            <p>（2）（他们）问现在是什么朝代，竟然不知道有过汉朝，更不必说魏晋了。</p>
+                        </div>
+                    </div>
+
+                    <div class="question" data-id="15" data-type="choice" data-score="3">
+                        <div class="question-text">15. 下列对文章的理解和分析，不正确的一项是（    ）（3 分）</div>
+                        <div class="options">
+                            <div class="option" data-value="A">A. 第一段描写桃花林的美丽景色，渲染了神秘美丽的气氛，暗示将会出现奇境。</div>
+                            <div class="option" data-value="B">B. 桃花源中"土地平旷，屋舍俨然""阡陌交通，鸡犬相闻"，表现了自然环境的美好和社会环境的安定。</div>
+                            <div class="option" data-value="C">C. 桃花源中人"见渔人，乃大惊"，说明他们与世隔绝时间很长，对外面的人感到陌生和恐惧。</div>
+                            <div class="option" data-value="D">D. 作者虚构桃花源这一理想社会，寄托了自己的政治理想，反映了对黑暗现实的不满和对美好生活的向往。</div>
+                        </div>
+                        <div class="feedback">
+                            <h4>✅ 答案解析</h4>
+                            <p>正确答案：C</p>
+                            <p>"感到陌生和恐惧"理解有误，应该是惊讶和好奇</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 四、现代文阅读 -->
+                <div class="subsection">
+                    <div class="section-subtitle" style="font-size: 18px; margin: 20px 0;">四、现代文阅读（本大题共 7 小题，共 40 分）</div>
+                    
+                    <!-- 记叙文阅读 -->
+                    <div style="margin: 30px 0;">
+                        <div class="section-subtitle" style="font-size: 16px;">（一）阅读下面的文字，完成 16～18 题。（20 分）</div>
+                        <div class="passage">
+                            <p style="text-align: center; font-weight: bold;">追忆似水流年</p>
+                            <p>①外婆家的老座钟，仍在书房的角落滴答作响。木质钟壳被岁月磨得温润发亮，指针在表盘上循环往复，像一场永不落幕的时光盛宴。每次回到老院，听见这熟悉的声响，那些似水流年里的温暖片段，便会顺着钟声，缓缓漫进心底。</p>
+                            <p>②童年的夏夜，总在老座钟的陪伴中度过。外婆会搬来竹椅，坐在书房门口，我依偎在她怀里，听着钟摆"滴答，滴答"的声响，仰望满天繁星。她一边用蒲扇为我扇风，一边讲过去的故事，声音温柔，与钟声交织在一起，成了夏夜里最安心的催眠曲。钟摆摇晃间，月光洒在钟面上，也落在外婆鬓角的银丝上，定格成岁月里最温柔的模样。</p>
+                            <p>③那时的我，总爱盯着老座钟好奇地打量，看着指针一圈圈转动，追问外婆："钟摆为什么不停呀？"外婆笑着摸摸我的头："它在数着时光呢，一分一秒，都藏着我们在一起的日子。"我似懂非懂地点头，总盼着时光慢些走，能多依偎在外婆身边，多听听这治愈的钟声。</p>
+                            <p>④后来我离开老院，去城里读书，唯有老座钟，依旧在原地坚守，记录着时光的流转。每年假期归来，我总会第一时间跑到书房，抚摸那熟悉的钟壳，听一听那不变的滴答声。外婆总会笑着迎上来，眉眼间的温柔，一如当年。可时光终究留不住，外婆的腰渐渐弯了，脚步也慢了，唯有老座钟，依旧精准地走着，见证着岁月的变迁。</p>
+                            <p>⑤如今再听老座钟的声响，心中满是温情与释然。似水流年，悄无声息地带走了青涩的童年，却沉淀下最珍贵的陪伴。那些藏在钟声里的时光，那些外婆给予的温暖，早已刻进我的心底，成为岁月馈赠的宝藏。</p>
+                            <p>⑥追忆似水流年，从不是沉溺过往，而是在时光的回响中，珍藏温暖，汲取力量。老座钟依旧滴答作响，而那些温柔的时光，会一直陪着我，在往后的岁月里，静静地散发着温柔的光芒。</p>
+                        </div>
+
+                        <div class="question" data-id="16" data-type="multi" data-score="4">
+                            <div class="question-text">16. 下列对文章的理解和分析，不正确的两项是（    ）（4 分）</div>
+                            <div class="options multi-select">
+                                <div class="option" data-value="A">A. 文章以"老座钟"为线索，串联起"我"与外婆相处的温暖时光。</div>
+                                <div class="option" data-value="B">B. 第②段描写童年夏夜的场景，运用了动作描写、语言描写和环境描写。</div>
+                                <div class="option" data-value="C">C. 第③段中外婆的话"它在数着时光呢"运用了比喻的修辞手法。</div>
+                                <div class="option" data-value="D">D. 第④段写外婆"腰渐渐弯了，脚步也慢了"，与老座钟"依旧精准地走着"形成对比。</div>
+                                <div class="option" data-value="E">E. 文章表达了作者对童年生活的怀念和对时光流逝的无奈与伤感。</div>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 答案解析</h4>
+                                <p>正确答案：CE</p>
+                                <p>C 项不是比喻，是拟人；E 项"无奈与伤感"理解有误，应该是"温情与释然"</p>
+                            </div>
+                        </div>
+
+                        <div class="question" data-id="17" data-type="text" data-score="8">
+                            <div class="question-text">17. 赏析第②段中画线的句子。（8 分）</div>
+                            <div class="question-text" style="margin-top: 10px; font-style: italic;">"钟摆摇晃间，月光洒在钟面上，也落在外婆鬓角的银丝上，定格成岁月里最温柔的模样。"</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的赏析..." style="min-height: 150px;"></textarea>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 参考答案</h4>
+                                <p>这句话运用了景物描写（环境描写）（2 分），通过"月光洒在钟面上""落在外婆鬓角的银丝上"等细腻的描写（2 分），营造出温馨宁静的氛围（2 分），表现了外婆的慈爱和"我"对外婆的深厚感情（2 分）。</p>
+                            </div>
+                        </div>
+
+                        <div class="question" data-id="18" data-type="text" data-score="8">
+                            <div class="question-text">18. 文章第⑥段在全文中有什么作用？请简要分析。（8 分）</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的分析..." style="min-height: 150px;"></textarea>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 参考答案</h4>
+                                <p>①总结全文，点明主旨（2 分）；②深化中心，表明追忆似水流年的意义在于珍藏温暖，汲取力量（3 分）；③照应开头，使文章结构完整（3 分）。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 说明文阅读 -->
+                    <div style="margin: 30px 0;">
+                        <div class="section-subtitle" style="font-size: 16px;">（二）阅读下面的文字，完成 19～22 题。（20 分）</div>
+                        <div class="passage">
+                            <p style="text-align: center; font-weight: bold;">大自然的语言（节选）</p>
+                            <p>①立春过后，大地渐渐从沉睡中苏醒过来。冰雪融化，草木萌发，各种花次第开放。再过两个月，燕子翩然归来。不久，布谷鸟也来了。于是转入炎热的夏季，这是植物孕育果实的时期。到了秋天，果实成熟，植物的叶子渐渐变黄，在秋风中簌簌地落下来。北雁南飞，活跃在田间草际的昆虫也都销声匿迹。到处呈现一片衰草连天的景象，准备迎接风雪载途的寒冬。在地球上温带和亚热带区域里，年年如是，周而复始。</p>
+                            <p>②几千年来，劳动人民注意了草木荣枯、候鸟去来等自然现象同气候的关系，据以安排农事。杏花开了，就好像大自然在传语要赶快耕地；桃花开了，又好像在暗示要赶快种谷子。布谷鸟开始唱歌，劳动人民懂得它在唱什么："阿公阿婆，割麦插禾。"这样看来，花香鸟语，草长莺飞，都是大自然的语言。</p>
+                            <p>③这些自然现象，我国古代劳动人民称它为物候。物候知识在我国起源很早。古代流传下来的许多农谚就包含了丰富的物候知识。到了近代，利用物候知识来研究农业生产，已经发展为一门科学，就是物候学。物候学记录植物的生长荣枯，动物的养育往来，如桃花开、燕子来等自然现象，从而了解随着时节推移的气候变化和这种变化对动植物的影响。</p>
+                            <p>④物候观测使用的是"活的仪器"，是活生生的生物。它比气象仪器复杂得多，灵敏得多。物候观测的数据反映气温、湿度等气候条件的综合，也反映气候条件对于生物的影响。应用在农事活动里，比较简便，容易掌握。物候对于农业的重要性就在这里。</p>
+                        </div>
+
+                        <div class="question" data-id="19" data-type="multi" data-score="4">
+                            <div class="question-text">19. 下列对文章的理解和分析，不正确的两项是（    ）（4 分）</div>
+                            <div class="options multi-select">
+                                <div class="option" data-value="A">A. 第①段按照时间顺序，生动地描写了一年四季的自然景象。</div>
+                                <div class="option" data-value="B">B. "大地渐渐从沉睡中苏醒过来"运用了拟人的修辞手法，生动形象。</div>
+                                <div class="option" data-value="C">C. 第②段中"阿公阿婆，割麦插禾"说明了布谷鸟的叫声具有预报天气的作用。</div>
+                                <div class="option" data-value="D">D. 第③段介绍了物候、物候学的概念，以及物候学在我国的发展历程。</div>
+                                <div class="option" data-value="E">E. 第④段主要说明了物候观测比气象仪器观测更加准确可靠。</div>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 答案解析</h4>
+                                <p>正确答案：CE</p>
+                                <p>C 项说明的是物候现象与农事的关系，不是预报天气；E 项"更加准确可靠"理解有误，应该是"简便，容易掌握"</p>
+                            </div>
+                        </div>
+
+                        <div class="question" data-id="20" data-type="text" data-score="4">
+                            <div class="question-text">20. 第①段中加点的词语"次第"有什么表达效果？（4 分）</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的分析..." style="min-height: 100px;"></textarea>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 参考答案</h4>
+                                <p>"次第"是依次的意思（1 分），生动形象地写出了各种花按顺序开放的情景（2 分），表现了春天万物复苏、生机勃勃的景象（1 分）。</p>
+                            </div>
+                        </div>
+
+                        <div class="question" data-id="21" data-type="text" data-score="6">
+                            <div class="question-text">21. 第②段画线句子运用了什么说明方法？有什么作用？（6 分）</div>
+                            <div class="question-text" style="margin-top: 10px; font-style: italic;">"杏花开了，就好像大自然在传语要赶快耕地；桃花开了，又好像在暗示要赶快种谷子。"</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的分析..." style="min-height: 100px;"></textarea>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 参考答案</h4>
+                                <p>运用了拟人的说明方法（2 分），将杏花、桃花人格化（1 分），生动形象地说明了物候现象与农事活动的关系（2 分），使说明更加通俗易懂（1 分）。</p>
+                            </div>
+                        </div>
+
+                        <div class="question" data-id="22" data-type="text" data-score="6">
+                            <div class="question-text">22. 结合全文，说说"大自然的语言"具体指什么？研究"大自然的语言"有什么意义？（6 分）</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的答案..." style="min-height: 100px;"></textarea>
+                            </div>
+                            <div class="feedback">
+                                <h4>✅ 参考答案</h4>
+                                <p>"大自然的语言"指草木荣枯、候鸟去来等自然现象（2 分）。研究意义：①可以了解气候变化及其对动植物的影响；②可以指导农业生产，安排农事活动；③有助于我们更好地认识自然、保护自然。（每点 2 分，答出两点即可）</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 五、综合性学习 -->
+                <div class="subsection">
+                    <div class="section-subtitle" style="font-size: 18px; margin: 20px 0;">五、综合性学习（本大题共 3 小题，共 12 分）</div>
+                    
+                    <div class="question" data-id="23" data-type="composite" data-score="12">
+                        <div class="question-text">23. 某校开展"古诗苑漫步"综合性学习活动，请你参与并完成以下任务。</div>
+                        
+                        <div style="margin: 20px 0;">
+                            <div class="question-text">（1）【飞花令】班级举行"飞花令"比赛，请你写出含有"花"字的连续两句古诗。（2 分）</div>
+                            <div class="answer-area">
+                                <input type="text" class="input-answer" data-answer="感时花溅泪" placeholder="上句" style="width: 300px; margin-right: 10px;">，
+                                <input type="text" class="input-answer" data-answer="恨别鸟惊心" placeholder="下句" style="width: 300px;">。
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <div class="question-text">（2）【诗词赏析】下面是同学们对《蒹葭》一诗的赏析，其中有误的一项是（    ）（3 分）</div>
+                            <div class="options">
+                                <div class="option" data-value="A">A. 诗歌每章开头都以蒹葭起兴，描绘了一幅露凝霜结的晚秋图。</div>
+                                <div class="option" data-value="B">B. "所谓伊人，在水一方"表明主人公追求的对象远在天涯，难以企及。</div>
+                                <div class="option" data-value="C">C. 诗歌采用重章叠句的形式，一唱三叹，回环往复，深化了诗歌意境。</div>
+                                <div class="option" data-value="D">D. 全诗塑造了一个不懈追求心上人的男子形象，表现了古代人民对爱情的执着追求。</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <div class="question-text">（3）【文化传承】在"诗词大会"活动中，主持人请你谈谈学习古诗文的意义。请结合所学知识，写一段 80 字左右的发言。（7 分）</div>
+                            <div class="answer-area">
+                                <textarea placeholder="请写出你的发言..." style="min-height: 120px;"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback">
+                            <h4>✅ 参考答案</h4>
+                            <p>（1）示例：①感时花溅泪，恨别鸟惊心  ②无可奈何花落去，似曾相识燕归来  ③待到重阳日，还来就菊花</p>
+                            <p>（2）B（"远在天涯，难以企及"理解有误，"伊人"虽然行踪不定，但主人公一直在执着追求）</p>
+                            <p>（3）示例：学习古诗文，可以传承中华优秀传统文化，提高我们的文学素养和审美能力，让我们从古人的智慧中汲取精神力量，更好地认识世界、认识人生。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 六、作文 -->
+                <div class="subsection">
+                    <div class="section-subtitle" style="font-size: 18px; margin: 20px 0;">六、作文（本大题共 1 小题，共 50 分）</div>
+                    
+                    <div class="question" data-id="24" data-type="composition" data-score="50">
+                        <div class="question-text">24. 阅读下面的材料，按要求作文。</div>
+                        <div class="passage">
+                            <p>材料一：外婆家的老座钟，仍在书房的角落滴答作响……那些藏在钟声里的时光，那些外婆给予的温暖，早已刻进我的心底，成为岁月馈赠的宝藏。</p>
+                            <p>材料二：秋日的风掠过窗台，裹挟着一缕淡淡的桂花香，瞬间唤醒了我心底藏着的味道——外婆做的桂花糖糕。那清甜软糯的滋味，混着亲情的温暖与童年的时光，在岁月里沉淀，始终藏在心底，不曾消散。</p>
+                            <p>材料三：按照我们家乡的传统，大年三十的晚上都要吃一碗印子粑和着面。一块块香喷喷的印子粑象征着丰收、喜庆和圣洁，来年像它一样圆圆满满，所以吃印子粑是对美满和幸福的期望。</p>
+                        </div>
+                        <div class="question-text" style="margin-top: 20px;"><strong>请以"藏在心底的______"为题，写一篇文章。</strong></div>
+                        <div class="question-text" style="margin-top: 15px;"><strong>要求：</strong></div>
+                        <div class="question-text">（1）将题目补充完整；</div>
+                        <div class="question-text">（2）内容具体，有真情实感；</div>
+                        <div class="question-text">（3）文体不限（诗歌、戏剧除外）；</div>
+                        <div class="question-text">（4）字数不少于 600 字；</div>
+                        <div class="question-text">（5）文中请回避与你相关的人名、校名、地名。</div>
+                        
+                        <div class="answer-area">
+                            <textarea placeholder="请在这里写作文..." style="min-height: 400px; font-size: 16px; line-height: 1.8;"></textarea>
+                        </div>
+                        
+                        <div class="feedback">
+                            <h4>✅ 写作指导</h4>
+                            <p><strong>审题要点：</strong></p>
+                            <p>（1）"藏在心底"表明这是深藏内心的、珍贵的记忆或情感；</p>
+                            <p>（2）要结合材料，写出真情实感；</p>
+                            <p>（3）可以写亲情、友情、师生情，也可以写成长中的感悟。</p>
+                            <p><strong>选材建议：</strong></p>
+                            <p>- 藏在心底的味道（外婆做的某道菜、家乡的特色小吃）</p>
+                            <p>- 藏在心底的温暖（亲人的关爱、朋友的帮助）</p>
+                            <p>- 藏在心底的感动（某个瞬间、某件事）</p>
+                            <p>- 藏在心底的秘密（成长的烦恼、青春的悸动）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="btn btn-submit" onclick="submitExam()">📤 提交试卷</button>
+            </div>
+        </div>
+
+        <!-- 成绩页面 -->
+        <div id="result-screen" class="hidden">
+            <div class="score-display">
+                🎉 得分：<span id="final-score">0</span>/120
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="objective-score">0</div>
+                    <div class="stat-label">客观题得分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">正确率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="time-used">0</div>
+                    <div class="stat-label">用时 (分钟)</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn" onclick="location.reload()">🔄 重新答题</button>
+                <button class="btn" onclick="window.print()">🖨️ 打印试卷</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 选择题数据
+        const choiceQuestions = [
+            {
+                id: 1,
+                score: 2,
+                text: "1. 下列加点字的注音完全正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 归省（xǐng）  行辈（háng）  凫水（fú）   戛然而止（gá）" },
+                    { value: "B", text: "B. 冗杂（rǒng）  磅礴（bó）   缄默（jiān） 销声匿迹（nì）" },
+                    { value: "C", text: "C. 萌发（méng） 连翘（qiào） 农谚（yàn）  风雪载途（zǎi）" },
+                    { value: "D", text: "D. 龟裂（guī）   狩猎（shòu） 凋零（diāo） 草长莺飞（yīng）" }
+                ],
+                correct: "B",
+                feedback: "A 项"戛"应读 jiá；C 项"翘"应读 qiáo，"载"应读 zài；D 项"龟"应读 jūn"
+            },
+            {
+                id: 2,
+                score: 2,
+                text: "2. 下列词语中没有错别字的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 偏辟   欺侮   絮叨   聚拢" },
+                    { value: "B", text: "B. 燥热   亢奋   羁绊   震撼" },
+                    { value: "C", text: "C. 次第   孕育   纬渡   悬殊" },
+                    { value: "D", text: "D. 雾霭   迁徙   赌注   枯燥" }
+                ],
+                correct: "D",
+                feedback: "A 项"辟"应为"僻"；B 项"梁"应为"粱"；C 项"纬渡"应为"纬度""
+            },
+            {
+                id: 3,
+                score: 2,
+                text: "3. 依次填入下列横线处的词语，最恰当的一项是（    ）",
+                extraText: "（1）月夜下，那______的钟声，伴随着外婆温柔的故事，成了我童年最安心的催眠曲。<br>（2）外婆做的桂花糖糕，软糯香甜，那清甜的滋味，混着亲情的温暖，在岁月里______。<br>（3）安塞腰鼓那______的力量，展现了黄土高原人民蓬勃的生命力。",
+                options: [
+                    { value: "A", text: "A. 熟悉  沉淀  磅礴" },
+                    { value: "B", text: "B. 熟悉  积累  宏大" },
+                    { value: "C", text: "C. 陌生  沉淀  宏大" },
+                    { value: "D", text: "D. 陌生  积累  磅礴" }
+                ],
+                correct: "A",
+                feedback: ""
+            },
+            {
+                id: 4,
+                score: 2,
+                text: "4. 下列句子中加点成语使用不恰当的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 外婆坐在庭院的石桌旁，动作娴熟而温柔地做着桂花糖糕。" },
+                    { value: "B", text: "B. 安塞腰鼓表演开始了，那激昂的鼓声让人叹为观止。" },
+                    { value: "C", text: "C. 春天来了，草原上草长莺飞，一片生机勃勃的景象。" },
+                    { value: "D", text: "D. 听到这个好消息，他大彻大悟，高兴得跳了起来。" }
+                ],
+                correct: "D",
+                feedback: ""大彻大悟"形容彻底醒悟，用在此处不恰当"
+            },
+            {
+                id: 5,
+                score: 2,
+                text: "5. 下列句子中没有语病的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 通过阅读《社戏》，使我感受到了鲁迅先生对童年生活的怀念之情。" },
+                    { value: "B", text: "B. 外婆做的印子粑不仅味道香甜，而且象征着丰收、喜庆和圣洁。" },
+                    { value: "C", text: "C. 是否具备良好的心理素质，是考试取得好成绩的关键。" },
+                    { value: "D", text: "D. 为了防止不再发生类似事故，学校加强了安全教育管理。" }
+                ],
+                correct: "B",
+                feedback: "A 项缺少主语；C 项两面对一面；D 项否定不当"
+            },
+            {
+                id: 6,
+                score: 2,
+                text: "6. 下列句子中标点符号使用正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. "这印子粑呀，"妈妈说："是因为很久以前，一个叫王文蔚的人任这里的地方官。"" },
+                    { value: "B", text: "B. 我追随着"嫦娥五号"的脚步，去探索月球的奥秘；我跟随着"蛟龙号"的深潜，去领略海底的神奇。" },
+                    { value: "C", text: "C. 似水流年，悄无声息地带走了青涩的童年，却沉淀下最珍贵的陪伴。" },
+                    { value: "D", text: "D. 是天的味道？还是年的味道？不，那是家乡的味道，是亲情的味道。" }
+                ],
+                correct: "C",
+                feedback: "A 项冒号应为逗号；B 项分号应为逗号；D 项第一个问号应为逗号"
+            },
+            {
+                id: 7,
+                score: 2,
+                text: "7. 下列对文学常识的表述，不正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 《社戏》选自鲁迅的小说集《呐喊》，文中通过描写"我"看社戏的经历，表达了对童年生活的怀念。" },
+                    { value: "B", text: "B. 《回延安》的作者是贺敬之，诗歌采用陕北"信天游"民歌体的形式，抒发了对延安的深厚感情。" },
+                    { value: "C", text: "C. 《大自然的语言》作者竺可桢，他是我国著名的气象学家、地理学家。" },
+                    { value: "D", text: "D. 《诗经》是我国最早的一部诗歌总集，收录了从西周到战国时期的诗歌 305 篇，分为风、雅、颂三个部分。" }
+                ],
+                correct: "D",
+                feedback: "《诗经》收录的是从西周到春秋时期的诗歌，不是战国时期"
+            },
+            {
+                id: 8,
+                score: 2,
+                text: "8. 下列对课文内容的理解，不正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. 《安塞腰鼓》是一篇歌颂激荡的生命和磅礴力量的散文，作者是刘成章。" },
+                    { value: "B", text: "B. 《阿西莫夫短文两篇》通过"恐龙无处不在"和"被压扁的沙子"，说明了板块构造理论。" },
+                    { value: "C", text: "C. 《灯笼》一文通过回忆与灯笼相关的往事，表达了作者对亲人的怀念和对家乡的眷恋。" },
+                    { value: "D", text: "D. 《大雁归来》的作者利奥波德是美国生态学家，文章主要介绍了大雁的生活习性。" }
+                ],
+                correct: "D",
+                feedback: "《大雁归来》不仅介绍大雁的生活习性，更表达了作者对大雁的喜爱和对自然的尊重"
+            },
+            {
+                id: 9,
+                score: 3,
+                text: "9. 依次填入下面一段文字横线处的语句，衔接最恰当的一项是（    ）",
+                extraText: "外婆家的老座钟，仍在书房的角落滴答作响。______，______。______，______。______。<br><br>①每次回到老院，听见这熟悉的声响<br>②木质钟壳被岁月磨得温润发亮<br>③那些似水流年里的温暖片段，便会顺着钟声，缓缓漫进心底<br>④指针在表盘上循环往复，像一场永不落幕的时光盛宴<br>⑤那些藏在钟声里的时光，那些外婆给予的温暖，早已刻进我的心底",
+                options: [
+                    { value: "A", text: "A. ②④①③⑤" },
+                    { value: "B", text: "B. ④②①③⑤" },
+                    { value: "C", text: "C. ②④③①⑤" },
+                    { value: "D", text: "D. ④②③①⑤" }
+                ],
+                correct: "A",
+                feedback: ""
+            },
+            {
+                id: 10,
+                score: 3,
+                text: "10. 对《关雎》这首诗的理解和分析，不正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. "关关雎鸠，在河之洲"使用比兴手法，以水鸟成双和鸣比喻男女纯洁爱情。" },
+                    { value: "B", text: "B. "悠哉悠哉，辗转反侧"表现了主人公对心上人的绵绵情思和相思之苦。" },
+                    { value: "C", text: "C. "琴瑟友之"和"钟鼓乐之"是实写，描绘了主人公与心上人相处的愉快场面。" },
+                    { value: "D", text: "D. 这首诗写一个小伙子对女子的思念和追求过程，表现了青年男子对美好爱情的大胆热烈追求。" }
+                ],
+                correct: "C",
+                feedback: ""琴瑟友之"和"钟鼓乐之"是虚写，是主人公对未来的想象"
+            },
+            {
+                id: 11,
+                score: 3,
+                text: "11. 对《送杜少府之任蜀州》的理解和分析，不正确的一项是（    ）",
+                options: [
+                    { value: "A", text: "A. "城阙辅三秦，风烟望五津"中，"辅"字写出了三秦大地护卫着长安的景象。" },
+                    { value: "B", text: "B. "与君离别意，同是宦游人"表达了诗人与友人同病相怜的伤感之情。" },
+                    { value: "C", text: "C. "海内存知己，天涯若比邻"运用对偶修辞，表现了诗人宽广的胸襟。" },
+                    { value: "D", text: "D. 这首诗一扫离别的千古愁云，体现了诗人积极乐观的人生态度。" }
+                ],
+                correct: "B",
+                feedback: ""同是宦游人"表达的是诗人与友人境遇相同，互相劝勉，不是同病相怜的伤感"
+            }
+        ];
+
+        let startTime = Date.now();
+        let timerInterval;
+        let userAnswers = {};
+        let multiAnswers = {};
+
+        // 初始化
+        function init() {
+            startTimer();
+            renderChoiceQuestions();
+            setupEventListeners();
+            loadProgress();
+        }
+
+        // 渲染选择题
+        function renderChoiceQuestions() {
+            const container = document.querySelector('.section .section-subtitle').parentElement;
+            let html = '';
+            
+            choiceQuestions.forEach(q => {
+                html += `
+                    <div class="question" data-id="${q.id}" data-type="choice" data-score="${q.score}">
+                        <div class="question-text">${q.text}</div>
+                        ${q.extraText ? `<div class="question-text" style="margin-top: 10px;">${q.extraText}</div>` : ''}
+                        <div class="options">
+                            ${q.options.map(opt => `
+                                <div class="option" data-value="${opt.value}" data-question="${q.id}">${opt.text}</div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback">
+                            <h4>✅ 答案解析</h4>
+                            <p>正确答案：${q.correct}</p>
+                            ${q.feedback ? `<p>${q.feedback}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = `
+                <div class="section-title">第Ⅰ卷  选择题（共 27 分）</div>
+                <div class="section-subtitle">一、（本大题共 11 小题，共 27 分。1～8 小题，每题 2 分；9～11 小题，每题 3 分）</div>
+                ${html}
+            `;
+        }
+
+        // 倒计时
+        function startTimer() {
+            let totalTime = 100 * 60;
+            const timeLeftEl = document.getElementById('time-left');
+            
+            timerInterval = setInterval(() => {
+                totalTime--;
+                const minutes = Math.floor(totalTime / 60);
+                const seconds = totalTime % 60;
+                timeLeftEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (totalTime <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // 设置事件监听
+        function setupEventListeners() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('option')) {
+                    const question = e.target.closest('.question');
+                    const questionId = question.dataset.id;
+                    const questionType = question.dataset.type;
+                    
+                    if (questionType === 'choice' || questionType === 'multi') {
+                        if (questionType === 'choice') {
+                            question.querySelectorAll('.option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                            e.target.classList.add('selected');
+                            userAnswers[questionId] = e.target.dataset.value;
+                        } else if (questionType === 'multi') {
+                            e.target.classList.toggle('selected');
+                            const selected = Array.from(question.querySelectorAll('.option.selected'))
+                                .map(opt => opt.dataset.value);
+                            multiAnswers[questionId] = selected;
+                        }
+                        saveProgress();
+                        updateProgress();
+                    }
+                }
+            });
+            
+            document.querySelectorAll('.input-answer').forEach(input => {
+                input.addEventListener('input', function() {
+                    saveProgress();
+                });
+            });
+            
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    saveProgress();
+                });
+            });
+        }
+
+        // 保存进度
+        function saveProgress() {
+            const progress = {
+                choiceAnswers: userAnswers,
+                multiAnswers: multiAnswers,
+                inputs: {},
+                textareas: []
+            };
+            
+            document.querySelectorAll('.input-answer').forEach((input, index) => {
+                progress.inputs[index] = input.value;
+            });
+            
+            document.querySelectorAll('textarea').forEach((textarea, index) => {
+                progress.textareas[index] = textarea.value;
+            });
+            
+            localStorage.setItem('chinese_exam_full_progress', JSON.stringify(progress));
+        }
+
+        // 加载进度
+        function loadProgress() {
+            const progress = localStorage.getItem('chinese_exam_full_progress');
+            if (progress) {
+                const data = JSON.parse(progress);
+                userAnswers = data.choiceAnswers || {};
+                multiAnswers = data.multiAnswers || {};
+                
+                Object.entries(userAnswers).forEach(([id, value]) => {
+                    const option = document.querySelector(`.option[data-question="${id}"][data-value="${value}"]`);
+                    if (option) option.classList.add('selected');
+                });
+                
+                Object.entries(multiAnswers).forEach(([id, values]) => {
+                    values.forEach(value => {
+                        const option = document.querySelector(`.option[data-question="${id}"][data-value="${value}"]`);
+                        if (option) option.classList.add('selected');
+                    });
+                });
+                
+                if (data.inputs) {
+                    Object.entries(data.inputs).forEach(([index, value]) => {
+                        const input = document.querySelectorAll('.input-answer')[index];
+                        if (input) input.value = value;
+                    });
+                }
+                
+                if (data.textareas) {
+                    data.textareas.forEach((value, index) => {
+                        const textarea = document.querySelectorAll('textarea')[index];
+                        if (textarea) textarea.value = value;
+                    });
+                }
+                
+                updateProgress();
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const totalQuestions = 24;
+            let answeredQuestions = Object.keys(userAnswers).length + Object.keys(multiAnswers).length;
+            
+            document.querySelectorAll('.input-answer').forEach(input => {
+                if (input.value.trim()) answeredQuestions++;
+            });
+            
+            document.querySelectorAll('textarea').forEach(textarea => {
+                if (textarea.value.trim()) answeredQuestions++;
+            });
+            
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+        }
+
+        // 提交试卷
+        function submitExam() {
+            clearInterval(timerInterval);
+            
+            if (!confirm('确定要提交试卷吗？提交后将无法修改答案！')) {
+                startTimer();
+                return;
+            }
+            
+            let totalScore = 0;
+            let objectiveScore = 0;
+            let maxObjectiveScore = 27;
+            
+            // 批改选择题
+            choiceQuestions.forEach(q => {
+                const question = document.querySelector(`.question[data-id="${q.id}"]`);
+                const userAnswer = userAnswers[q.id];
+                const options = question.querySelectorAll('.option');
+                
+                if (userAnswer === q.correct) {
+                    objectiveScore += q.score;
+                    totalScore += q.score;
+                    options.forEach(opt => {
+                        if (opt.dataset.value === q.correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                } else if (userAnswer) {
+                    options.forEach(opt => {
+                        if (opt.dataset.value === userAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                        if (opt.dataset.value === q.correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                }
+                
+                question.querySelector('.feedback').style.display = 'block';
+            });
+            
+            // 批改多选题
+            const multi16 = multiAnswers['16'] || [];
+            if (multi16.length === 2 && multi16.includes('C') && multi16.includes('E')) {
+                objectiveScore += 4;
+                totalScore += 4;
+                document.querySelectorAll('.question[data-id="16"] .option').forEach(opt => {
+                    if (['C', 'E'].includes(opt.dataset.value)) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            document.querySelector('.question[data-id="16"] .feedback').style.display = 'block';
+            
+            const multi19 = multiAnswers['19'] || [];
+            if (multi19.length === 2 && multi19.includes('C') && multi19.includes('E')) {
+                objectiveScore += 4;
+                totalScore += 4;
+                document.querySelectorAll('.question[data-id="19"] .option').forEach(opt => {
+                    if (['C', 'E'].includes(opt.dataset.value)) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            document.querySelector('.question[data-id="19"] .feedback').style.display = 'block';
+            
+            // 显示所有答案
+            document.querySelectorAll('.question').forEach(question => {
+                question.querySelector('.feedback').style.display = 'block';
+            });
+            
+            // 计算主观题分数（简化处理，按 60% 给分）
+            const subjectiveMaxScore = 120 - maxObjectiveScore - 8;
+            const subjectiveScore = Math.round((totalScore - objectiveScore) * 0.6);
+            totalScore = objectiveScore + subjectiveScore;
+            
+            // 显示成绩
+            document.getElementById('exam-content').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            const timeUsed = Math.floor((Date.now() - startTime) / 60000);
+            const accuracy = Math.round((objectiveScore / maxObjectiveScore) * 100);
+            
+            document.getElementById('final-score').textContent = totalScore;
+            document.getElementById('objective-score').textContent = objectiveScore;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('time-used').textContent = timeUsed;
+            
+            localStorage.removeItem('chinese_exam_full_progress');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('load', init);
+        window.addEventListener('beforeunload', saveProgress);
+    </script>
+</body>
+</html>
