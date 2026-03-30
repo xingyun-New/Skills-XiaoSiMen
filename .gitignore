@@ -1,18 +1,11 @@
-# IDE/Editor symlink directories (created by skills installer)
-.cline/
-.kiro/
-.qoder/
-.trae/
+# 忽略大型 PDF 文件
+*.pdf
 
-# Third-party installed skills (not part of this project)
-.agents/skills/find-skills/
+# 忽略历史目录
+历史/
 
-# OS files
-Thumbs.db
-.DS_Store
+# 忽略物理目录
+物理/
 
-# Node
-node_modules/
-
-# Misc
-nul
+# 忽略原卷目录
+原卷/
