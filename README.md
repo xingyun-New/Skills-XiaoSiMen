@@ -79,6 +79,7 @@ npx skills add https://github.com/xingyun-New/Skills-XiaoSiMen.git
 
 | 年级 | 内容 | 日期 | 在线练习 |
 |------|------|------|---------|
+| 七年级 | 阶段性模拟试卷（上册 + 下册综合） | 2026-03-30 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/%E5%8E%86%E5%8F%B2-7-%E9%98%B6%E6%AE%B5%E6%80%A7%E6%A8%A1%E6%8B%9F%E8%AF%95%E5%8D%B7-20260330.html) |
 | 八年级 | 中华人民共和国的成立和巩固 | 2026-02-26 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E7%9A%84%E6%88%90%E7%AB%8B%E5%92%8C%E5%B7%A9%E5%9B%BA-20260226.html) |
 | 八年级 | 社会主义制度建立与建设探索 | 2026-02-27 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/hist-8-%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E5%88%B6%E5%BA%A6%E5%BB%BA%E7%AB%8B%E4%B8%8E%E5%BB%BA%E8%AE%BE%E6%8E%A2%E7%B4%A2-20260227.html) |
 | 八年级 | 中国特色社会主义道路 | 2026-02-28 | [开始练习](https://xingyun-new.github.io/Skills-XiaoSiMen/quiz-output/history-8-%E4%B8%AD%E5%9B%BD%E7%89%B9%E8%89%B2%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E9%81%93%E8%B7%AF-20260228.html) |
