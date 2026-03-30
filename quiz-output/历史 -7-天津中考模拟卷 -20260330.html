@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【历史】【七年级】· 天津中考模拟试卷</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+
+    .header { text-align: center; color: white; margin-bottom: 24px; }
+    .header h1 {
+      font-size: 1.8em; margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-bar { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .stat-badge {
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      padding: 8px 20px; border-radius: 20px; font-size: 1em; color: white;
+    }
+    .stat-badge .value { font-weight: bold; }
+    .progress-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 12px;
+      height: 12px; margin: 16px 0; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 12px; transition: width 0.4s ease;
+    }
+
+    .card {
+      background: white; border-radius: 20px; padding: 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .question-num { font-size: 0.9em; color: #888; }
+    .difficulty { font-size: 0.85em; padding: 4px 12px; border-radius: 12px; }
+    .diff-1 { background: #E8F5E9; color: #2E7D32; }
+    .diff-2 { background: #FFF3E0; color: #E65100; }
+    .diff-3 { background: #FCE4EC; color: #C62828; }
+    .question-text {
+      font-size: 1.15em; line-height: 1.8;
+      margin-bottom: 20px; font-weight: 500;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option-btn {
+      display: flex; align-items: center;
+      padding: 14px 18px; border: 2px solid #e0e0e0;
+      border-radius: 14px; background: #fafafa;
+      cursor: pointer; transition: all 0.2s;
+      font-size: 1.05em; line-height: 1.6; text-align: left;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: #667eea; background: #f0f4ff; transform: translateX(4px);
+    }
+    .option-btn .letter {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #667eea; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; margin-right: 14px; flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: #4CAF50; background: #E8F5E9; }
+    .option-btn.correct .letter { background: #4CAF50; }
+    .option-btn.wrong { border-color: #f44336; background: #FFEBEE; }
+    .option-btn.wrong .letter { background: #f44336; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .knowledge-card {
+      margin-top: 20px; padding: 20px; border-radius: 14px;
+      line-height: 1.8; font-size: 0.95em; animation: fadeIn 0.3s ease;
+    }
+    .knowledge-card.correct-card {
+      background: linear-gradient(135deg, #E8F5E9, #f1f8e9);
+      border-left: 5px solid #4CAF50;
+    }
+    .knowledge-card.wrong-card {
+      background: linear-gradient(135deg, #FFF3E0, #FFF8E1);
+      border-left: 5px solid #FF9800;
+    }
+    .kc-title { font-weight: bold; font-size: 1.05em; margin-bottom: 8px; }
+    .kc-item { margin: 4px 0; }
+
+    .next-btn, .restart-btn {
+      width: 100%; padding: 14px; margin-top: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .next-btn:hover, .restart-btn:hover { transform: scale(1.02); }
+    .review-btn {
+      width: 100%; padding: 14px; margin-top: 8px;
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1.1em; font-weight: bold; cursor: pointer;
+    }
+
+    .result-card { text-align: center; padding: 40px 32px; }
+    .result-score {
+      font-size: 4em; font-weight: bold;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .result-detail { margin: 24px 0; line-height: 2; font-size: 1.05em; }
+    .weak-topics {
+      text-align: left; background: #FFF3E0;
+      padding: 16px 20px; border-radius: 12px; margin: 16px 0;
+    }
+    .weak-topics h3 { color: #E65100; margin-bottom: 8px; }
+
+    .achievement-popup {
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFA000);
+      color: #333; padding: 16px 24px; border-radius: 16px;
+      font-weight: bold; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1000;
+      animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(300px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut { to { transform: translateX(300px); opacity: 0; } }
+
+    .hint-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .hint-btn {
+      padding: 8px 18px; border: 2px solid #FF9800; border-radius: 20px;
+      background: #FFF8E1; color: #E65100; cursor: pointer;
+      font-size: 0.9em; font-weight: bold; transition: all 0.2s;
+    }
+    .hint-btn:hover:not(.used) { background: #FFE0B2; transform: scale(1.05); }
+    .hint-btn.used { opacity: 0.5; pointer-events: none; border-color: #ccc; color: #999; background: #f5f5f5; }
+    .hint-cost { font-size: 0.8em; color: #999; }
+    .hint-area {
+      background: #FFFDE7; border-left: 4px solid #FFB300;
+      padding: 12px 16px; border-radius: 0 10px 10px 0;
+      margin-bottom: 16px; font-size: 0.95em; line-height: 1.7;
+      animation: fadeIn 0.3s ease;
+    }
+    .hint-area .hint-level { font-weight: bold; color: #F57C00; margin-bottom: 4px; }
+
+    /* 材料分析题样式 */
+    .material-section {
+      background: #f5f5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 0 10px 10px 0;
+    }
+    .material-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .material-content {
+      line-height: 1.8;
+      font-size: 1em;
+      color: #333;
+    }
+    .sub-questions {
+      margin-top: 16px;
+    }
+    .sub-question-item {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .sub-question-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .sub-question-points {
+      font-size: 0.85em;
+      color: #9c27b0;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 0.95em;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    .answer-textarea:focus {
+      border-color: #9c27b0;
+    }
+    .submit-material-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .submit-material-btn:hover {
+      transform: scale(1.02);
+    }
+    .scoring-rubric {
+      background: #f3e5f5;
+      border-left: 4px solid #9c27b0;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+    .scoring-title {
+      font-weight: bold;
+      color: #7b1fa2;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    .scoring-item {
+      margin: 6px 0;
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #444;
+    }
+    .scoring-item::before {
+      content: "✓ ";
+      color: #9c27b0;
+      font-weight: bold;
+    }
+    .self-assess {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .assess-btn:hover:not(.disabled) {
+      border-color: #9c27b0;
+      background: #f3e5f5;
+      transform: scale(1.02);
+    }
+    .assess-btn.correct {
+      border-color: #4CAF50;
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .assess-btn.partial {
+      border-color: #FF9800;
+      background: #FFF3E0;
+      color: #E65100;
+    }
+    .assess-btn.wrong {
+      border-color: #f44336;
+      background: #FFEBEE;
+      color: #c62828;
+    }
+    .assess-btn.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .assess-score {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 20px; border-radius: 16px; }
+      .header h1 { font-size: 1.4em; }
+      .question-text { font-size: 1.05em; }
+      .option-btn { padding: 12px 14px; font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="quizTitle"></h1>
+    <div class="stats-bar">
+      <div class="stat-badge">📊 进度 <span class="value" id="progressText">0/0</span></div>
+      <div class="stat-badge">✅ 正确 <span class="value" id="correctCount">0</span></div>
+      <div class="stat-badge">🔥 连击 <span class="value" id="streakCount">0</span></div>
+      <div class="stat-badge">⭐ 积分 <span class="value" id="totalScore">0</span></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+  <div id="quizArea"></div>
+</div>
+
+<!-- ========== 题目数据（纯 JSON） ========== -->
+<script type="application/json" id="quiz-json">
+{
+  "title": "【历史】【七年级】· 天津中考模拟试卷（上册 + 下册综合）",
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "我国境内目前已确认的最早古人类是（  ）",
+      "options": ["北京人", "山顶洞人", "元谋人", "河姆渡人"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查中国早期人类的代表", "📖 关键知识：元谋人距今约 170 万年", "🎯 解题思路：记住「170 万年」这个关键数字"],
+      "knowledgeCard": {
+        "topic": "中国早期人类代表",
+        "source": "人教版七年级上册 第 1 课",
+        "keyMemory": "元谋人距今约 170 万年，是我国境内目前已确认的最早古人类",
+        "commonMistake": "容易混淆元谋人和北京人的时间",
+        "relatedTopics": "北京人、山顶洞人"
+      }
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "半坡居民和河姆渡居民房屋建筑不同的根本原因是（  ）",
+      "options": ["生活习惯不同", "自然地理环境不同", "建筑材料不同", "技术水平不同"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查原始农耕生活的差异", "📖 关键知识：半坡在北方，河姆渡在南方", "🎯 解题思路：地理环境决定生活方式"],
+      "knowledgeCard": {
+        "topic": "河姆渡和半坡居民",
+        "source": "人教版七年级上册 第 2 课",
+        "keyMemory": "河姆渡（南方）- 干栏式 - 水稻；半坡（北方）- 半地穴式 - 粟",
+        "commonMistake": "容易混淆南北方居民的房屋类型",
+        "relatedTopics": "原始农业、定居生活"
+      }
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "被尊奉为中华民族人文始祖的是（  ）",
+      "options": ["尧和舜", "炎帝和黄帝", "禹和启", "伏羲和女娲"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查远古传说中的人物", "📖 关键知识：炎黄联盟形成华夏族", "🎯 解题思路：记住「炎黄子孙」这个称呼"],
+      "knowledgeCard": {
+        "topic": "炎黄联盟与人文始祖",
+        "source": "人教版七年级上册 第 3 课",
+        "keyMemory": "炎帝和黄帝被尊崇为中华民族的人文始祖",
+        "commonMistake": "容易与尧舜禹混淆",
+        "relatedTopics": "阪泉之战、涿鹿之战"
+      }
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "约公元前 2070 年，建立夏朝的是（  ）",
+      "options": ["尧", "舜", "禹", "启"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查夏朝的建立者", "📖 关键知识：禹建立夏朝，这是中国历史上第一个王朝", "🎯 解题思路：禹治水有功，建立夏朝"],
+      "knowledgeCard": {
+        "topic": "夏朝的建立",
+        "source": "人教版七年级上册 第 4 课",
+        "keyMemory": "约公元前 2070 年，禹建立夏朝，标志着原始社会结束，奴隶社会开始",
+        "commonMistake": "容易混淆禹和启，启继承王位，世袭制开始",
+        "relatedTopics": "世袭制、早期国家"
+      }
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "difficulty": 1,
+      "question": "西周实行分封制的主要目的是（  ）",
+      "options": ["奖励功臣", "巩固统治", "发展经济", "推广文化"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查西周分封制的目的", "📖 关键知识：为稳定周初政治形势，巩固疆土", "🎯 解题思路：分封制是政治制度，核心目的是巩固统治"],
+      "knowledgeCard": {
+        "topic": "西周分封制",
+        "source": "人教版七年级上册 第 4 课",
+        "keyMemory": "分封制目的：为稳定周初政治形势，巩固疆土",
+        "commonMistake": "容易与分封制的作用混淆",
+        "relatedTopics": "宗法制、礼乐制度"
+      }
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "春秋时期第一个霸主是（  ）",
+      "options": ["晋文公", "楚庄王", "齐桓公", "秦穆公"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查春秋争霸", "📖 关键知识：齐桓公任用管仲进行改革", "🎯 解题思路：齐桓公提出「尊王攘夷」的口号"],
+      "knowledgeCard": {
+        "topic": "春秋争霸",
+        "source": "人教版七年级上册 第 6 课",
+        "keyMemory": "齐桓公是春秋时期第一个霸主，任用管仲改革",
+        "commonMistake": "容易与晋文公、楚庄王混淆",
+        "relatedTopics": "管仲改革、尊王攘夷"
+      }
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "秦始皇统一六国的时间是（  ）",
+      "options": ["公元前 230 年", "公元前 221 年", "公元前 209 年", "公元前 202 年"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查秦朝统一的时间", "📖 关键知识：公元前 221 年，秦完成统一", "🎯 解题思路：记住「公元前 221 年」这个重要年份"],
+      "knowledgeCard": {
+        "topic": "秦朝的统一",
+        "source": "人教版七年级上册 第 9 课",
+        "keyMemory": "公元前 221 年，秦始皇统一六国，建立秦朝",
+        "commonMistake": "容易与秦灭六国的开始时间混淆",
+        "relatedTopics": "秦始皇、中央集权制"
+      }
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "汉武帝时期，为了加强中央集权，在思想上实行的政策是（  ）",
+      "options": ["焚书坑儒", "罢黜百家，独尊儒术", "百家争鸣", "尊崇黄老"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查汉武帝的思想政策", "📖 关键知识：董仲舒提出「罢黜百家，独尊儒术」", "🎯 解题思路：儒家思想从此成为封建社会的正统思想"],
+      "knowledgeCard": {
+        "topic": "汉武帝的思想政策",
+        "source": "人教版七年级上册 第 12 课",
+        "keyMemory": "汉武帝接受董仲舒建议，「罢黜百家，独尊儒术」",
+        "commonMistake": "容易与秦始皇的「焚书坑儒」混淆",
+        "relatedTopics": "董仲舒、儒家思想"
+      }
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "隋朝大运河的中心是（  ）",
+      "options": ["长安", "洛阳", "涿郡", "余杭"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查隋朝大运河", "📖 关键知识：大运河以洛阳为中心", "🎯 解题思路：记住「洛阳」是中心，涿郡和余杭是两端"],
+      "knowledgeCard": {
+        "topic": "隋朝大运河",
+        "source": "人教版七年级下册 第 1 课",
+        "keyMemory": "大运河：以洛阳为中心，北抵涿郡，南至余杭",
+        "commonMistake": "容易混淆中心点和端点",
+        "relatedTopics": "隋炀帝、大运河的作用"
+      }
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "科举制正式确立的标志是（  ）",
+      "options": ["隋文帝初步建立选拔制度", "隋炀帝创立进士科", "唐太宗增加考试科目", "武则天创立殿试制"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查科举制的确立", "📖 关键知识：隋炀帝时进士科的创立", "🎯 解题思路：记住「进士科」是科举制正式形成的标志"],
+      "knowledgeCard": {
+        "topic": "科举制的创立",
+        "source": "人教版七年级下册 第 1 课",
+        "keyMemory": "隋炀帝创立进士科，标志着科举制正式确立",
+        "commonMistake": "容易混淆科举制的萌芽和正式确立",
+        "relatedTopics": "隋文帝、唐朝科举制"
+      }
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "唐太宗时期出现的盛世局面被称为（  ）",
+      "options": ["开元盛世", "贞观之治", "文景之治", "康乾盛世"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查唐朝的盛世", "📖 关键知识：唐太宗年号贞观", "🎯 解题思路：唐太宗 - 贞观之治；唐玄宗 - 开元盛世"],
+      "knowledgeCard": {
+        "topic": "贞观之治",
+        "source": "人教版七年级下册 第 2 课",
+        "keyMemory": "唐太宗（李世民）→ 贞观之治",
+        "commonMistake": "容易混淆贞观之治和开元盛世",
+        "relatedTopics": "唐玄宗、开元盛世"
+      }
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "唐朝由盛转衰的转折点是（  ）",
+      "options": ["安史之乱", "黄巢起义", "朱温建梁", "藩镇割据"],
+      "answer": 0,
+      "hints": ["💡 方向提示：本题考查唐朝由盛转衰的事件", "📖 关键知识：安史之乱持续八年，对社会经济造成极大破坏", "🎯 解题思路：安史之乱后，唐朝国势由盛转衰"],
+      "knowledgeCard": {
+        "topic": "安史之乱",
+        "source": "人教版七年级下册 第 4 课",
+        "keyMemory": "安史之乱（755-763 年）是唐朝由盛转衰的转折点",
+        "commonMistake": "容易与黄巢起义混淆",
+        "relatedTopics": "安禄山、史思明、藩镇割据"
+      }
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "北宋建立的时间是（  ）",
+      "options": ["907 年", "960 年", "1127 年", "1279 年"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查北宋的建立", "📖 关键知识：960 年，赵匡胤发动陈桥兵变", "🎯 解题思路：记住「960 年」这个年份"],
+      "knowledgeCard": {
+        "topic": "北宋的建立",
+        "source": "人教版七年级下册 第 6 课",
+        "keyMemory": "960 年，赵匡胤发动陈桥兵变，建立北宋",
+        "commonMistake": "容易与唐朝灭亡时间混淆",
+        "relatedTopics": "赵匡胤、陈桥兵变"
+      }
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "成吉思汗的主要功绩是（  ）",
+      "options": ["统一蒙古，建立蒙古政权", "建立元朝，统一全国", "实行行省制度", "推行汉化政策"],
+      "answer": 0,
+      "hints": ["💡 方向提示：本题考查成吉思汗的功绩", "📖 关键知识：1206 年，铁木真统一蒙古，被尊称为成吉思汗", "🎯 解题思路：成吉思汗统一蒙古，忽必烈建立元朝"],
+      "knowledgeCard": {
+        "topic": "成吉思汗统一蒙古",
+        "source": "人教版七年级下册 第 10 课",
+        "keyMemory": "1206 年，铁木真统一蒙古，建立蒙古政权，被尊称为成吉思汗",
+        "commonMistake": "容易与忽必烈建立元朝混淆",
+        "relatedTopics": "忽必烈、元朝建立"
+      }
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "明朝建立的时间是（  ）",
+      "options": ["1271 年", "1368 年", "1421 年", "1644 年"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查明朝的建立", "📖 关键知识：1368 年，朱元璋建立明朝", "🎯 解题思路：记住「1368 年」这个年份"],
+      "knowledgeCard": {
+        "topic": "明朝的建立",
+        "source": "人教版七年级下册 第 12 课",
+        "keyMemory": "1368 年，朱元璋（明太祖）建立明朝，定都应天府（南京）",
+        "commonMistake": "容易与元朝、清朝建立时间混淆",
+        "relatedTopics": "朱元璋、明太祖"
+      }
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "隋朝和秦朝的相似之处包括（  ）\n①都结束了长期分裂局面 ②都创立了重要制度 ③都因暴政而亡 ④都修建了大型工程",
+      "options": ["①②③", "②③④", "①③④", "①②③④"],
+      "answer": 3,
+      "hints": ["💡 方向提示：本题考查隋朝与秦朝的比较", "📖 关键知识：秦隋都结束分裂、创立制度、因暴政亡、修大型工程", "🎯 解题思路：四个选项都符合，这是典型的历史类比题"],
+      "knowledgeCard": {
+        "topic": "秦朝与隋朝的比较",
+        "source": "人教版七年级上下册 综合",
+        "keyMemory": "秦隋相似：都结束分裂、都创立重要制度、都因暴政灭亡、都修建大型工程",
+        "commonMistake": "容易漏选某个选项",
+        "relatedTopics": "秦朝统一、隋朝统一"
+      }
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于中国古代选官制度演变的排序，正确的是（  ）\n①世袭制 ②禅让制 ③科举制 ④察举制",
+      "options": ["①②③④", "②①④③", "①②④③", "②①③④"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查选官制度的演变顺序", "📖 关键知识：原始社会禅让制→奴隶社会世袭制→汉朝察举制→隋朝科举制", "🎯 解题思路：按时间顺序排列"],
+      "knowledgeCard": {
+        "topic": "古代选官制度的演变",
+        "source": "人教版七年级上下册 综合",
+        "keyMemory": "禅让制（原始社会）→ 世袭制（夏商周）→ 察举制（汉朝）→ 科举制（隋朝开始）",
+        "commonMistake": "容易混淆察举制和科举制的时间",
+        "relatedTopics": "选官制度、科举制"
+      }
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列朝代按建立时间先后顺序排列，正确的是（  ）\n①唐朝 ②隋朝 ③北宋 ④元朝",
+      "options": ["①②③④", "②①③④", "②①④③", "①②④③"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查朝代更替顺序", "📖 关键知识：581 年隋→618 年唐→960 年北宋→1271 年元", "🎯 解题思路：隋唐北宋元"],
+      "knowledgeCard": {
+        "topic": "朝代更替顺序",
+        "source": "人教版七年级下册 综合",
+        "keyMemory": "隋（581）→ 唐（618）→ 北宋（960）→ 元（1271）",
+        "commonMistake": "容易混淆唐宋之间的五代十国",
+        "relatedTopics": "隋唐宋元"
+      }
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于河姆渡居民和半坡居民共同点的说法，正确的是（  ）\n①都使用磨制石器 ②都种植农作物 ③都饲养家畜 ④都过定居生活",
+      "options": ["①②③", "①②④", "②③④", "①②③④"],
+      "answer": 3,
+      "hints": ["💡 方向提示：本题考查原始农耕居民的生活", "📖 关键知识：河姆渡和半坡都处于新石器时代", "🎯 解题思路：四个选项都是共同点"],
+      "knowledgeCard": {
+        "topic": "河姆渡和半坡居民",
+        "source": "人教版七年级上册 第 2 课",
+        "keyMemory": "河姆渡和半坡的共同点：都使用磨制石器、都种植农作物、都饲养家畜、都过定居生活",
+        "commonMistake": "容易只关注差异而忽略共同点",
+        "relatedTopics": "新石器时代、原始农业"
+      }
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列各项中，能体现唐朝对外开放的是（  ）\n①玄奘西行 ②鉴真东渡 ③遣唐使来华 ④郑和下西洋",
+      "options": ["①②③", "①②④", "①③④", "②③④"],
+      "answer": 0,
+      "hints": ["💡 方向提示：本题考查唐朝的对外交往", "📖 关键知识：郑和下西洋是明朝的事件", "🎯 解题思路：排除④即可"],
+      "knowledgeCard": {
+        "topic": "唐朝的对外交往",
+        "source": "人教版七年级下册 第 5 课",
+        "keyMemory": "唐朝对外开放：玄奘西行（天竺）、鉴真东渡（日本）、遣唐使来华",
+        "commonMistake": "容易将郑和下西洋误认为是唐朝",
+        "relatedTopics": "玄奘、鉴真、郑和"
+      }
+    },
+    {
+      "id": 21,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "我国古代经济重心南移完成于（  ）",
+      "options": ["唐朝", "北宋", "南宋", "元朝"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查经济重心南移", "📖 关键知识：从唐朝中期开始，到南宋最后完成", "🎯 解题思路：记住「南宋」这个时间点"],
+      "knowledgeCard": {
+        "topic": "经济重心南移",
+        "source": "人教版七年级下册 第 9 课",
+        "keyMemory": "经济重心南移：唐朝中期开始→南宋最后完成",
+        "commonMistake": "容易与开始时间混淆",
+        "relatedTopics": "南方经济发展、人口南迁"
+      }
+    },
+    {
+      "id": 22,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "元朝时，中央政府首次在台湾地区正式建立的行政机构是（  ）",
+      "options": ["西域都护", "安西都护府", "澎湖巡检司", "台湾府"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查元朝对台湾的管辖", "📖 关键知识：元朝设澎湖巡检司管辖澎湖和琉球（今台湾）", "🎯 解题思路：记住「澎湖巡检司」这个机构名称"],
+      "knowledgeCard": {
+        "topic": "元朝对台湾的管辖",
+        "source": "人教版七年级下册 第 11 课",
+        "keyMemory": "元朝设澎湖巡检司，管辖澎湖和琉球（今台湾）",
+        "commonMistake": "容易与清朝的台湾府混淆",
+        "relatedTopics": "台湾历史、元朝疆域"
+      }
+    },
+    {
+      "id": 23,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "明成祖时期，七下西洋的航海家是（  ）",
+      "options": ["张骞", "玄奘", "郑和", "戚继光"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查明朝的对外关系", "📖 关键知识：1405-1433 年，郑和七下西洋", "🎯 解题思路：记住「郑和下西洋」这个历史事件"],
+      "knowledgeCard": {
+        "topic": "郑和下西洋",
+        "source": "人教版七年级下册 第 13 课",
+        "keyMemory": "明成祖时，郑和七下西洋（1405-1433 年），最远到达红海沿岸和非洲东海岸",
+        "commonMistake": "容易与其他历史人物混淆",
+        "relatedTopics": "明朝对外关系、航海技术"
+      }
+    },
+    {
+      "id": 24,
+      "type": "choice",
+      "difficulty": 2,
+      "question": "清朝前期实行的对外政策是（  ）",
+      "options": ["对外开放", "闭关锁国", "重商主义", "自由贸易"],
+      "answer": 1,
+      "hints": ["💡 方向提示：本题考查清朝的对外政策", "📖 关键知识：清朝严格限制对外贸易，只开放广州一处", "🎯 解题思路：清朝实行「闭关锁国」政策"],
+      "knowledgeCard": {
+        "topic": "清朝的闭关锁国政策",
+        "source": "人教版七年级下册 第 18 课",
+        "keyMemory": "清朝实行闭关锁国政策，只开放广州一处作为对外通商口岸",
+        "commonMistake": "容易与唐朝的对外开放混淆",
+        "relatedTopics": "广州十三行、对外关系"
+      }
+    },
+    {
+      "id": 25,
+      "type": "choice",
+      "difficulty": 3,
+      "question": "下列关于中国古代科技成就的表述，不正确的是（  ）",
+      "options": ["东汉蔡伦改进造纸术", "北宋毕昇发明活字印刷术", "唐朝发明火药", "北宋制成指南针并用于航海"],
+      "answer": 2,
+      "hints": ["💡 方向提示：本题考查四大发明", "📖 关键知识：火药是唐朝炼丹家发明，唐末用于军事", "🎯 解题思路：注意「发明」和「改进」的区别"],
+      "knowledgeCard": {
+        "topic": "四大发明",
+        "source": "人教版七年级下册 综合",
+        "keyMemory": "造纸术（东汉蔡伦改进）、印刷术（北宋毕昇活字）、火药（唐朝发明）、指南针（北宋用于航海）",
+        "commonMistake": "容易混淆火药的发明和应用时间",
+        "relatedTopics": "四大发明、科技成就"
+      }
+    },
+    {
+      "id": 26,
+      "type": "material",
+      "difficulty": 3,
+      "material": "材料一：「为政以德，譬如北辰，居其所而众星共之。」\n——《论语》\n\n材料二：「民为贵，社稷次之，君为轻。」\n——《孟子》\n\n材料三：「知彼知己者，百战不殆。」\n——《孙子兵法》",
+      "materialLabel": "材料来源：春秋战国时期思想家的言论",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "材料一反映了谁的思想主张？他的核心思想是什么？（4 分）",
+          "points": 4,
+          "answer": "孔子。（2 分）核心思想是「仁」或「仁者爱人」。（2 分）",
+          "scoring": ["答出「孔子」得 2 分", "答出「仁」或「仁者爱人」得 2 分"]
+        },
+        {
+          "id": 2,
+          "question": "材料二体现了孟子的什么思想？（2 分）",
+          "points": 2,
+          "answer": "民贵君轻（或民本思想）。（2 分）",
+          "scoring": ["答出「民贵君轻」或「民本思想」得 2 分"]
+        },
+        {
+          "id": 3,
+          "question": "材料三出自哪一学派？这一学派在军事上有什么影响？（4 分）",
+          "points": 4,
+          "answer": "兵家。（2 分）影响：《孙子兵法》是世界上最早的兵书，对后世军事思想影响深远。（2 分）",
+          "scoring": ["答出「兵家」得 2 分", "答出影响得 2 分"]
+        }
+      ],
+      "hints": [
+        "💡 方向提示：本题考查春秋战国时期的思想文化",
+        "📖 关键知识：材料一出自《论语》，材料二出自《孟子》，材料三出自《孙子兵法》",
+        "🎯 解题思路：联系百家争鸣时期的主要思想家及其主张"
+      ],
+      "knowledgeCard": {
+        "topic": "百家争鸣",
+        "source": "人教版七年级上册 第 8 课",
+        "keyMemory": "孔子（儒家，仁）、孟子（民贵君轻）、孙子（兵家，《孙子兵法》）",
+        "commonMistake": "容易混淆各学派代表人物和主张",
+        "relatedTopics": "儒家、道家、法家、兵家"
+      }
+    },
+    {
+      "id": 27,
+      "type": "material",
+      "difficulty": 3,
+      "material": "材料一：隋朝大运河示意图（北抵涿郡，南至余杭，以洛阳为中心）\n\n材料二：「天下转漕，仰此一渠。」\n——唐·李敬方《汴河直进船》\n\n材料三：「北通涿郡之渔商，南运江都之转输，其为利也博哉！」\n——唐·皮日休",
+      "materialLabel": "材料来源：隋朝大运河相关史料",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "隋朝大运河是谁在位时开凿的？（2 分）",
+          "points": 2,
+          "answer": "隋炀帝（或杨广）。（2 分）",
+          "scoring": ["答出「隋炀帝」或「杨广」得 2 分"]
+        },
+        {
+          "id": 2,
+          "question": "根据材料一，指出大运河的中心和最南端分别是哪里？（4 分）",
+          "points": 4,
+          "answer": "中心：洛阳。（2 分）最南端：余杭。（2 分）",
+          "scoring": ["答出「洛阳」得 2 分", "答出「余杭」得 2 分"]
+        },
+        {
+          "id": 3,
+          "question": "根据材料二、三，概括大运河开凿的作用。（4 分）",
+          "points": 4,
+          "answer": "作用：加强了南北交通；促进了南北经济文化交流；有利于巩固统治。（任答两点，每点 2 分，共 4 分）",
+          "scoring": ["答出「加强南北交通」得 2 分", "答出「促进经济文化交流」或「巩固统治」得 2 分"]
+        }
+      ],
+      "hints": [
+        "💡 方向提示：本题考查隋朝大运河",
+        "📖 关键知识：隋炀帝开凿大运河，以洛阳为中心，北抵涿郡，南至余杭",
+        "🎯 解题思路：从材料中提取信息，结合所学知识作答"
+      ],
+      "knowledgeCard": {
+        "topic": "隋朝大运河",
+        "source": "人教版七年级下册 第 1 课",
+        "keyMemory": "隋炀帝开凿大运河，以洛阳为中心，四段：永济渠、通济渠、邗沟、江南河",
+        "commonMistake": "容易混淆大运河的端点和中心",
+        "relatedTopics": "隋炀帝、大运河的作用"
+      }
+    },
+    {
+      "id": 28,
+      "type": "material",
+      "difficulty": 3,
+      "material": "材料一：唐太宗说：「君，舟也；人，水也。水能载舟，亦能覆舟。」\n\n材料二：唐太宗对大臣说：「为君之道，必须先存百姓。若损百姓以奉其身，犹割股以啖腹，腹饱而身毙。」\n——《贞观政要》\n\n材料三：贞观年间，粮食连年丰收，马牛遍布四野，住宅向外的门可以不关。",
+      "materialLabel": "材料来源：唐太宗的治国理念",
+      "subQuestions": [
+        {
+          "id": 1,
+          "question": "材料一反映了唐太宗的什么治国理念？（2 分）",
+          "points": 2,
+          "answer": "以民为本（或重视人民力量、民本思想）。（2 分）",
+          "scoring": ["答出「以民为本」或类似意思得 2 分"]
+        },
+        {
+          "id": 2,
+          "question": "根据材料二，概括唐太宗的治国措施。（4 分）",
+          "points": 4,
+          "answer": "措施：减轻人民负担；重视发展生产；轻徭薄赋。（任答两点，每点 2 分，共 4 分）",
+          "scoring": ["答出「减轻人民负担」得 2 分", "答出「重视生产」或「轻徭薄赋」得 2 分"]
+        },
+        {
+          "id": 3,
+          "question": "材料三描述的是什么局面？结合所学知识，分析这一局面出现的原因。（4 分）",
+          "points": 4,
+          "answer": "局面：贞观之治。（2 分）原因：唐太宗吸取隋亡教训；勤于政事，虚心纳谏；广纳贤才；完善制度；减轻人民负担等。（任答两点，每点 1 分，共 2 分）",
+          "scoring": ["答出「贞观之治」得 2 分", "答出任意两点原因得 2 分"]
+        }
+      ],
+      "hints": [
+        "💡 方向提示：本题考查唐太宗的治国理念",
+        "📖 关键知识：唐太宗吸取隋亡教训，以民为本，出现贞观之治",
+        "🎯 解题思路：从材料中提取信息，结合贞观之治的相关知识"
+      ],
+      "knowledgeCard": {
+        "topic": "贞观之治",
+        "source": "人教版七年级下册 第 2 课",
+        "keyMemory": "唐太宗以民为本，吸取隋亡教训，出现贞观之治",
+        "commonMistake": "容易忽略唐太宗的治国措施",
+        "relatedTopics": "唐太宗、贞观之治、开元盛世"
+      }
+    }
+  ]
+}
+</script>
+<!-- ========== 题目数据结束 ========== -->
+
+<script>
+var quizData = JSON.parse(document.getElementById("quiz-json").textContent);
+var originalQuestions = JSON.parse(document.getElementById("quiz-json").textContent).questions;
+
+var currentIndex = 0, correctTotal = 0, streak = 0, maxStreak = 0, score = 0;
+var answered = false, wrongQuestions = [], hintsUsed = 0;
+var hintPenalty = [1.0, 0.7, 0.4, 0.1];
+var materialScore = 0;
+
+function init() {
+  document.getElementById("quizTitle").textContent = quizData.title;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  var total = quizData.questions.length;
+  document.getElementById("progressText").textContent = currentIndex + "/" + total;
+  document.getElementById("correctCount").textContent = correctTotal;
+  document.getElementById("streakCount").textContent = streak;
+  document.getElementById("totalScore").textContent = score;
+  document.getElementById("progressBar").style.width = ((currentIndex / total) * 100) + "%";
+}
+
+function renderQuestion() {
+  if (currentIndex >= quizData.questions.length) { showResult(); return; }
+  var q = quizData.questions[currentIndex];
+  var diffLabels = ["", "基础", "中等", "拔高"];
+  var letters = ["A", "B", "C", "D"];
+  var area = document.getElementById("quizArea");
+  hintsUsed = 0;
+
+  var hintBtnHtml = "";
+  if (q.hints && q.hints.length > 0) {
+    var labels = ["💡 提示 1", "📖 提示 2", "🎯 提示 3"];
+    var costs = ["-30%", "-60%", "-90%"];
+    hintBtnHtml = '<div class="hint-bar">' +
+      q.hints.map(function(_, i) {
+        return '<button class="hint-btn" id="hintBtn-' + i + '" onclick="useHint(' + i + ')">' +
+          labels[i] + ' <span class="hint-cost">(' + costs[i] + ')</span></button>';
+      }).join("") + '</div><div id="hintArea"></div>';
+  }
+
+  var optHtml = "";
+  if (q.type === "choice") {
+    optHtml = '<div class="options">' + q.options.map(function(opt, i) {
+      return '<div class="option-btn" onclick="selectChoice(' + i + ')" id="opt-' + i + '">' +
+        '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span></div>';
+    }).join("") + "</div>";
+  } else if (q.type === "material") {
+    optHtml = renderMaterialQuestion(q);
+  }
+
+  area.innerHTML = '<div class="card"><div class="question-header">' +
+    '<span class="question-num">第 ' + (currentIndex + 1) + ' / ' + quizData.questions.length + ' 题</span>' +
+    '<span class="difficulty diff-' + q.difficulty + '">' + diffLabels[q.difficulty] + '</span></div>' +
+    '<div class="question-text">' + q.question + '</div>' +
+    hintBtnHtml + optHtml +
+    '<div id="feedback"></div></div>';
+  answered = false;
+}
+
+function useHint(level) {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  if (!q.hints || level >= q.hints.length) return;
+  for (var i = 0; i <= level; i++) {
+    var btn = document.getElementById("hintBtn-" + i);
+    if (btn) btn.classList.add("used");
+  }
+  hintsUsed = level + 1;
+  var labels = ["💡 方向提示", "📖 关键知识", "🎯 解题思路"];
+  var html = "";
+  for (var j = 0; j <= level; j++) {
+    html += '<div class="hint-area"><div class="hint-level">' + labels[j] + '</div>' + q.hints[j] + '</div>';
+  }
+  document.getElementById("hintArea").innerHTML = html;
+}
+
+function selectChoice(idx) {
+  if (answered) return; answered = true;
+  var q = quizData.questions[currentIndex];
+  var userAns = q.options ? q.options[idx] : String(idx);
+  processAnswer(idx === q.answer, userAns);
+  document.querySelectorAll(".option-btn").forEach(function(btn, i) {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && idx !== q.answer) btn.classList.add("wrong");
+  });
+}
+
+function processAnswer(isCorrect, userAnswer) {
+  var q = quizData.questions[currentIndex];
+  if (isCorrect) {
+    streak++; if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPoints = Math.round(basePoints * hintPenalty[hintsUsed]);
+    score += earnedPoints;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 用提示答对 +" + earnedPoints);
+  } else {
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex, userAnswer: userAnswer || '' });
+  }
+  updateStats();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q) {
+  var kc = q.knowledgeCard;
+  var cls = isCorrect ? "correct-card" : "wrong-card";
+  
+  var h = '<div class="knowledge-card ' + cls + '">' +
+    '<div class="kc-title">' + (isCorrect ? "✅ 回答正确！" : "❌ 回答错误") + "</div>" +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + "</div>" +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + "</div>" +
+    '<div class="kc-item">💡 <b>关键记忆：</b>' + kc.keyMemory + "</div>";
+  if (!isCorrect) h += '<div class="kc-item">⚠️ <b>易错提醒：</b>' + kc.commonMistake + "</div>";
+  if (kc.relatedTopics) h += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + "</div>";
+  h += "</div>";
+  
+  h += '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+  document.getElementById("feedback").innerHTML = h;
+}
+
+function nextQuestion() { currentIndex++; updateStats(); renderQuestion(); }
+
+function showResult() {
+  var total = quizData.questions.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  var rating = pct >= 90 ? "🏆 优秀！知识掌握扎实！"
+    : pct >= 70 ? "👍 良好！继续加油！"
+    : pct >= 60 ? "✓ 及格，部分知识点需要巩固"
+    : "💪 加油！建议重新复习相关章节";
+
+  var weakHtml = "";
+  if (wrongQuestions.length > 0) {
+    var seen = {}, topics = [];
+    wrongQuestions.forEach(function(w) {
+      var t = quizData.questions[w.index].knowledgeCard.topic;
+      if (!seen[t]) { seen[t] = true; topics.push(t); }
+    });
+    weakHtml = '<div class="weak-topics"><h3>📋 薄弱知识点</h3>' +
+      topics.map(function(t) { return "<div>· " + t + "</div>"; }).join("") +
+      "</div>" + '<button class="review-btn" onclick="reviewWrong()">🔄 错题重练（' +
+      wrongQuestions.length + "题）</button>";
+  }
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressText").textContent = total + "/" + total;
+  document.getElementById("quizArea").innerHTML = '<div class="card result-card">' +
+    '<div style="font-size:1.2em;margin-bottom:8px;">练习完成！</div>' +
+    '<div class="result-score">' + pct + "分</div>" +
+    '<div class="result-detail">共 ' + total + " 题，答对 " + correctTotal + " 题<br>" +
+    "最高连击 " + maxStreak + " 次 · 总积分 " + score + "<br>" + rating + "</div>" +
+    weakHtml +
+    '<button class="restart-btn" onclick="restart()">🔁 重新开始</button></div>';
+}
+
+function reviewWrong() {
+  quizData.questions = wrongQuestions.map(function(w) { return originalQuestions[w.index]; });
+  currentIndex = 0; correctTotal = 0; streak = 0; score = 0;
+  wrongQuestions = []; updateStats(); renderQuestion();
+}
+
+function restart() { location.reload(); }
+
+function showAchievement(text) {
+  var el = document.createElement("div");
+  el.className = "achievement-popup"; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3000);
+}
+
+/* ========== 材料分析题专用函数 ========== */
+function renderMaterialQuestion(q) {
+  var materialLabel = q.materialLabel ? '<div class="material-label">' + q.materialLabel + '</div>' : '';
+  var subQuestionsHtml = '';
+  if (q.subQuestions && q.subQuestions.length > 0) {
+    subQuestionsHtml = '<div class="sub-questions">' +
+      q.subQuestions.map(function(sq, i) {
+        return '<div class="sub-question-item">' +
+          '<div class="sub-question-text">(' + (i + 1) + ') ' + sq.question +
+          '<span class="sub-question-points">（' + sq.points + '分）</span></div>' +
+          '<textarea class="answer-textarea" id="material-answer-' + i + '" ' +
+          'placeholder="请在此处输入你的答案..."></textarea>' +
+          '</div>';
+      }).join("") + '</div>';
+  }
+  return '<div class="material-section">' + materialLabel +
+    '<div class="material-content">' + q.material + '</div></div>' + subQuestionsHtml +
+    '<button class="submit-material-btn" onclick="submitMaterial()">提交答案</button>' +
+    '<div id="materialFeedback"></div>';
+}
+
+function submitMaterial() {
+  if (answered) return;
+  var q = quizData.questions[currentIndex];
+  var inputs = [];
+  var allFilled = true;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      var val = document.getElementById("material-answer-" + i).value.trim();
+      inputs.push(val);
+      if (!val) allFilled = false;
+    }
+  }
+  if (!allFilled) {
+    alert("请先完成所有小题的作答！");
+    return;
+  }
+  answered = true;
+  document.querySelectorAll(".answer-textarea").forEach(function(el) {
+    el.disabled = true;
+  });
+  var btn = document.querySelector(".submit-material-btn");
+  if (btn) btn.style.display = "none";
+  showMaterialFeedback(q);
+}
+
+function showMaterialFeedback(q) {
+  var kc = q.knowledgeCard;
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  var scoringHtml = '';
+  if (q.subQuestions) {
+    scoringHtml = '<div class="scoring-rubric"><div class="scoring-title">📝 评分标准</div>' +
+      q.subQuestions.map(function(sq, i) {
+        var pointsHtml = (sq.scoring && sq.scoring.length > 0) ?
+          sq.scoring.map(function(s) { return '<div class="scoring-item">' + s + '</div>'; }).join("") :
+          '<div class="scoring-item">答对关键词语即可得分</div>';
+        return '<div style="margin-bottom:12px;"><b>(' + (i+1) + ')</b> ' + sq.answer +
+          '<div style="margin-top:6px;">' + pointsHtml + '</div></div>';
+      }).join("") + '</div>';
+  }
+  var assessHtml = '<div class="self-assess">' +
+    '<button class="assess-btn" id="assessCorrect" onclick="selfAssess(\'correct\')">' +
+    '✅ 完全正确<div class="assess-score">得 ' + totalPoints + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessPartial" onclick="selfAssess(\'partial\')">' +
+    '🔶 部分正确<div class="assess-score">得 ' + Math.round(totalPoints * 0.5) + ' 分</div></button>' +
+    '<button class="assess-btn" id="assessWrong" onclick="selfAssess(\'wrong\')">' +
+    '❌ 错误<div class="assess-score">得 0 分</div></button>' +
+    '</div>';
+  var feedbackArea = document.getElementById("materialFeedback");
+  feedbackArea.innerHTML = '<div class="knowledge-card correct-card">' +
+    '<div class="kc-title">📖 参考答案与解析</div>' +
+    '<div class="kc-item">📚 <b>考点：</b>' + kc.topic + '</div>' +
+    '<div class="kc-item">📖 <b>出处：</b>' + kc.source + '</div>' +
+    (kc.answerTechnique ? '<div class="kc-item">💡 <b>答题技巧：</b>' + kc.answerTechnique + '</div>' : '') +
+    '</div>' + scoringHtml + assessHtml;
+}
+
+function selfAssess(level) {
+  var q = quizData.questions[currentIndex];
+  var totalPoints = 0;
+  if (q.subQuestions) {
+    for (var i = 0; i < q.subQuestions.length; i++) {
+      totalPoints += q.subQuestions[i].points;
+    }
+  }
+  document.querySelectorAll(".assess-btn").forEach(function(btn) {
+    btn.classList.add("disabled");
+  });
+  var earnedPoints = 0;
+  var isCorrect = false;
+  if (level === "correct") {
+    earnedPoints = totalPoints;
+    isCorrect = true;
+    document.getElementById("assessCorrect").classList.add("correct");
+  } else if (level === "partial") {
+    earnedPoints = Math.round(totalPoints * 0.5);
+    isCorrect = true;
+    document.getElementById("assessPartial").classList.add("partial");
+  } else {
+    document.getElementById("assessWrong").classList.add("wrong");
+    streak = 0;
+    wrongQuestions.push({ index: currentIndex, userAnswer: '自评：错误' });
+  }
+  if (isCorrect) {
+    streak++;
+    if (streak > maxStreak) maxStreak = streak;
+    var basePoints = (streak >= 5 ? 15 : streak >= 3 ? 12 : 10) + q.difficulty * 5;
+    var earnedPointsWithBonus = Math.round(basePoints * hintPenalty[hintsUsed]) + earnedPoints;
+    score += earnedPointsWithBonus;
+    correctTotal++;
+    if (hintsUsed === 0 && streak === 3) showAchievement("🔥 三连击！");
+    if (hintsUsed === 0 && streak === 5) showAchievement("⚡ 五连击！太棒了！");
+    if (hintsUsed === 0 && streak === 10) showAchievement("🏆 十连击！学霸！");
+    if (hintsUsed > 0) showAchievement("📖 自评得分 +" + earnedPointsWithBonus);
+  }
+  updateStats();
+  var feedbackArea = document.getElementById("materialFeedback");
+  var kc = q.knowledgeCard;
+  var extraHtml = '';
+  if (!isCorrect) {
+    extraHtml = '<div class="kc-item" style="margin-top:12px;">⚠️ <b>易错提醒：</b>' + kc.commonMistake + '</div>';
+  }
+  if (kc.relatedTopics) {
+    extraHtml += '<div class="kc-item">🔗 <b>关联知识：</b>' + kc.relatedTopics + '</div>';
+  }
+  feedbackArea.innerHTML += '<div class="knowledge-card ' + (isCorrect ? 'correct-card' : 'wrong-card') +
+    '" style="margin-top:16px;">' + extraHtml +
+    '<div class="kc-item" style="font-weight:bold;">' + (isCorrect ? '✅ 得分：' + earnedPoints : '❌ 本题未得分') + '</div>' +
+    '</div>' + '<button class="next-btn" onclick="nextQuestion()">' +
+    (currentIndex < quizData.questions.length - 1 ? "下一题 →" : "查看成绩 📊") + "</button>";
+}
+
+init();
+</script>
+</body>
+</html>
